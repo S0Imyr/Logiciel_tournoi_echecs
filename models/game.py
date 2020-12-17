@@ -3,11 +3,16 @@ POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
 
 
 class Player:
-    last_player_id = "0"*8
+    last_player_id = "0"*ID_WIDTH
 
     def __init__(self, last_name, first_name, birthdate, gender, rank):
-        Player.last_player_id = str(int(Player.last_player_id.lstrip('0'))+1)
-        self.player_id = (ID_WIDTH + 1-len(Player.last_player_id.lstrip('0')))*"0"+Player.last_player_id
+        if Player.last_player_id.lstrip('0') == "":
+            Player.last_player_id = str(1)
+        else:
+            Player.last_player_id = str(int(Player.last_player_id.lstrip('0'))+1)
+        self.player_id =\
+            (ID_WIDTH + 1 - len(Player.last_player_id.lstrip('0')))*"0"\
+            + Player.last_player_id
         self.last_name = last_name
         self.first_name = first_name
         self.birthdate = birthdate
@@ -66,10 +71,12 @@ class Tournament:
         self.description = "" # Les remarques générales du directeur du tournoi vont ici).
 
     def start_tournament(self):
-        self.players=["00002501", "00002502", "00002503", "00002504", "00002505", "00002506", "00002507", "00002508"]
+        pass
+
 
 if __name__ == "__main__":
+    list_id_players = ["00002501", "00002502", "00002503", "00002504", "00002505", "00002506", "00002507", "00002508"]
     # execute only if run as a script
-    player1 = Player("LOSSEC","Raphael","16/03/1988","M",168)
-
-
+    player1 = Player("Skywalker", "Anakin", "16/03/1988", "M", 168)
+    player2 = Player("Tano", "Ahsoka", "11/10/1982", "F", 99)
+    print(player1.player_id, player2.opponents)
