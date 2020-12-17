@@ -29,22 +29,37 @@ class Match:
         self.players = [player1, player2]
         self.players_points = [0, 0]
         self.winner = None
+        self.finished = False
+        self.points_assigned = False
+
+    def declare_result(self, num_player):
+        if self.finished:
+            print("Already registered")
+        else:
+            if num_player is not None:
+                self.winner = num_player
+                self.finished = True
 
     def assign_points(self):
-        if self.winner is None:
-            self.players_points = [POINTS["draw"], POINTS["draw"]]
-        elif self.winner == 1:
-            self.players_points = [POINTS["victory"], POINTS["defeat"]]
-        elif self.winner == 2:
-            self.players_points = [POINTS["defeat"], POINTS["victory"]]
+        if self.points_assigned:
+            print("Already assigned")
+        else:
+            if self.winner is None:
+                self.players_points = [POINTS["draw"], POINTS["draw"]]
+            elif self.winner == 1:
+                self.players_points = [POINTS["victory"], POINTS["defeat"]]
+            elif self.winner == 2:
+                self.players_points = [POINTS["defeat"], POINTS["victory"]]
+            self.points_assigned = True
 
 
 class Round:
-    def __init__(self, tournament_id):
+    def __init__(self, round_nb, tournament_id, players, players_points, players_rank):
         self.tournament_id = tournament_id
-        self.number = 0
-        self.players = []
-        self.players_rank = []
+        self.round_nb = round_nb
+        self.players = players
+        self.players_points = players_points
+        self.players_rank = players_rank
 
     def rank_players(self):
         pass
@@ -77,6 +92,22 @@ class Tournament:
 if __name__ == "__main__":
     list_id_players = ["00002501", "00002502", "00002503", "00002504", "00002505", "00002506", "00002507", "00002508"]
     # execute only if run as a script
-    player1 = Player("Skywalker", "Anakin", "16/03/1988", "M", 168)
-    player2 = Player("Tano", "Ahsoka", "11/10/1982", "F", 99)
-    print(player1.player_id, player2.opponents)
+    """Tests Player"""
+    """
+    dark_vador = Player("Skywalker", "Anakin", "16/03/1988", "M", 168)
+    padawan = Player("Tano", "Ahsoka", "11/10/1982", "F", 99)
+    print(dark_vador.player_id, padawan.opponents)
+    """
+    """Tests Match"""
+    """
+    match1 = Match("1", "1", "00000001", dark_vador.player_id, padawan.player_id)
+    print(match1.winner)
+    match1.declare_result(1)
+    print(match1.winner)
+    print(match1.players_points)
+    match1.assign_points()
+    print(match1.players_points)
+    match1.assign_points()
+    print(match1.players_points)
+    """
+    """Tests Round"""
