@@ -102,13 +102,8 @@ class Round:
                         if self.players[player].ranking == MATCH_1ST_ROUND[match][1]:
                             self.matchs[match].player2 = self.players[player]
             else:
-                for match in range(NB_MATCH):
-                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
-                    for player in range(NB_PLAYERS):
-                        if self.players[player].ranking == MATCH_OTHER_ROUND[match][0]:
-                            self.matchs[match].player1 = self.players[player]
-                        if self.players.ranking == MATCH_OTHER_ROUND[match][1]:
-                            self.matchs[match].player2 = self.players[player]
+                pass
+
         else:
             print("Caution, You need to rank players first !")
 
