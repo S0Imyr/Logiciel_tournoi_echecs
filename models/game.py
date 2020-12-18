@@ -5,8 +5,11 @@ import datetime
 FIRST = 1
 ID_WIDTH = 8
 NB_PLAYERS = 8
+NB_MATCH = 4
 NB_ROUND = 4
 POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
+MATCH_1ST_ROUND = [[1, 5], [2, 6], [3, 7], [4, 8]]
+MATCH_OTHER_ROUND = [[1, 2], [3, 4], [5, 6], [7, 8]]
 
 
 class Actor:
@@ -25,7 +28,6 @@ class Actor:
         self.birthdate = birthdate
         self.gender = gender
         self.rank = rank
-        self.opponents = []
 
 
 class Player:
@@ -34,15 +36,16 @@ class Player:
         self.rank = actor.rank
         self.points = 0
         self.ranking = 0
+        self.opponents = []
 
 
 class Match:
-    def __init__(self, match_nb, round_nb, tournament_id, player1, player2):
+    def __init__(self, match_nb, round_nb, tournament_id):
         self.match_nb = match_nb
         self.round_nb = round_nb
         self.tournament_id = tournament_id
-        self.player1 = player1
-        self.player2 = player2
+        self.player1 = None
+        self.player2 = None
         self.players_points = [0, 0]
         self.winner = None
         self.finished = False
@@ -77,10 +80,10 @@ class Round:
         self.round_nb = round_nb
         self.players = players
         self.players_ranked = False
-        self.matchs = []
+        self.matchs = {}
 
     def ranking_players(self):
-        if not self.players_ranked :
+        if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("points", "rank"))
             for rank in range(NB_PLAYERS):
                 sorted_players[rank].ranking = rank + 1
@@ -89,7 +92,30 @@ class Round:
             print("Already ranked")
 
     def define_matchs(self):
-        pass
+        if self.players_ranked:
+            if self.round_nb == 1:
+                for match in range(NB_MATCH):
+                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                    for player in range(NB_PLAYERS):
+                        if self.players[player].ranking == MATCH_1ST_ROUND[match][0]:
+                            self.matchs[match].player1 = self.players[player]
+                        if self.players[player].ranking == MATCH_1ST_ROUND[match][1]:
+                            self.matchs[match].player2 = self.players[player]
+            else:
+                for match in range(NB_MATCH):
+                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                    for player in range(NB_PLAYERS):
+                        if self.players[player].ranking == MATCH_OTHER_ROUND[match][0]:
+                            self.matchs[match].player1 = self.players[player]
+                        if self.players.ranking == MATCH_OTHER_ROUND[match][1]:
+                            self.matchs[match].player2 = self.players[player]
+        else:
+            print("Caution, You need to rank players first !")
+
+    def memorize_opponents(self):
+        for match in range(NB_MATCH):
+            self.matchs[match].player1.opponents = self.matchs[match].player2
+            self.matchs[match].player2.opponents = self.matchs[match].player1
 
 
 class Tournament:
@@ -106,8 +132,8 @@ class Tournament:
         self.number_of_rounds = NB_ROUND
         self.rounds = "" # La liste des instances de tours.
         self.list_of_players = "" # Liste des indices correspondant aux instances du joueur stockées en mémoire)
-        self.timer_type = "" # C'est toujours un bullet, un blitz ou un coup rapide)
-        self.description = "" # Les remarques générales du directeur du tournoi vont ici).
+        self.timer_type = ""
+        self.description = ""
 
     def start_tournament(self):
         pass
@@ -135,14 +161,14 @@ if __name__ == "__main__":
     print(match1.players_points)
     """
     """Tests Round"""
-    acteur1 = Actor("Skywalker","Anakin",datetime.date(41,5,6),"M",8)       # 2
-    acteur2 = Actor("Skywalker","Luke",datetime.date(19,12,7),"M",21)       # 3
-    acteur3 = Actor("Organa","Leia",datetime.date(19,12,7),"F",143)         # 8
-    acteur4 = Actor("Tano","Ahsoka",datetime.date(36,11,22),"F",35)         # 5
-    acteur5 = Actor("Master","Yoda",datetime.date(896,10,15),"M",3)         # 1
-    acteur6 = Actor("Palpatine","Sheev",datetime.date(84,2,25),"M",27)      # 4
-    acteur7 = Actor("Kashyyyk","Chewbacca",datetime.date(200,8,31),"M",112) # 7
-    acteur8 = Actor("Solo","Han",datetime.date(34,7,16),"M",107)            # 6
+    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
+    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
+    acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)         # 8
+    acteur4 = Actor("Tano", "Ahsoka", datetime.date(36, 11, 22), "F", 35)         # 5
+    acteur5 = Actor("Master", "Yoda", datetime.date(896, 10, 15), "M", 3)         # 1
+    acteur6 = Actor("Palpatine", "Sheev", datetime.date(84, 2, 25), "M", 27)      # 4
+    acteur7 = Actor("Kashyyyk", "Chewbacca", datetime.date(200, 8, 31), "M", 112) # 7
+    acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
     joueur1 = Player(acteur1)
     joueur2 = Player(acteur2)
     joueur3 = Player(acteur3)
@@ -158,7 +184,12 @@ if __name__ == "__main__":
     tour1.ranking_players()
     for k in range(8):
         print(joueurs[k].ranking)
-
+    tour1.define_matchs()
+    print(tour1.matchs[0].player1.actor.last_name)
+    print(tour1.matchs[0].player2.actor.last_name)
+    print(tour1.matchs[0].player2.opponents)
+    tour1.memorize_opponents()
+    print(tour1.matchs[0].player2.opponents.actor.last_name)
     """ Tri dico 
     print(sorted({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.items(), key=lambda t: t[1]))
     k = list({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.values())
