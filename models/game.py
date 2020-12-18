@@ -1,4 +1,5 @@
 from operator import attrgetter
+import datetime
 
 
 FIRST = 1
@@ -28,8 +29,9 @@ class Actor:
 
 
 class Player:
-    def __init__(self, rank):
-        self.rank = rank
+    def __init__(self, actor):
+        self.actor = actor
+        self.rank = actor.rank
         self.points = 0
         self.ranking = 0
 
@@ -74,13 +76,19 @@ class Round:
         self.tournament_id = tournament_id
         self.round_nb = round_nb
         self.players = players
+        self.players_ranked = False
+        self.matchs = []
 
     def ranking_players(self):
-        sorted_players = sorted(self.players, key=attrgetter("points", "rank"))
-        for rank in range(NB_PLAYERS):
-            sorted_players[rank].ranking = rank
+        if not self.players_ranked :
+            sorted_players = sorted(self.players, key=attrgetter("points", "rank"))
+            for rank in range(NB_PLAYERS):
+                sorted_players[rank].ranking = rank + 1
+            self.players_ranked = True
+        else:
+            print("Already ranked")
 
-    def define_matches(self):
+    def define_matchs(self):
         pass
 
 
@@ -127,8 +135,34 @@ if __name__ == "__main__":
     print(match1.players_points)
     """
     """Tests Round"""
+    acteur1 = Actor("Skywalker","Anakin",datetime.date(41,5,6),"M",8)       # 2
+    acteur2 = Actor("Skywalker","Luke",datetime.date(19,12,7),"M",21)       # 3
+    acteur3 = Actor("Organa","Leia",datetime.date(19,12,7),"F",143)         # 8
+    acteur4 = Actor("Tano","Ahsoka",datetime.date(36,11,22),"F",35)         # 5
+    acteur5 = Actor("Master","Yoda",datetime.date(896,10,15),"M",3)         # 1
+    acteur6 = Actor("Palpatine","Sheev",datetime.date(84,2,25),"M",27)      # 4
+    acteur7 = Actor("Kashyyyk","Chewbacca",datetime.date(200,8,31),"M",112) # 7
+    acteur8 = Actor("Solo","Han",datetime.date(34,7,16),"M",107)            # 6
+    joueur1 = Player(acteur1)
+    joueur2 = Player(acteur2)
+    joueur3 = Player(acteur3)
+    joueur4 = Player(acteur4)
+    joueur5 = Player(acteur5)
+    joueur6 = Player(acteur6)
+    joueur7 = Player(acteur7)
+    joueur8 = Player(acteur8)
+    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
+    tour1 = Round(1, "00000001", joueurs)
+    for k in range(8):
+        print(joueurs[k].ranking)
+    tour1.ranking_players()
+    for k in range(8):
+        print(joueurs[k].ranking)
+
+    """ Tri dico 
     print(sorted({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.items(), key=lambda t: t[1]))
     k = list({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.values())
     print(k)
     k.sort()
     print(k)
+    """
