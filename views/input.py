@@ -21,7 +21,6 @@ def prompt_number(message, min=None, max=None):
             response_is_not_number = False
         except ValueError:
             response = input("Entrée incorrecte, veuillez entrer un nombre : ")
-            continue
 
     max_is_not_number = True
     while max_is_not_number:
@@ -45,10 +44,17 @@ def prompt_number(message, min=None, max=None):
     return int(response)
 
 
+def prompt_yes_or_no(message):
+    """Demande à l'utilisateur à l'aide de
+    message de saisir O pour oui ou N pour non.
+    """
+    pass
+
 def prompt_string(message):
     """Demande à l'utilisateur à l'aide de
     message de saisir une chaine de caractère.
     """
+    pass
 
 def prompt_date(message):
     """Demande à l'utilisateur à l'aide de
@@ -64,7 +70,7 @@ def prompt_date(message):
         response_is_not_int = True
         response_is_not_yyyy = True
         date = response.split("/")
-        if len(date) == len(DATE_FORMAT) :
+        if len(date) == len(DATE_FORMAT):
             response_is_not_slashed = False
             try :
                 day = int(date[0])
