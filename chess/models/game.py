@@ -1,5 +1,10 @@
 import datetime
-from chess.models import *
+from chess.models.actors import Actor, Player
+from chess.models.round import Round
+
+
+ID_WIDTH = 8
+NB_ROUND = 4
 
 
 class Tournament:
@@ -105,24 +110,24 @@ if __name__ == "__main__":
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
 
-    '''controllers.input.define_players
+    '''controllers.input.define_players'''
 
     tour1 = Round(1, "00000001", joueurs)
-    '''
 
-    ''' Test si pas de rangement des joueurs
+
+    ''' Test si pas de rangement des joueurs'''
     print(tour1)
     tour1.define_matchs()
-    '''
 
-    '''Rangement et définition des matchs
+
+    '''Rangement et définition des matchs'''
     tour1.rank_players()
     tour1.define_matchs()
-    '''
 
-    '''Annonce des matchs
-    print(tour1)
-    '''
+
+    '''Annonce des matchs'''
+    print(tour1.players[0].name)
+
 
     '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2
     tour1.matchs[0].declare_result(1)
@@ -139,9 +144,10 @@ if __name__ == "__main__":
     tour1.matchs[3].assign_points()
 
     print(tour1)
-    '''
+    
     for k in range(NB_PLAYERS):
         print(joueurs[k])
+    '''
 
     # tour1.memorize_opponents()
     """ Tri dico 

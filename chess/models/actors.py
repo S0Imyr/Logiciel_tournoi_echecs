@@ -1,4 +1,4 @@
-from chess.models import *
+ID_WIDTH = 8
 
 
 class Actor:

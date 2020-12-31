@@ -1,4 +1,4 @@
-from chess.models import *
+POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
 
 
 class Match:
