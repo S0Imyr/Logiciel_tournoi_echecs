@@ -43,7 +43,7 @@ class Player:
         self.opponents = []
 
     def __repr__(self):
-        return f"Nom: {self.actor.last_name}, Prénom: {self.actor.first_name} \n" \
+        return f"Nom: {self.name} \n" \
                f"Identifiant: {self.actor.actor_id}\n" \
                f"Classement: {self.rank}\n" \
                f"Dans le tournoi {self.tournament_id}: \n" \
