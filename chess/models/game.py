@@ -126,18 +126,19 @@ if __name__ == "__main__":
 
 
     '''Annonce des matchs'''
-    print(tour1.players[0].name)
+    print(tour1)
+    print(tour1.players_ranked)
 
 
-    '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2
+    '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2'''
     tour1.matchs[0].declare_result(1)
     tour1.matchs[1].declare_result(2)
     tour1.matchs[2].declare_result(0)
     tour1.matchs[3].declare_result(1)
     tour1.finished = True
-    '''
 
-    '''controllers et views : Attribution des points et annonce des résultats
+
+    '''controllers et views : Attribution des points et annonce des résultats'''
     tour1.matchs[0].assign_points()
     tour1.matchs[1].assign_points()
     tour1.matchs[2].assign_points()
@@ -145,9 +146,9 @@ if __name__ == "__main__":
 
     print(tour1)
     
-    for k in range(NB_PLAYERS):
+    for k in range(8):
         print(joueurs[k])
-    '''
+
 
     # tour1.memorize_opponents()
     """ Tri dico 

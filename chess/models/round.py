@@ -42,7 +42,7 @@ class Round:
         if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("points", "rank"))
             for rank in range(NB_PLAYERS):
-                sorted_players[rank].ranking = rank + 1
+                sorted_players[rank].place = rank + 1
             self.players_ranked = True
         else:
             print("Already ranked")
