@@ -77,15 +77,15 @@ class Round:
                     self.matchs[match].player1 = sorted_players[first_non_assigned]
                     player_assigned.append(sorted_players[first_non_assigned])
                     first_non_assigned += 1
-                    id_player = first_non_assigned
+                    id_player = min(first_non_assigned, len(sorted_players)-1)
                     while sorted_players[id_player].player_id\
                             in self.matchs[match].player1.opponents\
                             or sorted_players[id_player]\
                             in player_assigned:
                         id_player += 1
-                        if id_player > len(sorted_players):
-                            print("Pas de joueurs disponibles !")
+                        if id_player >= len(sorted_players):
                             break
+                    id_player = min(id_player, len(sorted_players)-1)
                     self.matchs[match].player2 = sorted_players[id_player]
                     player_assigned.append(sorted_players[id_player])
                     if id_player == first_non_assigned:

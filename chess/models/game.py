@@ -159,10 +159,10 @@ if __name__ == "__main__":
     tour2.define_matchs()
     print(tour2)
 
-    tour2.matchs[0].declare_result(1)
+    tour2.matchs[0].declare_result(2)
     tour2.matchs[1].declare_result(2)
-    tour2.matchs[2].declare_result(0)
-    tour2.matchs[3].declare_result(1)
+    tour2.matchs[2].declare_result(1)
+    tour2.matchs[3].declare_result(0)
 
     tour2.matchs[0].assign_points()
     tour2.matchs[1].assign_points()
@@ -186,9 +186,9 @@ if __name__ == "__main__":
     tour3.define_matchs()
     print(tour3)
 
-    tour3.matchs[0].declare_result(1)
+    tour3.matchs[0].declare_result(0)
     tour3.matchs[1].declare_result(2)
-    tour3.matchs[2].declare_result(0)
+    tour3.matchs[2].declare_result(2)
     tour3.matchs[3].declare_result(1)
 
     tour3.matchs[0].assign_points()
