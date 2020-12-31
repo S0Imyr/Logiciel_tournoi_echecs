@@ -50,4 +50,3 @@ class Player:
                f"Rang: {self.ranking}\n" \
                f"Points: {self.points}\n" \
                f"A joué contre: {self.opponents} \n"
-

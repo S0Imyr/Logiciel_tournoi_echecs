@@ -1,10 +1,6 @@
 from operator import attrgetter
-import chess.models.match
-
-MATCH_1ST_ROUND = [[1, 5], [2, 6], [3, 7], [4, 8]]
-MATCH_OTHER_ROUND = [[1, 2], [3, 4], [5, 6], [7, 8]]
-NB_PLAYERS = 8
-NB_MATCH = 4
+from chess.models.match import *
+from chess.models.constant import *
 
 
 class Round:
@@ -37,7 +33,7 @@ class Round:
                         repr += f"Victoire de {self.matchs[num_match].player2.name}. \n"
         return repr
 
-    def ranking_players(self):
+    def rank_players(self):
         if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("points", "rank"))
             for rank in range(NB_PLAYERS):
@@ -65,7 +61,6 @@ class Round:
                 pass
         else:
             print("Attention, vous devez ranger les joueurs d'abord! \n")
-
 
     def memorize_opponents(self):
         """

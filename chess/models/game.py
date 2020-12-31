@@ -1,8 +1,5 @@
 import datetime
-import constant
-import actors
-import match
-import round
+from chess.models import *
 
 
 class Tournament:
@@ -28,9 +25,9 @@ class Tournament:
 
     def start_tournament(self):
         """
-               Launch the Tournament
-               :return:
-               """
+        Launch the Tournament
+        :return:
+        """
         '''controllers.input.define_players'''
         acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)  # 2
         acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)  # 3
