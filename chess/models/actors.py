@@ -47,6 +47,6 @@ class Player:
                f"Identifiant: {self.actor.actor_id}\n" \
                f"Classement: {self.rank}\n" \
                f"Dans le tournoi {self.tournament_id}: \n" \
-               f"Rang: {self.ranking}\n" \
+               f"Place: {self.place}\n" \
                f"Points: {self.points}\n" \
                f"A joué contre: {self.opponents} \n"
