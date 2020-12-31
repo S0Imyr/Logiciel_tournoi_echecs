@@ -1,6 +1,5 @@
 from operator import attrgetter
-from chess.models.match import *
-from chess.models.constant import *
+from chess.models import *
 
 
 class Round:

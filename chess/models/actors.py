@@ -1,4 +1,4 @@
-ID_WIDTH = 8
+from chess.models import *
 
 
 class Actor:
@@ -22,7 +22,7 @@ class Actor:
         self.rank = rank
 
     def __repr__(self):
-        return f"Personne: nom({self.last_name}), prénom({self.first_name}) \n" \
+        return f"Personne: Nom :{self.last_name}, Prénom :{self.first_name} \n" \
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
 

@@ -65,16 +65,15 @@ class Tournament:
 
 
 if __name__ == "__main__":
-    list_id_players = ["00002501", "00002502", "00002503", "00002504", "00002505", "00002506", "00002507", "00002508"]
+
     # execute only if run as a script
-    """Tests Player"""
+
+    """Tests Player
+    dark_vador = Actor("Skywalker", "Anakin", "16/03/1988", "M", 168)
+    print(dark_vador)
     """
-    dark_vador = Player("Skywalker", "Anakin", "16/03/1988", "M", 168)
-    padawan = Player("Tano", "Ahsoka", "11/10/1982", "F", 99)
-    print(dark_vador.player_id, padawan.opponents)
-    """
-    """Tests match"""
-    """
+
+    """Tests match
     match1 = match("1", "1", "00000001", dark_vador.player_id, padawan.player_id)
     print(match1.winner)
     match1.declare_result(1)
@@ -85,6 +84,7 @@ if __name__ == "__main__":
     match1.assign_points()
     print(match1.players_points)
     """
+
     """Tests Round"""
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
@@ -103,35 +103,43 @@ if __name__ == "__main__":
     joueur7 = Player(acteur7, "00000001", 7)
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
-    '''controllers.input.define_players'''
+
+
+    '''controllers.input.define_players
 
     tour1 = Round(1, "00000001", joueurs)
+    '''
 
-    ''' Test si pas de rangement des joueurs'''
+    ''' Test si pas de rangement des joueurs
     print(tour1)
     tour1.define_matchs()
+    '''
 
-    '''Rangement et définition des matchs'''
+    '''Rangement et définition des matchs
     tour1.rank_players()
     tour1.define_matchs()
+    '''
 
-    '''Annonce des matchs'''
+    '''Annonce des matchs
     print(tour1)
+    '''
 
-    '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2'''
+    '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2
     tour1.matchs[0].declare_result(1)
     tour1.matchs[1].declare_result(2)
     tour1.matchs[2].declare_result(0)
     tour1.matchs[3].declare_result(1)
     tour1.finished = True
-    '''controllers et views : Attribution des points et annonce des résultats'''
+    '''
+
+    '''controllers et views : Attribution des points et annonce des résultats
     tour1.matchs[0].assign_points()
     tour1.matchs[1].assign_points()
     tour1.matchs[2].assign_points()
     tour1.matchs[3].assign_points()
 
     print(tour1)
-
+    '''
     for k in range(NB_PLAYERS):
         print(joueurs[k])
 
