@@ -135,7 +135,6 @@ if __name__ == "__main__":
     tour1.matchs[1].declare_result(2)
     tour1.matchs[2].declare_result(0)
     tour1.matchs[3].declare_result(1)
-    tour1.finished = True
 
 
     '''controllers et views : Attribution des points et annonce des résultats'''
@@ -143,14 +142,18 @@ if __name__ == "__main__":
     tour1.matchs[1].assign_points()
     tour1.matchs[2].assign_points()
     tour1.matchs[3].assign_points()
+    tour1.finished = True
+    tour1.players_ranked = False
 
     print(tour1)
-    
+    tour1.rank_players()
+
+
     for k in range(8):
         print(joueurs[k])
 
 
-    # tour1.memorize_opponents()
+
     """ Tri dico 
     print(sorted({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.items(), key=lambda t: t[1]))
     k = list({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.values())
