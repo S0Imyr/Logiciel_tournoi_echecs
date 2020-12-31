@@ -1,9 +1,4 @@
 import datetime
-import chess.models.actors.actors
-import chess.models.round.round
-import chess.models.match.match
-
-
 
 FIRST = 1
 ID_WIDTH = 8
