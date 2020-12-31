@@ -113,6 +113,7 @@ if __name__ == "__main__":
     '''controllers.input.define_players'''
 
     tour1 = Round(1, "00000001", joueurs)
+    # self.rounds.append(tour1)
 
 
     ''' Test si pas de rangement des joueurs'''
@@ -127,7 +128,6 @@ if __name__ == "__main__":
 
     '''Annonce des matchs'''
     print(tour1)
-    print(tour1.players_ranked)
 
 
     '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2'''
@@ -143,21 +143,89 @@ if __name__ == "__main__":
     tour1.matchs[2].assign_points()
     tour1.matchs[3].assign_points()
     tour1.finished = True
-    tour1.players_ranked = False
+
 
     print(tour1)
-    tour1.rank_players()
+    tour1.memorize_opponents()
 
+    for k in range(8):
+        print(joueurs[k])
+
+    ''' Tour 2 '''
+
+    tour2 = Round(2, "00000001", joueurs)
+    # self.rounds.append(tour2)
+    tour2.rank_players()
+    tour2.define_matchs()
+    print(tour2)
+
+    tour2.matchs[0].declare_result(1)
+    tour2.matchs[1].declare_result(2)
+    tour2.matchs[2].declare_result(0)
+    tour2.matchs[3].declare_result(1)
+
+    tour2.matchs[0].assign_points()
+    tour2.matchs[1].assign_points()
+    tour2.matchs[2].assign_points()
+    tour2.matchs[3].assign_points()
+    tour2.finished = True
+
+    print(tour2)
+
+    tour2.memorize_opponents()
 
     for k in range(8):
         print(joueurs[k])
 
 
+    ''' Tour 3 '''
 
-    """ Tri dico 
-    print(sorted({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.items(), key=lambda t: t[1]))
-    k = list({"Anakin": 1, "Ahsoka": 45, "Obiwan": 58, "Plokoon": 15}.values())
-    print(k)
-    k.sort()
-    print(k)
-    """
+    tour3 = Round(3, "00000001", joueurs)
+    # self.rounds.append(tour3)
+    tour3.rank_players()
+    tour3.define_matchs()
+    print(tour3)
+
+    tour3.matchs[0].declare_result(1)
+    tour3.matchs[1].declare_result(2)
+    tour3.matchs[2].declare_result(0)
+    tour3.matchs[3].declare_result(1)
+
+    tour3.matchs[0].assign_points()
+    tour3.matchs[1].assign_points()
+    tour3.matchs[2].assign_points()
+    tour3.matchs[3].assign_points()
+    tour3.finished = True
+
+    print(tour3)
+
+    tour3.memorize_opponents()
+
+    for k in range(8):
+        print(joueurs[k])
+
+    ''' Tour 3 '''
+
+    tour4 = Round(4, "00000001", joueurs)
+    # self.rounds.append(tour4)
+    tour4.rank_players()
+    tour4.define_matchs()
+    print(tour4)
+
+    tour4.matchs[0].declare_result(1)
+    tour4.matchs[1].declare_result(2)
+    tour4.matchs[2].declare_result(0)
+    tour4.matchs[3].declare_result(1)
+
+    tour4.matchs[0].assign_points()
+    tour4.matchs[1].assign_points()
+    tour4.matchs[2].assign_points()
+    tour4.matchs[3].assign_points()
+    tour4.finished = True
+
+    print(tour4)
+
+    tour4.memorize_opponents()
+
+    for k in range(8):
+        print(joueurs[k])

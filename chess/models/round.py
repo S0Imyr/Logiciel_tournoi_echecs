@@ -19,6 +19,7 @@ class Round:
         self.players_ranked = False
         self.matchs = {}
         self.finished = False
+        self.players_sorted = False
 
     def __repr__(self):
         repr = f"Tour {self.round_nb} du tournoi {self.tournament_id} \n"
@@ -56,6 +57,7 @@ class Round:
         """
         if self.players_ranked:
             if self.round_nb == 1:
+                print("Lancement du round 1")
                 for match in range(NB_MATCH):
                     self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
                     for player in range(NB_PLAYERS):
@@ -64,7 +66,23 @@ class Round:
                         if self.players[player].place == MATCH_1ST_ROUND[match][1]:
                             self.matchs[match].player2 = self.players[player]
             else:
-                pass
+                print(f"Lancement du round {self.round_nb}")
+                first_non_assigned = 0
+                sorted_players = sorted(self.players, key=attrgetter("place"))
+                for match in range(NB_MATCH):
+                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                    self.matchs[match].player1 = sorted_players[first_non_assigned]
+                    print(sorted_players[first_non_assigned])
+                    first_non_assigned += 1
+                    id_player = first_non_assigned
+                    while sorted_players[id_player].player_id in self.matchs[match].player1.opponents:
+                        id_player += 1
+                        if id_player > len(sorted_players):
+                            print("Pas de joueurs disponibles !")
+                            break
+                    self.matchs[match].player2 = sorted_players[id_player]
+                    if id_player == first_non_assigned:
+                        first_non_assigned += 1
         else:
             print("Attention, vous devez ranger les joueurs d'abord! \n")
 
