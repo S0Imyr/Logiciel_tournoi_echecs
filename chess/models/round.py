@@ -69,17 +69,25 @@ class Round:
                 print(f"Lancement du round {self.round_nb}")
                 first_non_assigned = 0
                 sorted_players = sorted(self.players, key=attrgetter("place"))
+                player_assigned = []
                 for match in range(NB_MATCH):
+                    while sorted_players[first_non_assigned] in player_assigned:
+                        first_non_assigned += 1
                     self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
                     self.matchs[match].player1 = sorted_players[first_non_assigned]
+                    player_assigned.append(sorted_players[first_non_assigned])
                     first_non_assigned += 1
                     id_player = first_non_assigned
-                    while sorted_players[id_player].player_id in self.matchs[match].player1.opponents:
+                    while sorted_players[id_player].player_id\
+                            in self.matchs[match].player1.opponents\
+                            or sorted_players[id_player]\
+                            in player_assigned:
                         id_player += 1
                         if id_player > len(sorted_players):
                             print("Pas de joueurs disponibles !")
                             break
                     self.matchs[match].player2 = sorted_players[id_player]
+                    player_assigned.append(sorted_players[id_player])
                     if id_player == first_non_assigned:
                         first_non_assigned += 1
         else:
