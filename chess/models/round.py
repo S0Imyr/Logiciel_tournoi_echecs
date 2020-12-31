@@ -75,5 +75,5 @@ class Round:
         :return: None
         """
         for match in range(NB_MATCH):
-            self.matchs[match].player1.opponents = self.matchs[match].player2
-            self.matchs[match].player2.opponents = self.matchs[match].player1
+            self.matchs[match].player1.opponents.append(self.matchs[match].player2.player_id)
+            self.matchs[match].player2.opponents.append(self.matchs[match].player1.player_id)
