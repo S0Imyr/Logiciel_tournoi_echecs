@@ -50,15 +50,12 @@ class Match:
         :return:
         """
         if self.winner == 0:
-            self.player1.points = POINTS["draw"]
-            self.player2.points = POINTS["draw"]
-        else:
-            if self.winner is None:
-                self.players_points = [POINTS["draw"], POINTS["draw"]]
-            elif self.winner == 1:
-                self.player1.points = POINTS["victory"]
-                self.player2.points = POINTS["defeat"]
-            elif self.winner == 2:
-                self.player1.points = POINTS["defeat"]
-                self.player2.points = POINTS["victory"]
-            self.points_assigned = True
+            self.player1.points += POINTS["draw"]
+            self.player2.points += POINTS["draw"]
+        elif self.winner == 1:
+            self.player1.points += POINTS["victory"]
+            self.player2.points += POINTS["defeat"]
+        elif self.winner == 2:
+            self.player1.points += POINTS["defeat"]
+            self.player2.points += POINTS["victory"]
+        self.points_assigned = True
