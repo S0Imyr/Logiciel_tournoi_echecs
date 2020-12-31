@@ -72,7 +72,6 @@ class Round:
                 for match in range(NB_MATCH):
                     self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
                     self.matchs[match].player1 = sorted_players[first_non_assigned]
-                    print(sorted_players[first_non_assigned])
                     first_non_assigned += 1
                     id_player = first_non_assigned
                     while sorted_players[id_player].player_id in self.matchs[match].player1.opponents:
