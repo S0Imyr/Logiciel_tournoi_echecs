@@ -21,24 +21,6 @@ def prompt_number(message, min=None, max=None):
             response_is_not_number = False
         except ValueError:
             response = input("Entrée incorrecte, veuillez entrer un nombre : ")
-            continue
-
-    max_is_not_number = True
-    while max_is_not_number:
-        try:
-            max = int(max)
-            max_is_not_number = False
-        except ValueError:
-            print("Entrée incorrecte, veuillez entrer un maximum qui est un nombre : ")
-            continue
-    min_is_not_number = True
-    while min_is_not_number:
-        try:
-            min = int(min)
-            min_is_not_number = False
-        except ValueError:
-            print("Entrée incorrecte, veuillez entrer un maximum qui est un nombre : ")
-            continue
 
     while not (int(response) >= min and int(response) <= max):
         response = input(f"Nombre incorrect, veuillez entrer un entier entre {min} et {max} : ")
