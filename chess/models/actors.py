@@ -20,9 +20,10 @@ class Actor:
         self.birthdate = birthdate
         self.gender = gender
         self.rank = rank
+        self.tournaments = []
 
     def __repr__(self):
-        return f"Personne: Nom :{self.last_name}, Prénom :{self.first_name} \n" \
+        return f"Personne: Nom: {self.last_name}, Prénom: {self.first_name} \n" \
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
 
