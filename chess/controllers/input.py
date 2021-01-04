@@ -2,6 +2,7 @@ import datetime
 from chess.models.actors import Actor
 
 DATE_FORMAT = ["day", "month", "year"]
+ID_WIDTH = 8
 
 
 def prompt_number(message, min=None, max=None):
@@ -53,6 +54,27 @@ def prompt_string(message):
     """
     response = input(message)
     response = response.capitalize()
+    return response
+
+
+def prompt_id_num(message, length=ID_WIDTH):
+    """
+    Demande à l'utilisateur de saisir un identifiant
+    qui est une chaîne de caractère numérique
+    de longueur length
+    :param message, length la longueur de l'identifiant
+    :return: input
+    """
+    response = input(message)
+    while len(response) != length:
+        response = input(f"Entrée incorrecte. Veuillez renseigner un identifiant contenant {length} nombres: ")
+    response_is_not_number = True
+    while response_is_not_number:
+        try:
+            int(response)
+            response_is_not_number = False
+        except ValueError:
+            response = input(f"Entrée incorrecte. Veuillez renseigner un identifiant contenant {length} nombres: ")
     return response
 
 
@@ -117,8 +139,6 @@ def input_actor():
      les regrouper dans son instance acteur
     :return: instance d'acteur
     """
-    print("Inscription d'un joueur: \n")
-    print("Renseigner les informations suivantes: \n")
     last_name = prompt_string("Votre nom de famille : ")
     first_name = prompt_string("Votre prénom : ")
     birthdate = prompt_date("Votre date de naissance en respectant le format: jj/mm/aaaa: ")
@@ -126,6 +146,15 @@ def input_actor():
     rank = prompt_number("Votre classement HATP: ", min=0)
     acteur = Actor(last_name, first_name, birthdate, gender, rank)
     return acteur
+
+
+def define_player(num_player):
+    """
+    Définit les joueurs d'un tournoi en demandant leur identifiant
+    :return: instance de tournoi
+    """
+    id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
+    pass
 
 if __name__ == "__main__":
     Me = input_actor()
