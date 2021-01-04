@@ -27,6 +27,9 @@ class Actor:
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
 
+    def modify_rank(self, rank):
+        self.rank = rank
+
 
 class Player:
     """
