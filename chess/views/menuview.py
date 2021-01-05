@@ -20,12 +20,13 @@ class MenuView:
             if choice in self.menu:
                 return self.menu[choice]
 
+
 if __name__ == "__main__":
     from chess.controllers.menus import Menu
-    menu = Menu()
-    menu.add("auto", "Lancer un tournoi", lambda: None)
-    menu.add("auto", "Ajouter un nouveau joueur", lambda: None)
-    menu.add("q", "Quitter", lambda: None)
-    test = MenuView(menu)
+    menutest = Menu()
+    menutest.add("auto", "Lancer un tournoi", lambda: None)
+    menutest.add("auto", "Ajouter un nouveau joueur", lambda: None)
+    menutest.add("q", "Quitter", lambda: None)
+    test = MenuView(menutest)
     test._display_menu()
     test.get_user_choice()
