@@ -29,4 +29,3 @@ if __name__ == "__main__":
     test = MenuView(menu)
     test._display_menu()
     test.get_user_choice()
-
