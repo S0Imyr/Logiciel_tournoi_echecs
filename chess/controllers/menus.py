@@ -1,3 +1,4 @@
+
 class MenuEntry:
     """
     Entrée d'un menu, lie une option à son gestionnaire
@@ -9,13 +10,13 @@ class MenuEntry:
     def __repr__(self):
         return f"MenuEntry({self.option}, {self.handler})"
 
-    def __str__(self):                  # Affichage print
+    def __str__(self):
         return str(self.option)
 
 
 class Menu:
     """
-    Menu liant clés et entrées
+    Menu liant clés, entrées, gestionnaire
     """
     def __init__(self):
         self._entries = {}
@@ -28,6 +29,14 @@ class Menu:
         return self._entries[choice]
 
     def add(self, key, option, handler):
+        """
+        permet d'ajouter des entrées, avec leur gestionnaire
+        :param key: si égal à "auto", la clé va prendre la suite après 1 ou
+        les clés précédemment "auto"
+        :param option: option affiché à choisir
+        :param handler: gestionnaire de l'option associée
+        :return: None
+        """
         if key == "auto":
             key = str(self._autokey)
             self._autokey += 1
@@ -35,6 +44,10 @@ class Menu:
         self._entries[str(key)] = MenuEntry(option, handler)
 
     def items(self):
+        """
+        permet d'accéder clé, entrées sans passer par _entries
+        :return: clé, entrées du menu
+        """
         return self._entries.items()
 
 
@@ -43,5 +56,5 @@ if __name__ == "__main__":
     menu.add("auto", "Lancer un tournoi", lambda: None)
     menu.add("auto", "Ajouter un nouveau joueur", lambda: None)
     menu.add("q", "Quitter", lambda: None)
-    print(menu._entries)
-    print(menu._entries['1'])
+    print(menu.items())
+    print(menu['1'])
