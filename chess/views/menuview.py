@@ -7,7 +7,7 @@ class MenuView:
         self.menu = menu
 
     def _display_menu(self):
-        for key, option in self.menu.items()
+        for key, option in self.menu.items():
             print(f"{key}. {option}")
 
     def _get_user_choice(self):
