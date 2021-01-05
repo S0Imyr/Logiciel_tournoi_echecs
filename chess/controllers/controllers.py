@@ -1,5 +1,5 @@
-from .menus import Menu
-from ..views.menuview import MenuView
+from chess.controllers.menus import Menu
+from chess.views.menuview import MenuView
 
 
 class BrowseControllers:
@@ -44,7 +44,7 @@ class Tournament:
         pass
 
     def __call__(self):
-        print("Lancement tournoi")
+        print("Lancement tournoi") # A modifier -> views
         return
 
 
@@ -54,7 +54,7 @@ class NewPlayer:
     """
 
     def __call__(self):
-        print("Lancement tournoi")
+        print("Définition d'un nouveau joueur")  # A modifier -> views
         return
 
 
@@ -84,4 +84,8 @@ class Ending:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        print("Aurevoir")
+        print("Aurevoir")  # A modifier -> views
+
+if __name__ == "__main__":
+    app = BrowseControllers()
+    app.start()
