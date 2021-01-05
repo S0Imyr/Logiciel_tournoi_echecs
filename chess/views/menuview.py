@@ -10,7 +10,7 @@ class MenuView:
         for key, option in self.menu.items():
             print(f"{key}. {option}")
 
-    def _get_user_choice(self):
+    def get_user_choice(self):
         while True:
             # Afficher le menu
             self._display_menu()
@@ -19,3 +19,14 @@ class MenuView:
             # Vérifier que le choix existe
             if choice in self.menu:
                 return self.menu[choice]
+
+if __name__ == "__main__":
+    from chess.controllers.menus import Menu
+    menu = Menu()
+    menu.add("auto", "Lancer un tournoi", lambda: None)
+    menu.add("auto", "Ajouter un nouveau joueur", lambda: None)
+    menu.add("q", "Quitter", lambda: None)
+    test = MenuView(menu)
+    test._display_menu()
+    test.get_user_choice()
+
