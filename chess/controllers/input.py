@@ -179,6 +179,7 @@ def define_tournament_player(num_player):
     id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
     pass # en attente de dico des identifiants
 
+
 if __name__ == "__main__":
     Me = input_actor()
     print(Me)
