@@ -157,15 +157,6 @@ def input_actor():
     return acteur
 
 
-def define_player(num_player):
-    """
-    Définit les joueurs d'un tournoi en demandant leur identifiant
-    :return: instance de l'acteur
-    """
-    id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
-    pass # en attente de dico des identifiants
-
-
 def tournament_inputs():
     """
     Recueil les informations nécessaires à la création d'un tournoi
@@ -179,6 +170,14 @@ def tournament_inputs():
     tournoi = Tournament(name, location, date, timer, description)
     return tournoi
 
+
+def define_tournament_player(num_player):
+    """
+    Définit les joueurs d'un tournoi en demandant leur identifiant
+    :return: instance de l'acteur
+    """
+    id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
+    pass # en attente de dico des identifiants
 
 if __name__ == "__main__":
     Me = input_actor()
