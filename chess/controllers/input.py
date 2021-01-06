@@ -1,5 +1,6 @@
 import datetime
 from chess.models.actors import Actor
+from chess.models.game import Tournament
 
 DATE_FORMAT = ["day", "month", "year"]
 ID_WIDTH = 8
@@ -62,8 +63,9 @@ def prompt_id_num(message, length=ID_WIDTH):
     Demande à l'utilisateur de saisir un identifiant
     qui est une chaîne de caractère numérique
     de longueur length
-    :param message, length la longueur de l'identifiant
-    :return: input
+    :param message: message à montrer
+    :param length: la longueur de l'identifiant
+    :return:
     """
     response = input(message)
     while len(response) != length:
@@ -78,19 +80,26 @@ def prompt_id_num(message, length=ID_WIDTH):
     return response
 
 
-def prompt_gender(message):
+def prompt_propositions(propositions):
     """
     Demande à l'utilisateur de spécifier un genre.
     Si la réponse n'est pas M ou F, la demande
     est refaite.
-    :param message:
+    :param propositions: dictionnaire des possibilités
     :return: input
     """
+    proposal_message = ""
+    for cle, item in propositions:
+        proposal_message += f"soit :{cle} pour {item}.\n"
+    message = "Choisissez parmi: \n" + proposal_message
+    error_message = "Votre réponse ne correspond pas. \n" \
+                    "Veuillez indiquer : \n"
+    error_message += proposal_message
+
     response = input(message)
-    while response != "M" and response != "F":
-        input("Votre réponse ne correspond pas. \n"
-              "Veuillez indiquer 'F' pour Féminin "
-              "ou 'M' pour Masculin :")
+
+    while response not in propositions:
+        input(error_message)
     return response
 
 
@@ -142,7 +151,7 @@ def input_actor():
     last_name = prompt_string("Votre nom de famille : ")
     first_name = prompt_string("Votre prénom : ")
     birthdate = prompt_date("Votre date de naissance en respectant le format: jj/mm/aaaa: ")
-    gender = prompt_gender("Votre genre en écrivant F pour féminin ou M pour Masculin: ")
+    gender = prompt_propositions({"F": "Féminin", "M": "Masculin"})
     rank = prompt_number("Votre classement HATP: ", min=0)
     acteur = Actor(last_name, first_name, birthdate, gender, rank)
     return acteur
@@ -151,10 +160,25 @@ def input_actor():
 def define_player(num_player):
     """
     Définit les joueurs d'un tournoi en demandant leur identifiant
-    :return: instance de tournoi
+    :return: instance de l'acteur
     """
     id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
-    pass
+    pass # en attente de dico des identifiants
+
+
+def tournament_inputs():
+    """
+    Recueil les informations nécessaires à la création d'un tournoi
+    :return: instance de tournoi avec les informations
+    """
+    name = prompt_string("Nom du tournoi : ")
+    location = prompt_string("Lieu du tournoi : ")
+    date = datetime.date.today()
+    timer = prompt_propositions({"Bu": "Bullet", "Bz": "Blitz", "Cr": "Coup rapide"})
+    description = prompt_number("description: ")
+    tournoi = Tournament(name, location, date, timer, description)
+    return tournoi
+
 
 if __name__ == "__main__":
     Me = input_actor()
