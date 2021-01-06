@@ -89,7 +89,7 @@ def prompt_propositions(propositions):
     :return: input
     """
     proposal_message = ""
-    for cle, item in propositions:
+    for cle, item in propositions.items():
         proposal_message += f"soit :{cle} pour {item}.\n"
     message = "Choisissez parmi: \n" + proposal_message
     error_message = "Votre réponse ne correspond pas. \n" \
@@ -175,7 +175,7 @@ def tournament_inputs():
     location = prompt_string("Lieu du tournoi : ")
     date = datetime.date.today()
     timer = prompt_propositions({"Bu": "Bullet", "Bz": "Blitz", "Cr": "Coup rapide"})
-    description = prompt_number("description: ")
+    description = prompt_string("description: ")
     tournoi = Tournament(name, location, date, timer, description)
     return tournoi
 
