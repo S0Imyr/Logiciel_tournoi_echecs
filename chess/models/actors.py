@@ -6,6 +6,7 @@ class Actor:
     An actor is the identity of player of the different tournaments
     """
     last_actor_id = "0"*ID_WIDTH
+    dict_id_actors = {}
 
     def __init__(self, last_name, first_name, birthdate, gender, rank):
         if Actor.last_actor_id.lstrip('0') == "":
@@ -21,11 +22,19 @@ class Actor:
         self.gender = gender
         self.rank = rank
         self.tournaments = []
+        self.actors = Actor.dict_id_actors
+        self.actors[self.actor_id] = self
 
     def __repr__(self):
         return f"Personne: Nom: {self.last_name}, Prénom: {self.first_name} \n" \
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
+
+    def __getitem__(self, id):
+        return self.actors[id]
+
+    def __contains__(self, id):
+        return id in self.actor_id
 
     def modify_rank(self, rank):
         self.rank = rank
