@@ -84,13 +84,15 @@ class TournamentPlayers:
 
     def __call__(self):
         while len(self.tournament.list_of_players) < NB_PLAYERS:
-            chess.views.flow.view_id_player(len(self.tournament.list_of_players)+1)
+            num_player = len(self.tournament.list_of_players)+1
+            chess.views.flow.view_id_player(num_player)
+            chess.controllers.input.define_tournament_player(self.tournament, num_player)
         return LaunchTournament(self.tournament)
 
 
 class NewPlayer:
     """
-    Menu d'ajout de joueurs
+    Gestion d'ajout de joueurs
     """
     def __init__(self, tournament=None):
         self.tournament = tournament
