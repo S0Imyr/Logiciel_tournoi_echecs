@@ -13,16 +13,20 @@ class Tournament:
     """
     last_tournament_id = "0"*ID_WIDTH
 
-    def __init__(self, name, location):
+    def __init__(self, name, location, start_date, timer, description):
+        if Tournament.last_tournament_id.lstrip('0') == "":
+            Tournament.last_tournament_id = str(1)
+        else:
+            Tournament.last_tournament_id = str(int(Tournament.last_tournament_id.lstrip('0')) + 1)
         self.tournament_id = \
-            (ID_WIDTH + 1 - len(str(Tournament.last_tournament_id)))*"0"\
-            + str(int(Tournament.last_tournament_id.lstrip('0'))+1)
+            (ID_WIDTH + 1 - len(Tournament.last_tournament_id.lstrip('0'))) * "0" \
+            + Tournament.last_tournament_id
         self.name = name
         self.location = location
-        self.start_date = None
+        self.start_date = start_date
         self.end_date = None
-        self.timer_type = ""
-        self.description = ""
+        self.timer_type = timer
+        self.description = description
         self.number_of_rounds = NB_ROUND
         self.rounds = [] # La liste des instances de tours.
         self.list_of_players = [] # Liste des indices correspondant aux instances du joueur stockées en mémoire)
@@ -65,7 +69,7 @@ class Tournament:
         tour1.matchs[3].declare_result(1)
         tour1.finished = True
         '''for k in range(NB_PLAYERS):
-            Tour1.matchs[k].assign_points()'''
+            tour1.matchs[k].assign_points()'''
         pass
 
 
@@ -99,6 +103,8 @@ if __name__ == "__main__":
     acteur6 = Actor("Palpatine", "Sheev", datetime.date(84, 2, 25), "M", 27)      # 4
     acteur7 = Actor("Kashyyyk", "Chewbacca", datetime.date(200, 8, 31), "M", 112) # 7
     acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
+    acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
+
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
     joueur3 = Player(acteur3, "00000001", 3)
@@ -227,5 +233,8 @@ if __name__ == "__main__":
 
     tour4.memorize_opponents()
 
+
+
     for k in range(8):
         print(joueurs[k])
+    print(acteur1)
