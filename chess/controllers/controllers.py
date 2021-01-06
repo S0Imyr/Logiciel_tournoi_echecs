@@ -1,5 +1,6 @@
 from chess.controllers.menus import Menu
 from chess.views.menuview import MenuView
+from chess.controllers.input import tournament_inputs
 import chess.views.flow
 
 
@@ -27,9 +28,45 @@ class HomeMenuController:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Lancer un tournoi", Tournament())
+        chess.views.flow.intro_HomeMenu()
+        self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Ajouter un nouveau joueur", NewPlayer())
         self.menu.add("auto", "Obtenir un rapport", RapportMenu())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+
+        return user_choice.handler
+
+
+class TournamentCreation:
+    """
+    Gestionnaire création du tournoi
+    """
+    def __init__(self):
+        self.tournament = None
+
+    def __call__(self):
+        chess.views.flow.tournament_creation()
+        self.tournament = tournament_inputs()
+
+        return TournamentPlayersMenu(self.tournament)
+
+
+class TournamentPlayersMenu:
+    """
+    Introduction des joueurs du tournoi
+    """
+    def __init__(self, tournament):
+        self.tournament = tournament
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        chess.views.flow.tournament_players()
+
+        self.menu.add("auto", "Ajouter les joueurs par id", TournamentPlayers(self.tournament))
+        self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", NewPlayer(self.tournament))
         self.menu.add("q", "quitter", Ending())
 
         user_choice = self.view.get_user_choice()
@@ -37,23 +74,17 @@ class HomeMenuController:
         return user_choice.handler
 
 
-class Tournament:
-    """
-    Gestionnaire du tournoi
-    """
-    def __init__(self):
-        pass
-
-    def __call__(self):
-        chess.views.flow.intro_tournament()
-        print("Lancement tournoi") # A modifier -> views
-        return
+class TournamentPlayers:
+    def __init__(self, tournament):
+        self.tournament = tournament
 
 
 class NewPlayer:
     """
     Menu d'ajout de joueurs
     """
+    def __init__(self, tournament=None):
+        self.tournament = tournament
 
     def __call__(self):
         print("Définition d'un nouveau joueur")  # A modifier -> views
