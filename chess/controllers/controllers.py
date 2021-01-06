@@ -1,7 +1,11 @@
 from chess.controllers.menus import Menu
 from chess.views.menuview import MenuView
 from chess.controllers.input import tournament_inputs
+from chess.controllers.input import input_actor
 import chess.views.flow
+
+
+NB_PLAYERS = 8
 
 
 class BrowseControllers:
@@ -28,7 +32,7 @@ class HomeMenuController:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        chess.views.flow.intro_HomeMenu()
+        chess.views.flow.view_intro_home_menu()
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Ajouter un nouveau joueur", NewPlayer())
         self.menu.add("auto", "Obtenir un rapport", RapportMenu())
@@ -47,7 +51,7 @@ class TournamentCreation:
         self.tournament = None
 
     def __call__(self):
-        chess.views.flow.tournament_creation()
+        chess.views.flow.view_tournament_creation()
         self.tournament = tournament_inputs()
 
         return TournamentPlayersMenu(self.tournament)
@@ -63,11 +67,11 @@ class TournamentPlayersMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        chess.views.flow.tournament_players()
+        chess.views.flow.view_tournament_players(self.tournament)
 
         self.menu.add("auto", "Ajouter les joueurs par id", TournamentPlayers(self.tournament))
         self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", NewPlayer(self.tournament))
-        self.menu.add("q", "quitter", Ending())
+        self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
 
@@ -78,6 +82,11 @@ class TournamentPlayers:
     def __init__(self, tournament):
         self.tournament = tournament
 
+    def __call__(self):
+        while len(self.tournament.list_of_players) < NB_PLAYERS:
+            chess.views.flow.view_id_player(len(self.tournament.list_of_players)+1)
+        return LaunchTournament(self.tournament)
+
 
 class NewPlayer:
     """
@@ -85,10 +94,25 @@ class NewPlayer:
     """
     def __init__(self, tournament=None):
         self.tournament = tournament
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
 
     def __call__(self):
-        print("Définition d'un nouveau joueur")  # A modifier -> views
-        return
+        chess.views.flow.view_new_player()
+        actor = input_actor()
+        chess.views.flow.view_validation_new_player(actor)
+        if self.tournament:
+            self.tournament.list_of_players.append(actor)
+            return TournamentPlayers(self.tournament)
+        return NewPlayer()
+
+
+class LaunchTournament:
+    def __init__(self, tournament):
+        self.tournament = tournament
+
+    def __call__(self):
+        pass
 
 
 class RapportMenu:
@@ -104,7 +128,7 @@ class RapportMenu:
         self.menu.add("auto", "Liste des tournois", ())
         self.menu.add("auto", "Détail d'un tournoi", ())
         self.menu.add("auto", "Menu principal", HomeMenuController())
-        self.menu.add("q", "quitter", Ending())
+        self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
 
