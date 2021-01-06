@@ -1,7 +1,13 @@
 
 
 def intro_tournament():
-    print("Bienvenue à ce tournoi \n"
-          "Débutons par définir les joueurs :")
+    print("\n ### Tournoi ### \n"
+          "\n"
+          "-- Débutons par définir les joueurs : --\n")
+
+def intro_HomeMenu():
+    print("\n ### Menu Principal ### \n"
+          "\n"
+          "-- Que souhaitez vous réaliser ? --\n")
 
 
