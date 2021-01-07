@@ -177,7 +177,7 @@ def define_tournament_player(tournament, num_player):
     :return: instance de l'acteur
     """
     actor_id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
-    while actor_id not in Actor:
+    while actor_id not in Actors:  ######
         actor_id = prompt_id_num(f"Identifiant inconnu. Veuillez réessayer l'identifiant du {num_player}: ")
     tournament.list_of_players.append(Actor[actor_id])
 
