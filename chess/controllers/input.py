@@ -4,6 +4,7 @@ from chess.models.game import Tournament
 
 DATE_FORMAT = ["day", "month", "year"]
 ID_WIDTH = 8
+NB_MATCH = 4
 
 
 def prompt_number(message, mini=None, maxi=None):
@@ -200,13 +201,16 @@ def input_match_results(round):
           "pour entrez les résultats")
     remaining_matchs = {"1": "Match 1", "2":
                         "Match 2", "3": "Match 3", "4": "Match 4"}
+    winners = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
         print(round.matchs[num_match-1])
         winner = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)
-        round.matchs[num_match-1].declare_result(winner)
+        winners[num_match] = winner
+        del remaining_matchs[str(num_match)]
+    return winners
 
 
 if __name__ == "__main__":
