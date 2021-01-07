@@ -116,7 +116,7 @@ class TournamentPlayers:
         print(self.tournament.list_of_players)  ###### test
         while len(self.tournament.list_of_players) < NB_PLAYERS:
             num_player = len(self.tournament.list_of_players) + 1
-            chess.views.flow.view_id_player(num_player)
+            chess.views.flow.view_id_player(self.tournament, num_player)
             define_tournament_player(self.tournament, num_player)
         return LaunchTournament(self.tournament)
 
