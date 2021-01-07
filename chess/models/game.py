@@ -30,7 +30,7 @@ class Tournament:
         self.timer_type = timer
         self.description = description
         self.number_of_rounds = NB_ROUND
-        self.rounds = [""]*NB_ROUND # La liste des instances de tours.
+        self.rounds = [] # La liste des instances de tours.
         self.list_of_players = [""]*NB_PLAYERS # Liste des indices correspondant aux instances du joueur stockées en mémoire)
         self.players_assigned = False
 
