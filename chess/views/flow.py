@@ -30,8 +30,7 @@ def view_new_player(tournament=None):
 
 
 def view_validation_new_player(actor):
-    print(f"\n ### Le joueur a bien été enregistré ### \n"
-          "\n")
+    print(f"\n ### Le joueur suivant a bien été enregistré ### \n")
     print(actor)
 
 
