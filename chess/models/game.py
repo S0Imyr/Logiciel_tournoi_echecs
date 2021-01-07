@@ -6,6 +6,7 @@ from chess.models.round import Round
 ID_WIDTH = 8
 NB_ROUND = 4
 NB_PLAYERS = 8
+NB_MATCH = 4
 
 
 class Tournament:
@@ -34,53 +35,26 @@ class Tournament:
         self.list_of_players = [""]*NB_PLAYERS # Liste des indices correspondant aux instances du joueur stockées en mémoire)
         self.players_assigned = False
 
-    def start_first_round(self):
+    def start_round(self, num_round):
         """
         Launch the Tournament
         :return:
         """
-        '''controllers.input.define_players
-        acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)  # 2
-        acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)  # 3
-        acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)  # 8
-        acteur4 = Actor("Tano", "Ahsoka", datetime.date(36, 11, 22), "F", 35)  # 5
-        acteur5 = Actor("Master", "Yoda", datetime.date(896, 10, 15), "M", 3)  # 1
-        acteur6 = Actor("Palpatine", "Sheev", datetime.date(84, 2, 25), "M", 27)  # 4
-        acteur7 = Actor("Kashyyyk", "Chewbacca", datetime.date(200, 8, 31), "M", 112)  # 7
-        acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)  # 6
-        joueur1 = Player(acteur1, 5, 1)
-        joueur2 = Player(acteur2, 5, 2)
-        joueur3 = Player(acteur3, 5, 3)
-        joueur4 = Player(acteur4, 5, 4)
-        joueur5 = Player(acteur5, 5, 5)
-        joueur6 = Player(acteur6, 5, 6)
-        joueur7 = Player(acteur7, 5, 7)
-        joueur8 = Player(acteur8, 5, 8)
-        joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
-        controllers.input.define_players'''
-
-        tour1 = Round(1, self.tournament_id, joueurs)
-        self.rounds.append(tour1)
-        tour1.define_matchs()
+        tour = Round(num_round, self.tournament_id, self.list_of_players)
+        self.rounds.append(tour)
+        tour.define_matchs()
 
         '''Annonce des matchs'''
-    def display_results_first_round(self, num_round, winners):
+    def register_round_results(self, num_round, winners):
         '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2'''
-        self.rounds[num_round].matchs[0].declare_result(winners[0])
-        self.rounds[num_round].matchs[1].declare_result(winners[1])
-        self.rounds[num_round].matchs[2].declare_result(winners[2])
-        self.rounds[num_round].matchs[3].declare_result(winners[3])
+        for num_match in range(NB_MATCH):
+            self.rounds[num_round].matchs[num_match].declare_result(winners[num_match])
         self.rounds[num_round].finished = True
 
     def assign_points(self, winners):
         for k in range(NB_PLAYERS):
             tour1.matchs[k].assign_points()
 
-    def start_other_round(self, num_round):
-        pass
-
-    def results_other_round(self, num_round):
-        pass
 
 
 if __name__ == "__main__":
