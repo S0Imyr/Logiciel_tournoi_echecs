@@ -32,7 +32,7 @@ class Tournament:
         self.description = description
         self.number_of_rounds = NB_ROUND
         self.rounds = [] # La liste des instances de tours.
-        self.list_of_players = [""]*NB_PLAYERS # Liste des indices correspondant aux instances du joueur stockées en mémoire)
+        self.list_of_players = [] # Liste des indices correspondant aux instances du joueur stockées en mémoire)
         self.players_assigned = False
 
     def start_round(self, num_round):
