@@ -2,6 +2,7 @@ import datetime
 from chess.models.actors import Actor
 from chess.models.game import Tournament
 
+
 DATE_FORMAT = ["day", "month", "year"]
 ID_WIDTH = 8
 NB_MATCH = 4
@@ -180,37 +181,33 @@ def tournament_inputs():
     return tournoi
 
 
-def define_tournament_player(tournament, num_player):
-    """
-    Définit les joueurs d'un tournoi en demandant leur identifiant
-    :return: instance de l'acteur
-    """
-    actor_id = prompt_id_num(f"Veuillez indiquer "
-                             f"l'identifiant du joueur {num_player}: ")
-    while actor_id not in Actors:  ######
-        actor_id = prompt_id_num(f"Identifiant inconnu."
-                                 f" Veuillez réessayer "
-                                 f"l'identifiant du {num_player}: ")
-    tournament.list_of_players.append(Actor[actor_id])
-
-
 def input_match_results(round):
+    """
+    Demande à remplir les résultat d'un tour
+    On commence par choisir un match en désignant son numéro
+    puis on indique un vainqueur ou un match nul
+    :param round: le tour en question
+    :return: la liste des résultats des 4 matchs
+    Exemple {0,1,1,2}, match nul pour le premier match
+    Le premier joueur désigné est vainqueur pour les matchs 2 et 3.
+    Le second joueur désigné est vainqueur pour le match 4.
+    """
     print("En attente de résultats: \n"
           "Lorsqu'un match est terminé, "
           "indiquez le numéro du match "
           "pour entrez les résultats")
     remaining_matchs = {"1": "Match 1", "2":
                         "Match 2", "3": "Match 3", "4": "Match 4"}
-    winners = [0]*NB_MATCH
+    results = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
-        print(round.matchs[num_match-1])
-        winner = prompt_number("Indiquer le vainqueur"
+        print(round.matchs[num_match])
+        result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)
-        winners[num_match] = winner
+        results[num_match] = result
         del remaining_matchs[str(num_match)]
-    return winners
+    return results
 
 
 if __name__ == "__main__":
