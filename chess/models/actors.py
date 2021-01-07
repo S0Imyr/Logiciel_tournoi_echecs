@@ -13,7 +13,7 @@ class Actor:
         else:
             Actor.last_actor_id = str(int(Actor.last_actor_id.lstrip('0')) + 1)
         self.actor_id = \
-            (ID_WIDTH + 1 - len(Actor.last_actor_id.lstrip('0'))) * "0" \
+            (ID_WIDTH - len(Actor.last_actor_id.lstrip('0'))) * "0" \
             + Actor.last_actor_id
         self.last_name = last_name
         self.first_name = first_name
