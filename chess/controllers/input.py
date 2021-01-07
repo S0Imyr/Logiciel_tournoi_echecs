@@ -6,18 +6,18 @@ DATE_FORMAT = ["day", "month", "year"]
 ID_WIDTH = 8
 
 
-def prompt_number(message, min=None, max=None):
+def prompt_number(message, mini=None, maxi=None):
     """
     Demande à l'utilisateur à l'aide de
     message de saisir un entier.
 
     Si l'utilisateur fournit un objet qui n'est
     pas un entier, ou un entier qui n'est pas
-    entre le min et le max (non compris),
+    entre le min et le max (compris),
     alors la question est reposée.
     :param message:
-    :param min:
-    :param max:
+    :param mini:
+    :param maxi:
     :return:
     """
     response = input(message)
@@ -29,20 +29,20 @@ def prompt_number(message, min=None, max=None):
         except ValueError:
             response = input("Entrée incorrecte, veuillez entrer un nombre : ")
 
-    if min is None and max is None:
+    if mini is None and maxi is None:
         pass
-    elif min is None:
-        while not int(response) < max:
+    elif mini is None:
+        while not int(response) <= maxi:
             response = input(f"Nombre incorrect, veuillez"
-                             f" entrer inférieur à {max} : ")
-    elif max is None:
-        while not int(response) > min:
+                             f" entrer inférieur à {maxi} : ")
+    elif maxi is None:
+        while not int(response) >= mini:
             response = input(f"Nombre incorrect, veuillez"
-                             f" entrer supérieur à {min} : ")
+                             f" entrer supérieur à {mini} : ")
     else:
-        while not (int(response) > min and int(response) < max):
+        while not (int(response) >= mini and int(response) <= maxi):
             response = input(f"Nombre incorrect, veuillez"
-                             f" entrer un entier entre {min} et {max} : ")
+                             f" entrer un entier entre {mini} et {maxi} : ")
     return int(response)
 
 
@@ -69,14 +69,16 @@ def prompt_id_num(message, length=ID_WIDTH):
     """
     response = input(message)
     while len(response) != length:
-        response = input(f"Entrée incorrecte. Veuillez renseigner un identifiant contenant {length} nombres: ")
+        response = input(f"Entrée incorrecte. Veuillez renseigner"
+                         f" un identifiant contenant {length} nombres: ")
     response_is_not_number = True
     while response_is_not_number:
         try:
             int(response)
             response_is_not_number = False
         except ValueError:
-            response = input(f"Entrée incorrecte. Veuillez renseigner un identifiant contenant {length} nombres: ")
+            response = input(f"Entrée incorrecte. Veuillez renseigner"
+                             f" un identifiant contenant {length} nombres: ")
     return response
 
 
@@ -115,30 +117,33 @@ def prompt_date(message):
     day = 1
     month = 1
     year = 0
-    response_is_not_date = True
-    while response_is_not_date:
+    is_not_date = True
+    while is_not_date:
         response = input(message)
-        response_is_not_slashed = True
-        response_is_not_int = True
-        response_is_not_yyyy = True
+        is_not_slashed = True
+        is_not_int = True
+        is_not_yyyy = True
         date = response.split("/")
         if len(date) == len(DATE_FORMAT):
-            response_is_not_slashed = False
+            is_not_slashed = False
             try:
                 day = int(date[0])
                 month = int(date[1])
                 if len(date[2]) == 4:
-                    response_is_not_yyyy = False
+                    is_not_yyyy = False
                     year = int(date[2])
                 else:
-                    message = "Erreur de format, veuiller écrire la date en respectant le format: jj/mm/aaaa: "
-                response_is_not_int = False
+                    message = "Erreur de format, veuiller écrire la date" \
+                              " en respectant le format: jj/mm/aaaa: "
+                is_not_int = False
             except ValueError:
-                response_is_not_int = True
-                message = "Erreur de format, veuiller écrire la date en respectant le format: jj/mm/aaaa: "
+                is_not_int = True
+                message = "Erreur de format, veuiller écrire la date" \
+                          " en respectant le format: jj/mm/aaaa: "
         else:
-            message = "Erreur de format, veuiller écrire la date en respectant le format: jj/mm/aaaa: "
-        response_is_not_date = response_is_not_int or response_is_not_slashed or response_is_not_yyyy
+            message = "Erreur de format, veuiller écrire la date" \
+                      " en respectant le format: jj/mm/aaaa: "
+        is_not_date = is_not_int or is_not_slashed or is_not_yyyy
     return datetime.date(year, month, day)
 
 
@@ -150,9 +155,10 @@ def input_actor():
     """
     last_name = prompt_string("Votre nom de famille : ")
     first_name = prompt_string("Votre prénom : ")
-    birthdate = prompt_date("Votre date de naissance en respectant le format: jj/mm/aaaa: ")
+    birthdate = prompt_date("Votre date de naissance "
+                            "en respectant le format: jj/mm/aaaa: ")
     gender = prompt_propositions({"F": "Féminin", "M": "Masculin"})
-    rank = prompt_number("Votre classement HATP: ", min=0)
+    rank = prompt_number("Votre classement HATP: ", mini=0)
     acteur = Actor(last_name, first_name, birthdate, gender, rank)
     return acteur
 
@@ -165,7 +171,9 @@ def tournament_inputs():
     name = prompt_string("Nom du tournoi : ")
     location = prompt_string("Lieu du tournoi : ")
     date = datetime.date.today()
-    timer = prompt_propositions({"Bu": "Bullet", "Bz": "Blitz", "Cr": "Coup rapide"})
+    timer = prompt_propositions({"Bu": "Bullet",
+                                 "Bz": "Blitz",
+                                 "Cr": "Coup rapide"})
     description = prompt_string("description: ")
     tournoi = Tournament(name, location, date, timer, description)
     return tournoi
@@ -176,10 +184,29 @@ def define_tournament_player(tournament, num_player):
     Définit les joueurs d'un tournoi en demandant leur identifiant
     :return: instance de l'acteur
     """
-    actor_id = prompt_id_num(f"Veuillez indiquer l'identifiant du joueur {num_player}: ")
+    actor_id = prompt_id_num(f"Veuillez indiquer "
+                             f"l'identifiant du joueur {num_player}: ")
     while actor_id not in Actors:  ######
-        actor_id = prompt_id_num(f"Identifiant inconnu. Veuillez réessayer l'identifiant du {num_player}: ")
+        actor_id = prompt_id_num(f"Identifiant inconnu."
+                                 f" Veuillez réessayer "
+                                 f"l'identifiant du {num_player}: ")
     tournament.list_of_players.append(Actor[actor_id])
+
+
+def input_match_results(round):
+    print("En attente de résultats: \n"
+          "Lorsqu'un match est terminé, "
+          "indiquez le numéro du match "
+          "pour entrez les résultats")
+    remaining_matchs = {"1": "Match 1", "2":
+                        "Match 2", "3": "Match 3", "4": "Match 4"}
+    while remaining_matchs != {}:
+        num_match = int(prompt_propositions(remaining_matchs))
+        print(round.matchs[num_match-1])
+        winner = prompt_number("Indiquer le vainqueur"
+                               " par 1 ou 2, ou inscrivez 0"
+                               " pour le match nul", 0, 2)
+        round.matchs[num_match-1].declare_result(winner)
 
 
 if __name__ == "__main__":
