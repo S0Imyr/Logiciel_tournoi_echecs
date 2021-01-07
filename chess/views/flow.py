@@ -36,8 +36,7 @@ def view_validation_new_player(actor):
 
 
 def view_id_player(tournament, num=1,):
-    print(f"\n ### Tournoi {tournament.name}: Identification de joueur ### \n"
-          "\n")
+    print(f"\n ### Tournoi {tournament.name}: Identification de joueur ### \n")
     print(f"-- Joueur {num}--")
 
 
