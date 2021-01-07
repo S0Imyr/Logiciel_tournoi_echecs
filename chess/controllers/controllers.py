@@ -1,12 +1,13 @@
 from chess.controllers.menus import Menu
 from chess.views.menuview import MenuView
-from chess.controllers.input import tournament_inputs, input_actor
+from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
 import chess.views.flow
 
 
 NB_PLAYERS = 8
 NB_MATCH = 4
 NB_ROUND = 4
+
 
 class BrowseControllers:
     def __init__(self):
@@ -30,19 +31,23 @@ class Actors:
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
-        self.id = []
-        self.actors = []
+        self.actors = {}
 
     def __call__(self, tournament=None, num_player=None):
         chess.views.flow.view_new_player()
         actor = input_actor()
-        self.id = actor.actor_id
-        self.actors.append(actor)
+        self.actors[actor.actor_id] = actor
         chess.views.flow.view_validation_new_player(actor)
         if tournament and num_player:
             tournament.list_of_players[num_player-1] = actor.actor_id
             return TournamentPlayers(tournament)
         return Actors()
+
+    def __getitem__(self, item):
+        return self.actors[item]
+
+    def __contains__(self, item):
+        return item in self.actors
 
 
 class HomeMenuController:
@@ -109,9 +114,9 @@ class TournamentPlayers:
 
     def __call__(self):
         while len(self.tournament.list_of_players) < NB_PLAYERS:
-            num_player = len(self.tournament.list_of_players)+1
+            num_player = len(self.tournament.list_of_players) + 1
             chess.views.flow.view_id_player(num_player)
-            chess.controllers.input.define_tournament_player(self.tournament, num_player)
+            define_tournament_player(self.tournament, num_player)
         return LaunchTournament(self.tournament)
 
 
@@ -124,7 +129,7 @@ class LaunchTournament:
         for num_round in range(NB_ROUND):
             self.tournament.start_round(num_round)                                              # Instance de round et définition des matchs
             chess.views.flow.view_round_matchs(self.tournament.rounds[num_round])               # Affichage des matchs
-            winners = chess.controllers.input_match_result(self.tournament.rounds[num_round])   # Attente, entrée des gagnants
+            winners = chess.controllers.input.input_match_results(self.tournament.rounds[num_round])   # Attente, entrée des gagnants
             self.tournament.register_round_results(num_round, winners)                          # Entrées dans instance de round
             chess.views.flow.view_round_matchs(self.tournament.rounds[num_round])               # Affichage résultats
             # DataBase.export()                                                                 # Export TDB
@@ -158,6 +163,19 @@ class Ending:
     def __call__(self):
         print("Aurevoir")  # A modifier -> views
 
+
+def define_tournament_player(tournament, num_player):
+    """
+    Définit les joueurs d'un tournoi en demandant leur identifiant
+    :return: instance de l'acteur
+    """
+    actor_id = prompt_id_num(f"Veuillez indiquer "
+                             f"l'identifiant du joueur {num_player}: ")
+    while actor_id not in Actors():  ######
+        actor_id = prompt_id_num(f"Identifiant inconnu."
+                                 f" Veuillez réessayer "
+                                 f"l'identifiant du {num_player}: ")
+    tournament.list_of_players.append(Actors().actors[actor_id])
 
 if __name__ == "__main__":
     app = BrowseControllers()
