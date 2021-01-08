@@ -55,6 +55,20 @@ class Tournament:
         for k in range(NB_PLAYERS):
             tour1.matchs[k].assign_points()
 
+    def tournament_to_dict(self):
+        """
+        convert a tournament into a dictionnary
+        :return:
+        """
+        pass
+
+    def dict_to_tournament(self):
+        """
+        convert a dictionnary into a tournament
+        :return:
+        """
+        pass
+
 
 
 if __name__ == "__main__":

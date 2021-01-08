@@ -39,6 +39,20 @@ class Round:
                         repr += f"Victoire de {self.matchs[num_match].player2.name}. \n"
         return repr
 
+    def round_to_dict(self):
+        """
+        convert a round into a dictionnary
+        :return:
+        """
+        pass
+
+    def dict_to_round(self):
+        """
+        convert a dictionnary into a round
+        :return:
+        """
+        pass
+
     def rank_players(self):
         if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("rank"))

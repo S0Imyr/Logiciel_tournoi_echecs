@@ -71,14 +71,14 @@ class Player:
 
     def player_to_dict(self):
         """
-        convert the actor into a dictionnary
+        convert an actor into a dictionnary
         :return:
         """
         pass
 
-    def player_to_actor(self):
+    def dict_to_player(self):
         """
-        convert a dictionnary into actor
+        convert a dictionnary into an actor
         :return:
         """
         pass

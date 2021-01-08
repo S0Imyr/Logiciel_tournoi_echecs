@@ -59,3 +59,17 @@ class Match:
             self.player1.points += POINTS["defeat"]
             self.player2.points += POINTS["victory"]
         self.points_assigned = True
+
+    def match_to_dict(self):
+        """
+        convert a match into a dictionnary
+        :return:
+        """
+        pass
+
+    def dict_to_match(self):
+        """
+        convert a dictionnary into match
+        :return:
+        """
+        pass
