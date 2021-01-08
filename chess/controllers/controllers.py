@@ -2,6 +2,7 @@ from chess.controllers.menus import Menu
 from chess.views.menuview import MenuView
 from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
 import chess.views.flow
+from chess.controllers.database import ExportActors, ExportTournament
 
 
 NB_PLAYERS = 8
@@ -38,7 +39,8 @@ class Actors:
         actor = input_actor()
         self.actors[actor.actor_id] = actor
         chess.views.flow.view_validation_new_player(actor)
-        #Enregistrer dans la DB
+        export = ExportActors(actor)
+        export.serialize_actors()                                                   #Enregistrer dans la DB
         if tournament is not None and num_player is not None:
             print("arguments, réussi") ### Test
             tournament.list_of_players[num_player] = actor.actor_id
