@@ -38,10 +38,21 @@ class Actors:
         actor = input_actor()
         self.actors[actor.actor_id] = actor
         chess.views.flow.view_validation_new_player(actor)
-        if tournament and num_player:
-            tournament.list_of_players[num_player-1] = actor.actor_id
-            return TournamentPlayers(tournament)
-        return Actors()
+        if tournament is not None and num_player is not None:
+            print("arguments, réussi") ### Test
+            tournament.list_of_players[num_player] = actor.actor_id
+            self.menu.add("auto", "Ajouter un nouveau joueur", Actors())            #tournament, num_player+1
+            self.menu.add("auto", "Terminer par l'identification par id", TournamentPlayers(tournament))
+            self.menu.add("auto", "Retour", TournamentPlayers(tournament))
+            self.menu.add("q", "Quitter", Ending())
+            user_choice = self.view.get_user_choice()
+            return user_choice.handler
+
+        self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
+        self.menu.add("auto", "Retour au menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
     def __getitem__(self, item):
         return self.actors[item]
@@ -97,7 +108,7 @@ class TournamentPlayersMenu:
         chess.views.flow.view_tournament_players(self.tournament)
 
         self.menu.add("auto", "Ajouter les joueurs par id", TournamentPlayers(self.tournament))
-        self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", Actors())
+        self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", Actors())     # self.tournament, 1
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
@@ -113,7 +124,6 @@ class TournamentPlayers:
         self.tournament = tournament
 
     def __call__(self):
-        print(self.tournament.list_of_players)  ###### test
         while len(self.tournament.list_of_players) < NB_PLAYERS:
             num_player = len(self.tournament.list_of_players) + 1
             chess.views.flow.view_id_player(self.tournament, num_player)

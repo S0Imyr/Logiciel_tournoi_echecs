@@ -24,7 +24,7 @@ def view_new_player(tournament=None):
     if tournament:
         display += f"\n ### Tournoi {tournament.name}: Nouveau joueur ### \n "
     else:
-        display += "Nouveau joueur"
+        display += "\n ### Nouveau joueur ### \n"
     display += "\n -- Entrez les informations demandées: --\n"
     print(display)
 
@@ -66,3 +66,4 @@ def view_round_matchs(round):
                     display += f"Victoire de " \
                                f"{round.matchs[num_match].player2.name}. \n"
     print(display)
+
