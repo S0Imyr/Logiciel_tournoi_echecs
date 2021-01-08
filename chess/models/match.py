@@ -73,18 +73,32 @@ class Match:
         serialized_match = {}
         for attribute in string_attributes:
             serialized_match[attribute] = self.__getattribute__(attribute)
-        # no_string_attributes = ['player1', 'player2', 'players_points']
+        # no_string_attributes = ['player1', 'player2']
         serialized_match['player1'] = self.player1.player_to_dict()
         serialized_match['player2'] = self.player1.player_to_dict()
         return serialized_match
 
-
-    def dict_to_match(self):
+    def dict_to_match(self, dictio):
         """
         convert a dictionnary into match
         :return: a instance of Match
         """
-        pass
+        for key, item in dictio.items():
+            if key == 'player1' or key == 'player2':
+                acteur = Actor(item['actor']['last_name'],
+                               item['actor']['first_name'],
+                               item['actor']['birthdate'],
+                               item['actor']['gender'],
+                               item['actor']['rank'])
+                acteur.dict_to_actor(item['actor'])
+                player = Player(acteur, item['tournament_id'], item['player_id'])
+                player.dict_to_player(item)
+                print("acteur: ", acteur)
+                print("joueur: ", player)
+                self.__setattr__(key, acteur)
+            else:
+                self.__setattr__(key, item)
+
 
 if __name__ == "__main__":
     from chess.models.actors import Actor, Player
@@ -105,3 +119,10 @@ if __name__ == "__main__":
     print(match)
     serie = match.match_to_dict()
     print(serie)
+    match = Match(serie['match_nb'], serie['round_nb'], serie['tournament_id'])
+    print(serie['match_nb'])
+    print(serie['player1'])
+    match.dict_to_match(serie)
+    print("Match num: ", match.match_nb)
+    print(match.player1)
+
