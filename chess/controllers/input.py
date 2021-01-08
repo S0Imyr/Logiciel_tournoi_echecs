@@ -1,6 +1,7 @@
 import datetime
 from chess.models.actors import Actor
 from chess.models.game import Tournament
+from chess.utils.conversion import str_into_date
 
 
 DATE_FORMAT = ["day", "month", "year"]
@@ -30,7 +31,6 @@ def prompt_number(message, mini=None, maxi=None):
             response_is_not_number = False
         except ValueError:
             response = input("Entrée incorrecte, veuillez entrer un nombre : ")
-
     if mini is None and maxi is None:
         pass
     elif mini is None:
@@ -116,9 +116,7 @@ def prompt_date(message):
     :param message:
     :return: input date
     """
-    day = 1
-    month = 1
-    year = 0
+    date = ""
     is_not_date = True
     while is_not_date:
         response = input(message)
@@ -129,11 +127,9 @@ def prompt_date(message):
         if len(date) == len(DATE_FORMAT):
             is_not_slashed = False
             try:
-                day = int(date[0])
-                month = int(date[1])
                 if len(date[2]) == 4:
                     is_not_yyyy = False
-                    year = int(date[2])
+                    date = str_into_date(response)
                 else:
                     message = "Erreur de format, veuiller écrire la date" \
                               " en respectant le format: jj/mm/aaaa: "
@@ -146,7 +142,7 @@ def prompt_date(message):
             message = "Erreur de format, veuiller écrire la date" \
                       " en respectant le format: jj/mm/aaaa: "
         is_not_date = is_not_int or is_not_slashed or is_not_yyyy
-    return datetime.date(year, month, day)
+    return date
 
 
 def input_actor():
