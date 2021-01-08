@@ -14,17 +14,17 @@ def list_to_str_space(list):
         string += str(element)+ " "
     return string.strip()
 
-def str_space_to_int_list(string):
+def str_space_to_list(string):
     string_list = string.split(" ")
     int_list = []
     if string_list != '':
         for element in string_list:
             if element != '':
-                int_list.append(int(element))
+                int_list.append(element)
     return int_list
 
 if __name__ == "__main__":
     test = list_to_str_space([2, 1])
     print(test)
-    print(str_space_to_int_list(test))
-    print(str_space_to_int_list(' '))
+    print(str_space_to_list(test))
+    print(str_space_to_list(' '))
