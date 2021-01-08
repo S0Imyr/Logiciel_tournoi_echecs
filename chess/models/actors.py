@@ -95,11 +95,12 @@ class Player:
         return serialized_player
 
 
-    def dict_to_player(self, dict):
+    def dict_to_player(self, dictio):
         """
         convert a dictionnary into an actor
         :return:
         """
+
         pass
 
 if __name__ == "__main__":
