@@ -1,3 +1,6 @@
+from chess.utils.conversion import list_to_str_space
+
+
 ID_WIDTH = 8
 
 
@@ -35,9 +38,17 @@ class Actor:
         convert the actor into a dictionnary
         :return:
         """
-        pass
+        string_attributes = ['actor_id', 'last_name', 'first_name', 'gender', 'rank']
+        serialized_actor = {}
+        for attribute in string_attributes:
+            serialized_actor[attribute] = self.__getattribute__(attribute)
+        # no_string_attributes = ['birthdate', 'tournaments']
+        serialized_actor['birthdate'] = str(self.birthdate)
+        serialized_actor['tournaments'] = list_to_str_space(self.tournaments)
+        return serialized_actor
 
-    def dict_to_actor(self):
+
+    def dict_to_actor(self, dict):
         """
         convert a dictionnary into actor
         :return:
@@ -74,11 +85,30 @@ class Player:
         convert an actor into a dictionnary
         :return:
         """
-        pass
+        string_attributes = ['name', 'tournament_id', 'player_id', 'rank', 'ranking', 'points', 'place']
+        serialized_player = {}
+        for attribute in string_attributes:
+            serialized_player[attribute] = self.__getattribute__(attribute)
+        # no_string_attributes = ['actor', 'opponents']
+        serialized_player['actor'] = self.actor.actor_to_dict()
+        serialized_player['opponents'] = list_to_str_space(self.opponents)
+        return serialized_player
 
-    def dict_to_player(self):
+
+    def dict_to_player(self, dict):
         """
         convert a dictionnary into an actor
         :return:
         """
         pass
+
+if __name__ == "__main__":
+    import datetime
+    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
+    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
+
+    joueur1 = Player(acteur1, "00000001", 1)
+    joueur2 = Player(acteur2, "00000001", 2)
+
+    print(joueur1.player_to_dict())
+    print(acteur2.actor_to_dict())
