@@ -30,6 +30,20 @@ class Actor:
     def modify_rank(self, rank):
         self.rank = rank
 
+    def actor_to_dict(self):
+        """
+        convert the actor into a dictionnary
+        :return:
+        """
+        pass
+
+    def dict_to_actor(self):
+        """
+        convert a dictionnary into actor
+        :return:
+        """
+        pass
+
 
 class Player:
     """
@@ -54,3 +68,17 @@ class Player:
                f"Place: {self.place}\n" \
                f"Points: {self.points}\n" \
                f"A joué contre: {self.opponents} \n"
+
+    def player_to_dict(self):
+        """
+        convert the actor into a dictionnary
+        :return:
+        """
+        pass
+
+    def player_to_actor(self):
+        """
+        convert a dictionnary into actor
+        :return:
+        """
+        pass
