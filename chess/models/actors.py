@@ -1,4 +1,4 @@
-from chess.utils.conversion import list_to_str_space, str_space_to_int_list
+from chess.utils.conversion import list_to_str_space, str_space_to_list, str_to_date
 
 
 ID_WIDTH = 8
@@ -54,8 +54,7 @@ class Actor:
         :return:
         """
         self.actor_id = dictio['actor_id']
-        self.tournaments = str_space_to_int_list(dictio['tournaments'])
-
+        self.tournaments = str_space_to_list(dictio['tournaments'])
 
 
 class Player:
@@ -85,7 +84,7 @@ class Player:
     def player_to_dict(self):
         """
         convert an actor into a dictionnary
-        :return:
+        :return: dictionnary of the player serialiazed
         """
         string_attributes = ['name', 'tournament_id', 'player_id', 'rank', 'ranking', 'points', 'place']
         serialized_player = {}
@@ -96,48 +95,46 @@ class Player:
         serialized_player['opponents'] = list_to_str_space(self.opponents)
         return serialized_player
 
-
     def dict_to_player(self, dictio):
         """
         convert a dictionnary into an actor
         :return:
         """
-        for key, item in dictio.items():
-            if key == 'player1' or key == 'player2':
-                acteur = Actor(item['actor']['last_name'],
-                               item['actor']['first_name'],
-                               item['actor']['birthdate'],
-                               item['actor']['gender'],
-                               item['actor']['rank'])
-                acteur.dict_to_actor(item['actor'])
-                player = Player(acteur,
-                                item['tournament_id'],
-                                item['player_id'])
-                player.dict_to_player(item)
-                self.__setattr__(key, acteur)
-            else:
-                self.__setattr__(key, item)
+        string_attribute = ['name', 'rank', 'ranking', 'points', 'place']
+        for key in string_attribute:
+            self.__setattr__(key, dictio[key])
+        self.opponents = str_space_to_list(dictio['opponents'])
+
 
 if __name__ == "__main__":
     import datetime
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
     acteur2.tournaments = ["00000025", "00000027"]
-    acteur2.actor_id = ['000123456']
+    acteur2.actor_id = '000123456'
     print(acteur2.actor_to_dict())
     dictio = acteur2.actor_to_dict()
     acteur3 = Actor(dictio['last_name'],
                     dictio['first_name'],
-                    dictio['birthdate'],
+                    str_to_date(dictio['birthdate']),
                     dictio['gender'],
                     dictio['rank'])
     acteur3.dict_to_actor(dictio)
-    print("acteur3:", acteur3)
-    print(acteur3.tournaments, acteur3.actor_id)
+    print("acteur3: ", acteur3)
+    print(acteur3.tournaments, acteur3.actor_id, acteur3.birthdate.month)
+
+    print("\n ### Tests Player ### \n")
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
+    joueur1.place = 1
+    joueur1.opponents = [1, 2, 3]
 
-    print(joueur1.player_to_dict())
+    dico2 = joueur1.player_to_dict()
+    print("\n dico2:", dico2)
 
+    joueur3 = Player(acteur3, dico2['tournament_id'], dico2['player_id'])
+    joueur3.dict_to_player(dico2)
+
+    print("joueur3 \n", joueur3, joueur3.player_id)
 
 #### ne pas oublier last_id
