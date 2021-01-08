@@ -23,8 +23,17 @@ def str_space_to_list(string):
                 int_list.append(element)
     return int_list
 
+def str_to_date(string):
+    date_list = string.split("-")
+    year = int(date_list[0])
+    month = int(date_list[1])
+    day = int(date_list[2])
+    return datetime.date(year, month, day)
+
 if __name__ == "__main__":
     test = list_to_str_space([2, 1])
     print(test)
     print(str_space_to_list(test))
     print(str_space_to_list(' '))
+    da = str_to_date("0019-12-07")
+    print(da.month)
