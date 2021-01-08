@@ -69,7 +69,12 @@ class Match:
         convert a match into a dictionnary
         :return: a dictionnary
         """
-        string_attributes = ['match_nb', 'round_nb', 'tournament_id', 'winner', 'finished', 'points_assigned']
+        string_attributes = ['match_nb',
+                             'round_nb',
+                             'tournament_id',
+                             'winner',
+                             'finished',
+                             'points_assigned']
         serialized_match = {}
         for attribute in string_attributes:
             serialized_match[attribute] = self.__getattribute__(attribute)
@@ -91,10 +96,10 @@ class Match:
                                item['actor']['gender'],
                                item['actor']['rank'])
                 acteur.dict_to_actor(item['actor'])
-                player = Player(acteur, item['tournament_id'], item['player_id'])
+                player = Player(acteur,
+                                item['tournament_id'],
+                                item['player_id'])
                 player.dict_to_player(item)
-                print("acteur: ", acteur)
-                print("joueur: ", player)
                 self.__setattr__(key, acteur)
             else:
                 self.__setattr__(key, item)
@@ -103,8 +108,15 @@ class Match:
 if __name__ == "__main__":
     from chess.models.actors import Actor, Player
     import datetime
-    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
-    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
+    acteur1 = Actor("Skywalker",
+                    "Anakin",
+                    datetime.date(41, 5, 6),
+                    "M", 8)
+    acteur2 = Actor("Skywalker",
+                    "Luke",
+                    datetime.date(19, 12, 7),
+                    "M",
+                    21)
 
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
@@ -119,7 +131,9 @@ if __name__ == "__main__":
     print(match)
     serie = match.match_to_dict()
     print(serie)
-    match = Match(serie['match_nb'], serie['round_nb'], serie['tournament_id'])
+    match = Match(serie['match_nb'],
+                  serie['round_nb'],
+                  serie['tournament_id'])
     print(serie['match_nb'])
     print(serie['player1'])
     match.dict_to_match(serie)
