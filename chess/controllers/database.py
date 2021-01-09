@@ -42,8 +42,19 @@ def deserialize_match(serialized_match):
     return match
 
 
-def deserialize_round():
-    pass
+def deserialize_round(serialized_round):
+    deserialized_players = []
+    for player in serialized_round['players']:
+        deserialized_players.append(deserialize_player(player))
+    r0und = Round(serialized_round['round_nb'], serialized_round['tournament_id'], deserialized_players)
+    string_attribute = ['players_ranked', 'finished', 'players_sorted']
+    for attribute in string_attribute:
+        setattr(r0und, attribute, serialized_round[attribute])
+    matchs = []
+    for match_nb in serialized_round['matchs'].keys():
+         matchs.append(deserialize_match(serialized_round['matchs'][match_nb]))
+    setattr(r0und, 'matchs', matchs)
+    return r0und
 
 
 def deserialize_tournament():
@@ -154,6 +165,10 @@ if __name__ == '__main__':
 
     """ Test Round """
     print("\n ### Test Round ### \n")
+
+    r00ound = Round(round_nb=3,tournament_id="00000002", players=joueurs)
+
+    print(vars(r00ound))
 
     """ Test Tournament """
     print("\n ### Test Tournament ### \n")
