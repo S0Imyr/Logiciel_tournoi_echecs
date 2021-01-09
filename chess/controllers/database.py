@@ -32,11 +32,19 @@ def deserialize_match(serialized_match):
     match = Match(serialized_match['match_nb'],
                   serialized_match['round_nb'],
                   serialized_match['tournament_id'])
-    match.dict_to_match(serialized_match)
+    player1 = deserialize_player(serialized_match['player1'])
+    setattr(match, 'player1', player1)
+    player2 = deserialize_player(serialized_match['player2'])
+    setattr(match, 'player2', player2)
+    string_attribute = ['winner', 'finished', 'points_assigned']
+    for attribute in string_attribute:
+        setattr(match, attribute, serialized_match[attribute])
     return match
+
 
 def deserialize_round():
     pass
+
 
 def deserialize_tournament():
     pass
@@ -129,8 +137,23 @@ if __name__ == '__main__':
     """ Test Match """
     print("\n ### Test Match ### \n")
 
+    match = Match(2, 3, "00000002")
+    match.player1 = joueur4
+    match.player2 = joueur5
+    match.declare_result(1)
+    match.assign_points()
+
+    """ serialize """
+    ser_match = match.match_to_dict()
+    print(ser_match)
+
+    """ deserialize """
+    match0 = deserialize_match(ser_match)
+    print(vars(match))
+    print(vars(match0))
+
     """ Test Round """
-    print("\n ### Test Match ### \n")
+    print("\n ### Test Round ### \n")
 
     """ Test Tournament """
-    print("\n ### Test Match ### \n")
+    print("\n ### Test Tournament ### \n")
