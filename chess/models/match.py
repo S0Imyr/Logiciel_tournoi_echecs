@@ -1,4 +1,4 @@
-from chess.utils.conversion import list_to_str_space
+from chess.utils.conversion import list_to_str_space, str_to_date
 
 
 POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
@@ -80,7 +80,7 @@ class Match:
             serialized_match[attribute] = self.__getattribute__(attribute)
         # no_string_attributes = ['player1', 'player2']
         serialized_match['player1'] = self.player1.player_to_dict()
-        serialized_match['player2'] = self.player1.player_to_dict()
+        serialized_match['player2'] = self.player2.player_to_dict()
         return serialized_match
 
     def dict_to_match(self, dictio):
@@ -89,10 +89,10 @@ class Match:
         :return: a instance of Match
         """
         for key, item in dictio.items():
-            if key == 'player1' or key == 'player2':
+            if key == 'player1':
                 acteur = Actor(item['actor']['last_name'],
                                item['actor']['first_name'],
-                               item['actor']['birthdate'],
+                               str_to_date(item['actor']['birthdate']),
                                item['actor']['gender'],
                                item['actor']['rank'])
                 acteur.dict_to_actor(item['actor'])
@@ -100,7 +100,19 @@ class Match:
                                 item['tournament_id'],
                                 item['player_id'])
                 player.dict_to_player(item)
-                self.__setattr__(key, acteur)
+                self.__setattr__(key, player)
+            elif key == 'player2':
+                acteur = Actor(item['actor']['last_name'],
+                               item['actor']['first_name'],
+                               str_to_date(item['actor']['birthdate']),
+                               item['actor']['gender'],
+                               item['actor']['rank'])
+                acteur.dict_to_actor(item['actor'])
+                player = Player(acteur,
+                                item['tournament_id'],
+                                item['player_id'])
+                player.dict_to_player(item)
+                self.__setattr__(key, player)
             else:
                 self.__setattr__(key, item)
 
@@ -108,6 +120,7 @@ class Match:
 if __name__ == "__main__":
     from chess.models.actors import Actor, Player
     import datetime
+    """ Données """
     acteur1 = Actor("Skywalker",
                     "Anakin",
                     datetime.date(41, 5, 6),
@@ -128,15 +141,30 @@ if __name__ == "__main__":
     match.player2 = joueur2
     match.declare_result(1)
     match.assign_points()
+
+    print("\n Info match : \n")
     print(match)
+
+    """ serialize """
     serie = match.match_to_dict()
+    print("\n Test série: \n")
     print(serie)
+
+
+    print("\n Début deserialize: \n")
     match = Match(serie['match_nb'],
                   serie['round_nb'],
                   serie['tournament_id'])
-    print(serie['match_nb'])
-    print(serie['player1'])
+    print("Donnée Match: ", serie['match_nb'])
+    print("Donnée Player 1: ", serie['player1'])
+    print("Donnée Player 2: ", serie['player2'])
+    print("fin de deserialize: \n")
     match.dict_to_match(serie)
-    print("Match num: ", match.match_nb)
-    print(match.player1)
+    print("Match: ", match.match_nb)
+    print("Player 1", match.player1)
+    print("Player 2:", match.player2)
+    print("Joueur 1", match.player1.actor)
+    print("Joueur 2:", match.player2.actor)
 
+
+    print(match)
