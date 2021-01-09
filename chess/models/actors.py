@@ -41,7 +41,7 @@ class Actor:
         string_attributes = ['actor_id', 'last_name', 'first_name', 'gender', 'rank']
         serialized_actor = {}
         for attribute in string_attributes:
-            serialized_actor[attribute] = self.__getattribute__(attribute)
+            serialized_actor[attribute] = getattr(self, attribute)
         # no_string_attributes = ['birthdate', 'tournaments']
         serialized_actor['birthdate'] = str(self.birthdate)
         serialized_actor['tournaments'] = list_to_str_space(self.tournaments)
@@ -89,7 +89,7 @@ class Player:
         string_attributes = ['name', 'tournament_id', 'player_id', 'rank', 'ranking', 'points', 'place']
         serialized_player = {}
         for attribute in string_attributes:
-            serialized_player[attribute] = self.__getattribute__(attribute)
+            serialized_player[attribute] = getattr(self, attribute)
         # no_string_attributes = ['actor', 'opponents']
         serialized_player['actor'] = self.actor.actor_to_dict()
         serialized_player['opponents'] = list_to_str_space(self.opponents)
