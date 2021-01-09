@@ -14,8 +14,11 @@ def deserialiaze_actor(serialiazed_actor):
     return actor
 
 
-def deserialize_player():
-    pass
+def deserialize_player(serialiazed_player):
+    actor = deserialiaze_actor(serialiazed_player['actor'])
+    player = Player(actor, serialiazed_player['tournament_id'], serialiazed_player['player_id'])
+    player.dict_to_player(serialiazed_player)
+    return player
 
 
 def deserialize_match():
@@ -63,6 +66,9 @@ if __name__ == '__main__':
     handler = DataBaseHandler(TinyDB('db.json'))
     handler.database.table('actors').truncate()
 
+    print("\n ### Test acteur ### \n")
+    """ Test Acteur """
+
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
     acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)         # 8
@@ -73,6 +79,19 @@ if __name__ == '__main__':
     acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
     acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
 
+    acteur1.tournaments = ["00002200", "00002201"]
+    for k in acteurs:
+        handler.export_actor(k)
+    # print(vars(acteur1))
+    acters = handler.import_actors()
+    print(acters)
+
+    """Verification"""
+    print(vars(acteur1))
+    print(vars(acters[1][0]))
+
+    """ Test Joueur """
+    print("\n ### Test joueur ### \n")
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
     joueur3 = Player(acteur3, "00000001", 3)
@@ -83,13 +102,17 @@ if __name__ == '__main__':
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
-    for k in acteurs:
-        handler.export_actor(k)
-    # print(vars(acteur1))
-    acters = handler.import_actors()
-    print(acters)
-    # joueur1 = Player(acteur1, "00000001", 1)
-    # print(vars(joueur1))
-    print(vars(acteur1))
-    print(vars(acters[1][0]))
+    """ serialize """
+    j3 = joueur3.player_to_dict()
+    #print("\n dico2:", dico2)
 
+    """ deserialize """
+    # acteur03 = deserialiaze_actor(dico2['actor'])
+    # joueur03 = Player(acteur03, dico2['tournament_id'], dico2['player_id'])
+    # joueur03.dict_to_player(dico2)
+    joueur03 = deserialize_player(j3)
+    print(vars(joueur3))
+    print(vars(joueur03))
+
+    print(vars(joueur3.actor))
+    print(vars(joueur03.actor))
