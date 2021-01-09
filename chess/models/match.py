@@ -83,39 +83,6 @@ class Match:
         serialized_match['player2'] = self.player2.player_to_dict()
         return serialized_match
 
-    def dict_to_match(self, dictio):
-        """
-        convert a dictionnary into match
-        :return: a instance of Match
-        """
-        for key, item in dictio.items():
-            if key == 'player1':
-                acteur = Actor(item['actor']['last_name'],
-                               item['actor']['first_name'],
-                               str_to_date(item['actor']['birthdate']),
-                               item['actor']['gender'],
-                               item['actor']['rank'])
-                acteur.dict_to_actor(item['actor'])
-                player = Player(acteur,
-                                item['tournament_id'],
-                                item['player_id'])
-                player.dict_to_player(item)
-                setattr(self, key, player)
-            elif key == 'player2':
-                acteur = Actor(item['actor']['last_name'],
-                               item['actor']['first_name'],
-                               str_to_date(item['actor']['birthdate']),
-                               item['actor']['gender'],
-                               item['actor']['rank'])
-                acteur.dict_to_actor(item['actor'])
-                player = Player(acteur,
-                                item['tournament_id'],
-                                item['player_id'])
-                player.dict_to_player(item)
-                setattr(self, key, player)
-            else:
-                setattr(self, key, item)
-
 
 if __name__ == "__main__":
     from chess.models.actors import Actor, Player
