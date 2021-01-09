@@ -77,7 +77,7 @@ class Match:
                              'points_assigned']
         serialized_match = {}
         for attribute in string_attributes:
-            serialized_match[attribute] = self.__getattribute__(attribute)
+            serialized_match[attribute] = getattr(self, attribute)
         # no_string_attributes = ['player1', 'player2']
         serialized_match['player1'] = self.player1.player_to_dict()
         serialized_match['player2'] = self.player2.player_to_dict()
