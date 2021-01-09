@@ -1,4 +1,4 @@
-from chess.utils.conversion import list_to_str_space, str_space_to_list, str_to_date
+from chess.utils.conversion import list_to_str_space
 
 
 ID_WIDTH = 8
@@ -48,15 +48,6 @@ class Actor:
         return serialized_actor
 
 
-    def dict_to_actor(self, dictio):
-        """
-        finish conversion of a dictionnary into actor
-        :return:
-        """
-        self.actor_id = dictio['actor_id']
-        self.tournaments = str_space_to_list(dictio['tournaments'])
-
-
 class Player:
     """
     A player mean a player in a specific tournament
@@ -95,16 +86,6 @@ class Player:
         serialized_player['opponents'] = list_to_str_space(self.opponents)
         return serialized_player
 
-    def dict_to_player(self, dictio):
-        """
-        convert a dictionnary into an actor
-        :return:
-        """
-        string_attribute = ['name', 'rank', 'ranking', 'points', 'place']
-        for key in string_attribute:
-            self.__setattr__(key, dictio[key])
-        self.opponents = str_space_to_list(dictio['opponents'])
-
 
 if __name__ == "__main__":
     import datetime
@@ -123,18 +104,6 @@ if __name__ == "__main__":
     """ test """
     print(dictio)
 
-    """ deserialize """
-    acteur3 = Actor(dictio['last_name'],
-                    dictio['first_name'],
-                    str_to_date(dictio['birthdate']),
-                    dictio['gender'],
-                    dictio['rank'])
-    acteur3.dict_to_actor(dictio)
-
-    """ test """
-    print("acteur3: ", acteur3)
-    print(acteur3.tournaments, acteur3.actor_id, acteur3.birthdate.month)
-
     """ Test Player """
     print("\n ### Tests Player ### \n")
 
@@ -147,11 +116,5 @@ if __name__ == "__main__":
     """ serialize """
     dico2 = joueur1.player_to_dict()
     print("\n dico2:", dico2)
-
-    """ deserialize """
-    joueur3 = Player(acteur3, dico2['tournament_id'], dico2['player_id'])
-    joueur3.dict_to_player(dico2)
-
-    print("joueur3 \n", joueur3, joueur3.player_id)
 
 #### ne pas oublier last_id
