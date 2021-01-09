@@ -108,30 +108,47 @@ class Player:
 
 if __name__ == "__main__":
     import datetime
+
+    """ Test Actor """
+    print("\n ### Tests Actor ### \n")
+    """ Données """
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
     acteur2.tournaments = ["00000025", "00000027"]
     acteur2.actor_id = '000123456'
-    print(acteur2.actor_to_dict())
+
+    """ serialize """
     dictio = acteur2.actor_to_dict()
+
+    """ test """
+    print(dictio)
+
+    """ deserialize """
     acteur3 = Actor(dictio['last_name'],
                     dictio['first_name'],
                     str_to_date(dictio['birthdate']),
                     dictio['gender'],
                     dictio['rank'])
     acteur3.dict_to_actor(dictio)
+
+    """ test """
     print("acteur3: ", acteur3)
     print(acteur3.tournaments, acteur3.actor_id, acteur3.birthdate.month)
 
+    """ Test Player """
     print("\n ### Tests Player ### \n")
+
+    """Données"""
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
     joueur1.place = 1
     joueur1.opponents = [1, 2, 3]
 
+    """ serialize """
     dico2 = joueur1.player_to_dict()
     print("\n dico2:", dico2)
 
+    """ deserialize """
     joueur3 = Player(acteur3, dico2['tournament_id'], dico2['player_id'])
     joueur3.dict_to_player(dico2)
 
