@@ -91,8 +91,7 @@ if __name__ == '__main__':
     handler = DataBaseHandler(TinyDB('db.json'))
     handler.database.table('actors').truncate()
 
-    print("\n ### Test acteur ### \n")
-    """ Test Acteur """
+    """ Données """
 
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
@@ -104,19 +103,6 @@ if __name__ == '__main__':
     acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
     acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
 
-    acteur1.tournaments = ["00002200", "00002201"]
-    for k in acteurs:
-        handler.export_actor(k)
-    # print(vars(acteur1))
-    acters = handler.import_actors()
-    print(acters)
-
-    """Verification"""
-    print(vars(acteur1))
-    print(vars(acters[1][0]))
-
-    """ Test Joueur """
-    print("\n ### Test joueur ### \n")
     joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
     joueur3 = Player(acteur3, "00000001", 3)
@@ -127,25 +113,138 @@ if __name__ == '__main__':
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
-    """ serialize """
+    """ Test Acteur 
+    print("\n ### Test acteur ### \n")
+    acteur1.tournaments = ["00002200", "00002201"]
+    for k in acteurs:
+        handler.export_actor(k)
+    # print(vars(acteur1))
+    acters = handler.import_actors()
+    print(acters)
+    """
+
+    """Verification
+    print(vars(acteur1))
+    print(vars(acters[1][0]))
+    """
+
+    """ Test Joueur 
+    print("\n ### Test joueur ### \n")
+    """
+
+    """ serialize 
     j3 = joueur3.player_to_dict()
     #print("\n dico2:", dico2)
+    """
 
-    """ deserialize """
+    """ deserialize 
     # acteur03 = deserialiaze_actor(dico2['actor'])
     # joueur03 = Player(acteur03, dico2['tournament_id'], dico2['player_id'])
     # joueur03.dict_to_player(dico2)
     joueur03 = deserialize_player(j3)
     print(vars(joueur3))
     print(vars(joueur03))
-
     print(vars(joueur3.actor))
     print(vars(joueur03.actor))
+    """
+
+    """ Lancement partie : """
+    tour1 = Round(1, "00000001", joueurs)
+
+    tour1.define_matchs()
+
+
+    tour1.rank_players()
+    tour1.define_matchs()
+
+
+    tour1.matchs[0].declare_result(1)
+    tour1.matchs[1].declare_result(2)
+    tour1.matchs[2].declare_result(0)
+    tour1.matchs[3].declare_result(1)
+
+
+    tour1.matchs[0].assign_points()
+    tour1.matchs[1].assign_points()
+    tour1.matchs[2].assign_points()
+    tour1.matchs[3].assign_points()
+    tour1.finished = True
+
+    tour1.memorize_opponents()
+
+
+    """Tour 2"""
+
+    tour2 = Round(2, "00000001", joueurs)
+
+    tour2.rank_players()
+    tour2.define_matchs()
+
+
+    tour2.matchs[0].declare_result(2)
+    tour2.matchs[1].declare_result(2)
+    tour2.matchs[2].declare_result(1)
+    tour2.matchs[3].declare_result(0)
+
+    tour2.matchs[0].assign_points()
+    tour2.matchs[1].assign_points()
+    tour2.matchs[2].assign_points()
+    tour2.matchs[3].assign_points()
+    tour2.finished = True
+
+    tour2.memorize_opponents()
+
+    """Tour 3"""
+
+    tour3 = Round(3, "00000001", joueurs)
+
+    tour3.rank_players()
+    tour3.define_matchs()
+
+
+    tour3.matchs[0].declare_result(0)
+    tour3.matchs[1].declare_result(2)
+    tour3.matchs[2].declare_result(2)
+    tour3.matchs[3].declare_result(1)
+
+    tour3.matchs[0].assign_points()
+    tour3.matchs[1].assign_points()
+    tour3.matchs[2].assign_points()
+    tour3.matchs[3].assign_points()
+    tour3.finished = True
+
+    tour3.memorize_opponents()
+
+
+
+    ''' Tour 4 '''
+
+    tour4 = Round(4, "00000001", joueurs)
+
+    tour4.rank_players()
+    tour4.define_matchs()
+
+    tour4.matchs[0].declare_result(1)
+    tour4.matchs[1].declare_result(2)
+    tour4.matchs[2].declare_result(0)
+    tour4.matchs[3].declare_result(1)
+
+    tour4.matchs[0].assign_points()
+    tour4.matchs[1].assign_points()
+    tour4.matchs[2].assign_points()
+    tour4.matchs[3].assign_points()
+    tour4.finished = True
+
+
+    tour4.memorize_opponents()
+
+    """ Fin partie """
+
 
     """ Test Match """
     print("\n ### Test Match ### \n")
 
-    match = Match(2, 3, "00000002")
+    match = tour4.matchs[0]
     match.player1 = joueur4
     match.player2 = joueur5
     match.declare_result(1)
