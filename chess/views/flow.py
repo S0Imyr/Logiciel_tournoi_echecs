@@ -70,3 +70,6 @@ def view_round_matchs(round):
 def view_import_actors(nb_players):
     print(f"\n ### Import de joueurs ### \n")
     print(f"-- {nb_players} joueurs importés --")
+
+def validation_export(exportation):
+    pass
