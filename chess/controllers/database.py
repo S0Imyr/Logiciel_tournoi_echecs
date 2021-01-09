@@ -1,30 +1,25 @@
-from chess.models.actors import Actor, Player
-from chess.models.match import Match
-from chess.models.round import Round
-from chess.models.game import Tournament
-from chess.models.game import Tournament
 from chess.utils.conversion import str_to_date, str_space_to_list
 from tinydb import TinyDB
 
 
-def deserialiaze_actor(serialiazed_actor):
-    actor = Actor(serialiazed_actor['last_name'],
-                  serialiazed_actor['first_name'],
-                  str_to_date(serialiazed_actor['birthdate']),
-                  serialiazed_actor['gender'],
-                  serialiazed_actor['rank'])
-    actor.actor_id = serialiazed_actor['actor_id']
-    actor.tournaments = str_space_to_list(serialiazed_actor['tournaments'])
+def deserialize_actor(serialized_actor):
+    actor = Actor(serialized_actor['last_name'],
+                  serialized_actor['first_name'],
+                  str_to_date(serialized_actor['birthdate']),
+                  serialized_actor['gender'],
+                  serialized_actor['rank'])
+    actor.actor_id = serialized_actor['actor_id']
+    actor.tournaments = str_space_to_list(serialized_actor['tournaments'])
     return actor
 
 
-def deserialize_player(serialiazed_player):
-    actor = deserialiaze_actor(serialiazed_player['actor'])
-    player = Player(actor, serialiazed_player['tournament_id'], serialiazed_player['player_id'])
+def deserialize_player(serialized_player):
+    actor = deserialize_actor(serialized_player['actor'])
+    player = Player(actor, serialized_player['tournament_id'], serialized_player['player_id'])
     string_attribute = ['name', 'rank', 'ranking', 'points', 'place']
     for key in string_attribute:
-        setattr(player, key, serialiazed_player[key])
-    player.opponents = str_space_to_list(serialiazed_player['opponents'])
+        setattr(player, key, serialized_player[key])
+    player.opponents = str_space_to_list(serialized_player['opponents'])
     return player
 
 
@@ -52,7 +47,7 @@ def deserialize_round(serialized_round):
         setattr(r0und, attribute, serialized_round[attribute])
     matchs = []
     for match_nb in serialized_round['matchs'].keys():
-         matchs.append(deserialize_match(serialized_round['matchs'][match_nb]))
+        matchs.append(deserialize_match(serialized_round['matchs'][match_nb]))
     setattr(r0und, 'matchs', matchs)
     return r0und
 
@@ -74,12 +69,11 @@ class DataBaseHandler:
         pass
 
     def import_actors(self):
-        db = TinyDB('db.json')
-        actors_table = db.table('actors')
+        actors_table = self.database.table('actors')
         serialized_actors = actors_table.all()
         actors = []
         for value in serialized_actors:
-            actor = deserialiaze_actor(value)
+            actor = deserialize_actor(value)
             actors.append(actor)
         return len(serialized_actors), actors
 
@@ -90,6 +84,9 @@ class DataBaseHandler:
 if __name__ == '__main__':
     import datetime
     from chess.models.actors import Actor, Player
+    from chess.models.match import Match
+    from chess.models.round import Round
+    from chess.models.game import Tournament
 
     handler = DataBaseHandler(TinyDB('db.json'))
     handler.database.table('actors').truncate()
@@ -166,7 +163,7 @@ if __name__ == '__main__':
     """ Test Round """
     print("\n ### Test Round ### \n")
 
-    r00ound = Round(round_nb=3,tournament_id="00000002", players=joueurs)
+    r00ound = Round(round_nb=3, tournament_id="00000002", players=joueurs)
 
     print(vars(r00ound))
 
