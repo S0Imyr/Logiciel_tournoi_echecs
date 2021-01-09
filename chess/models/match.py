@@ -100,7 +100,7 @@ class Match:
                                 item['tournament_id'],
                                 item['player_id'])
                 player.dict_to_player(item)
-                self.__setattr__(key, player)
+                setattr(self, key, player)
             elif key == 'player2':
                 acteur = Actor(item['actor']['last_name'],
                                item['actor']['first_name'],
@@ -112,9 +112,9 @@ class Match:
                                 item['tournament_id'],
                                 item['player_id'])
                 player.dict_to_player(item)
-                self.__setattr__(key, player)
+                setattr(self, key, player)
             else:
-                self.__setattr__(key, item)
+                setattr(self, key, item)
 
 
 if __name__ == "__main__":
