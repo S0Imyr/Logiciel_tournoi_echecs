@@ -2,10 +2,14 @@ from chess.models.game import Tournament
 from chess.models.actors import Actor
 
 from chess.views.menuview import MenuView
-import chess.views.flow
+from chess.views.flow import  view_validation_new_player, view_new_actor, \
+    view_intro_home_menu, view_tournament_creation, view_tournament_players,\
+    view_id_player, view_launch_tournament, view_round_matchs
+
 
 from chess.controllers.menus import Menu
-from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
+from chess.controllers.input import tournament_inputs, input_actor, \
+    prompt_id_num, input_match_results
 
 
 NB_PLAYERS = 8
@@ -37,8 +41,8 @@ class Actors:
         self.view = MenuView(self.menu)
         self.actors = {}
 
-    def __call__(self, tournament=None, num_player=None):
-        chess.views.flow.view_new_player()
+    def __call__(self):
+        view_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
                       actor_arguments[1],
@@ -46,17 +50,8 @@ class Actors:
                       actor_arguments[3],
                       actor_arguments[4])
         self.actors[actor.actor_id] = actor
-        chess.views.flow.view_validation_new_player(actor)
-                                                                #Enregistrer dans la DB
-        if tournament is not None and num_player is not None:
-            print("arguments, réussi") ### Test
-            tournament.list_of_players[num_player] = actor.actor_id
-            self.menu.add("auto", "Ajouter un nouveau joueur", Actors())            #tournament, num_player+1
-            self.menu.add("auto", "Terminer par l'identification par id", TournamentPlayers(tournament))
-            self.menu.add("auto", "Retour", TournamentPlayers(tournament))
-            self.menu.add("q", "Quitter", Ending())
-            user_choice = self.view.get_user_choice()
-            return user_choice.handler
+        view_validation_new_player(actor)
+        # Enregistrer dans la DB
 
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
         self.menu.add("auto", "Retour au menu principal", HomeMenuController())
@@ -71,7 +66,6 @@ class Actors:
         return item in self.actors
 
 
-
 class HomeMenuController:
     """
     Controleur du menu principal
@@ -81,7 +75,7 @@ class HomeMenuController:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        chess.views.flow.view_intro_home_menu()
+        view_intro_home_menu()
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
@@ -102,14 +96,14 @@ class TournamentCreation:
         self.tournament = None
 
     def __call__(self):
-        chess.views.flow.view_tournament_creation()
+        view_tournament_creation()
         tournament_arguments = tournament_inputs()
         self.tournament = Tournament(tournament_arguments[0],
                                      tournament_arguments[1],
                                      tournament_arguments[2],
                                      tournament_arguments[3],
                                      tournament_arguments[4])
-        # Export information
+        # Export information ? step 0
         return TournamentPlayersMenu(self.tournament)
 
 
@@ -123,10 +117,10 @@ class TournamentPlayersMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        chess.views.flow.view_tournament_players(self.tournament)
+        view_tournament_players(self.tournament)
 
         self.menu.add("auto", "Ajouter les joueurs par id", TournamentPlayers(self.tournament))
-        self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", Actors())     # self.tournament, 1
+        self.menu.add("auto", "Retour au Menu Principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
@@ -144,7 +138,7 @@ class TournamentPlayers:
     def __call__(self):
         while len(self.tournament.list_of_players) < NB_PLAYERS:
             num_player = len(self.tournament.list_of_players) + 1
-            chess.views.flow.view_id_player(self.tournament, num_player)
+            view_id_player(self.tournament, num_player)
             define_tournament_player(self.tournament, num_player)
         # Export
         return LaunchTournament(self.tournament)
@@ -155,14 +149,15 @@ class LaunchTournament:
         self.tournament = tournament
 
     def __call__(self):
-        chess.views.flow.view_launch_tournament(self.tournament)                                # Affichage lancement tournoi
+        view_launch_tournament(self.tournament)                                   # Affichage lancement tournoi
         for num_round in range(NB_ROUND):
-            self.tournament.start_round(num_round)                                              # Instance de round et définition des matchs
-            chess.views.flow.view_round_matchs(self.tournament.rounds[num_round])               # Affichage des matchs
-            winners = chess.controllers.input.input_match_results(self.tournament.rounds[num_round])   # Attente, entrée des gagnants
-            self.tournament.register_round_results(num_round, winners)                          # Entrées dans instance de round
-            chess.views.flow.view_round_matchs(self.tournament.rounds[num_round])               # Affichage résultats
-            # Export()                                                                 # Export TDB
+            self.tournament.start_round(num_round)                                # Instance de round et définition des matchs
+            view_round_matchs(self.tournament.rounds[num_round])                  # Affichage des matchs
+            winners = input_match_results(self.tournament.rounds[num_round])      # Attente, entrée des gagnants
+            self.tournament.register_round_results(num_round, winners)            # Entrées dans instance de round
+            view_round_matchs(self.tournament.rounds[num_round])                  # Affichage résultats
+            # step += 1
+            # Export()                                                            # Export TDB
 
 
 class ResumeTournament:

@@ -16,15 +16,19 @@ def view_tournament_creation():
 def view_tournament_players(tournament):
     print(f"\n ### Tournoi {tournament.name}: Type d'entrée des joueurs ### \n"
           "\n"
-          "-- Maintenant comment voulez vous entrer un joueur ? --\n")
+          
+          "-- Attention --\n"
+          
+          "pour ajouter des joueurs, "
+          "vous devez les avoir enregistrer "
+          "depuis le menu principal"
+          "puis donner l'identifiant au joueur"
+          "pour qu'il le redonne au lancement du tournoi. ")
 
 
-def view_new_player(tournament=None):
-    display = ""
-    if tournament:
-        display += f"\n ### Tournoi {tournament.name}: Nouveau joueur ### \n "
-    else:
-        display += "\n ### Nouveau joueur ### \n"
+
+def view_new_actor():
+    display = "\n ### Nouveau joueur ### \n"
     display += "\n -- Entrez les informations demandées: --\n"
     print(display)
 
