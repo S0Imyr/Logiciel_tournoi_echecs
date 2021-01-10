@@ -1,9 +1,12 @@
 import datetime
+
+from chess.utils.utils import get_new_id
+
 from chess.models.actors import Actor, Player
 from chess.models.round import Round
 
 
-ID_WIDTH = 8
+TOURNAMENT_ID_WIDTH = 8
 NB_ROUND = 4
 NB_PLAYERS = 8
 NB_MATCH = 4
@@ -13,17 +16,10 @@ class Tournament:
     """
     A Tournament
     """
-    last_tournament_id = "0"*ID_WIDTH
+    last_tournament_id = "0" * TOURNAMENT_ID_WIDTH
 
     def __init__(self, name, location, start_date, timer, description):
-        if Tournament.last_tournament_id.lstrip('0') == "":
-            Tournament.last_tournament_id = str(1)
-        else:
-            Tournament.last_tournament_id = \
-                str(int(Tournament.last_tournament_id.lstrip('0')) + 1)
-        self.tournament_id = \
-            (ID_WIDTH + 1 - len(Tournament.last_tournament_id.lstrip('0')))\
-            *"0"+ Tournament.last_tournament_id
+        self.tournament_id = get_new_id(Tournament.last_tournament_id, TOURNAMENT_ID_WIDTH)
         self.name = name
         self.location = location
         self.start_date = start_date
@@ -51,24 +47,30 @@ class Tournament:
             self.rounds[num_round].matchs[num_match].declare_result(winners[num_match])
         self.rounds[num_round].finished = True
 
-    def assign_points(self, winners):
-        for k in range(NB_PLAYERS):
-            tour1.matchs[k].assign_points()
 
     def tournament_to_dict(self):
         """
         convert a tournament into a dictionnary
         :return:
         """
-        pass
-
-    def dict_to_tournament(self):
-        """
-        convert a dictionnary into a tournament
-        :return:
-        """
-        pass
-
+"""        string_attributes = ['',
+                             '',
+                             '',
+                             '',
+                             '']
+        serialized_tournament = {}
+        for attribute in string_attributes:
+            serialized_tournament[attribute] = getattr(self, attribute)
+        # no_string_attributes = ['players' (list), 'matchs' (dict)]
+        serialized_tournament['players'] = []
+        for player in [1, 2]:
+            pass
+            #serialized_tournament['players']
+        serialized_tournament['matchs'] = {}
+        for key, value in {1:"un", 2: "deux"}:
+            # serialized_tournament['matchs'][key] = value.match_to_dict()
+            pass
+        return serialized_tournament"""
 
 
 if __name__ == "__main__":

@@ -1,23 +1,17 @@
 from chess.utils.conversion import list_to_str_space
+from chess.utils.utils import get_new_id
 
-
-ID_WIDTH = 8
+ACTOR_ID_WIDTH = 8
 
 
 class Actor:
     """
     An actor is the identity of player of the different tournaments
     """
-    last_actor_id = "0"*ID_WIDTH
+    last_actor_id = "0" * ACTOR_ID_WIDTH
 
     def __init__(self, last_name, first_name, birthdate, gender, rank):
-        if Actor.last_actor_id.lstrip('0') == "":
-            Actor.last_actor_id = str(1)
-        else:
-            Actor.last_actor_id = str(int(Actor.last_actor_id.lstrip('0')) + 1)
-        self.actor_id = \
-            (ID_WIDTH - len(Actor.last_actor_id.lstrip('0'))) * "0" \
-            + Actor.last_actor_id
+        self.actor_id = get_new_id(Actor.last_actor_id, ACTOR_ID_WIDTH)
         self.last_name = last_name
         self.first_name = first_name
         self.birthdate = birthdate
