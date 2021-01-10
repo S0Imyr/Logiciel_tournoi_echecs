@@ -16,11 +16,20 @@ def list_to_str_space(list):
 
 def str_space_to_list(string):
     string_list = string.split(" ")
+    list = []
+    if string_list != '':
+        for element in string_list:
+            if element != '':
+                list.append(element)
+    return list
+
+def str_space_to_int_list(string):
+    string_list = string.split(" ")
     int_list = []
     if string_list != '':
         for element in string_list:
             if element != '':
-                int_list.append(element)
+                int_list.append(int(element))
     return int_list
 
 def str_to_date(string):
