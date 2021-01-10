@@ -44,14 +44,23 @@ class Round:
         convert a round into a dictionnary
         :return:
         """
-        pass
+        string_attributes = ['round_nb',
+                             'tournament_id',
+                             'players_ranked',
+                             'finished',
+                             'players_sorted']
+        serialized_round = {}
+        for attribute in string_attributes:
+            serialized_round[attribute] = getattr(self, attribute)
+        # no_string_attributes = ['players' (list), 'matchs' (dict)]
+        serialized_round['players'] = []
+        for player in self.players:
+            serialized_round['players'].append(player.player_to_dict())
+        serialized_round['matchs'] = {}
+        for key, value in self.matchs.items():
+            serialized_round['matchs'][key] = value.match_to_dict()
+        return serialized_round
 
-    def dict_to_round(self):
-        """
-        convert a dictionnary into a round
-        :return:
-        """
-        pass
 
     def rank_players(self):
         if not self.players_ranked:
@@ -116,3 +125,57 @@ class Round:
         for match in range(NB_MATCH):
             self.matchs[match].player1.opponents.append(self.matchs[match].player2.player_id)
             self.matchs[match].player2.opponents.append(self.matchs[match].player1.player_id)
+
+if __name__ == '__main__':
+    import datetime
+    from chess.models.actors import Actor, Player
+    """ Données """
+
+    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
+    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
+    acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)         # 8
+    acteur4 = Actor("Tano", "Ahsoka", datetime.date(36, 11, 22), "F", 35)         # 5
+    acteur5 = Actor("Yoda", "Maître", datetime.date(896, 10, 15), "M", 3)         # 1
+    acteur6 = Actor("Palpatine", "Sheev", datetime.date(84, 2, 25), "M", 27)      # 4
+    acteur7 = Actor("Kashyyyk", "Chewbacca", datetime.date(200, 8, 31), "M", 112) # 7
+    acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
+    acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
+
+    joueur1 = Player(acteur1, "00000001", 1)
+    joueur2 = Player(acteur2, "00000001", 2)
+    joueur3 = Player(acteur3, "00000001", 3)
+    joueur4 = Player(acteur4, "00000001", 4)
+    joueur5 = Player(acteur5, "00000001", 5)
+    joueur6 = Player(acteur6, "00000001", 6)
+    joueur7 = Player(acteur7, "00000001", 7)
+    joueur8 = Player(acteur8, "00000001", 8)
+    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
+
+
+    """ Lancement partie : """
+    tour1 = Round(1, "00000001", joueurs)
+
+    tour1.define_matchs()
+
+
+    tour1.rank_players()
+    tour1.define_matchs()
+
+
+    tour1.matchs[0].declare_result(1)
+    tour1.matchs[1].declare_result(2)
+    tour1.matchs[2].declare_result(0)
+    tour1.matchs[3].declare_result(1)
+
+
+    tour1.matchs[0].assign_points()
+    tour1.matchs[1].assign_points()
+    tour1.matchs[2].assign_points()
+    tour1.matchs[3].assign_points()
+    tour1.finished = True
+
+    tour1.memorize_opponents()
+
+    print(vars(tour1))
+    print('serialized round')
+    print(tour1.round_to_dict())
