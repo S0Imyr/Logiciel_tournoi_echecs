@@ -85,7 +85,7 @@ class Round:
         :return:
         """
         if self.players_ranked:
-            if self.round_nb == 1:
+            if self.round_nb == 0:
                 print("Lancement du round 1")
                 for match in range(NB_MATCH):
                     self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
