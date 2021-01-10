@@ -1,4 +1,4 @@
-from chess.utils.conversion import str_to_date, str_space_to_list
+from chess.utils.conversion import str_to_date, str_space_to_list, str_space_to_int_list
 from tinydb import TinyDB
 
 
@@ -19,7 +19,7 @@ def deserialize_player(serialized_player):
     string_attribute = ['name', 'rank', 'ranking', 'points', 'place']
     for key in string_attribute:
         setattr(player, key, serialized_player[key])
-    player.opponents = str_space_to_list(serialized_player['opponents'])
+    player.opponents = str_space_to_int_list(serialized_player['opponents'])
     return player
 
 
@@ -45,9 +45,9 @@ def deserialize_round(serialized_round):
     string_attribute = ['players_ranked', 'finished', 'players_sorted']
     for attribute in string_attribute:
         setattr(r0und, attribute, serialized_round[attribute])
-    matchs = []
-    for match_nb in serialized_round['matchs'].keys():
-        matchs.append(deserialize_match(serialized_round['matchs'][match_nb]))
+    matchs = {}
+    for match_nb, match in serialized_round['matchs'].items():
+        matchs[match_nb] = deserialize_match(match)
     setattr(r0und, 'matchs', matchs)
     return r0und
 
@@ -113,40 +113,6 @@ if __name__ == '__main__':
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
-    """ Test Acteur 
-    print("\n ### Test acteur ### \n")
-    acteur1.tournaments = ["00002200", "00002201"]
-    for k in acteurs:
-        handler.export_actor(k)
-    # print(vars(acteur1))
-    acters = handler.import_actors()
-    print(acters)
-    """
-
-    """Verification
-    print(vars(acteur1))
-    print(vars(acters[1][0]))
-    """
-
-    """ Test Joueur 
-    print("\n ### Test joueur ### \n")
-    """
-
-    """ serialize 
-    j3 = joueur3.player_to_dict()
-    #print("\n dico2:", dico2)
-    """
-
-    """ deserialize 
-    # acteur03 = deserialiaze_actor(dico2['actor'])
-    # joueur03 = Player(acteur03, dico2['tournament_id'], dico2['player_id'])
-    # joueur03.dict_to_player(dico2)
-    joueur03 = deserialize_player(j3)
-    print(vars(joueur3))
-    print(vars(joueur03))
-    print(vars(joueur3.actor))
-    print(vars(joueur03.actor))
-    """
 
     """ Lancement partie : """
     tour1 = Round(1, "00000001", joueurs)
@@ -241,30 +207,71 @@ if __name__ == '__main__':
     """ Fin partie """
 
 
-    """ Test Match """
+    """ Test Acteur 
+    print("\n ### Test acteur ### \n")
+    acteur1.tournaments = ["00002200", "00002201"]
+    for k in acteurs:
+        handler.export_actor(k)
+    # print(vars(acteur1))
+    acters = handler.import_actors()
+    print(acters)"""
+
+
+    """Verification
+    print(vars(acteur1))
+    print(vars(acters[1][0]))
+    """
+
+    """ Test Joueur 
+    print("\n ### Test joueur ### \n")
+    """
+
+    """ serialize 
+    j3 = joueur3.player_to_dict()
+    #print("\n dico2:", dico2)
+    """
+
+    """ deserialize 
+    # acteur03 = deserialiaze_actor(dico2['actor'])
+    # joueur03 = Player(acteur03, dico2['tournament_id'], dico2['player_id'])
+    # joueur03.dict_to_player(dico2)
+    joueur03 = deserialize_player(j3)
+    print(vars(joueur3))
+    print(vars(joueur03))
+    print(vars(joueur3.actor))
+    print(vars(joueur03.actor))
+    """
+
+    """ Test Match 
     print("\n ### Test Match ### \n")
 
     match = tour4.matchs[0]
     match.player1 = joueur4
     match.player2 = joueur5
     match.declare_result(1)
-    match.assign_points()
+    match.assign_points()"""
 
-    """ serialize """
+    """ serialize 
     ser_match = match.match_to_dict()
-    print(ser_match)
+    print(ser_match) """
 
-    """ deserialize """
+    """ deserialize 
     match0 = deserialize_match(ser_match)
     print(vars(match))
-    print(vars(match0))
+    print(vars(match0))"""
 
     """ Test Round """
     print("\n ### Test Round ### \n")
 
-    r00ound = Round(round_nb=3, tournament_id="00000002", players=joueurs)
+    r0und4 = tour4
+    ser_round = r0und4.round_to_dict()
+    print(ser_round)
 
-    print(vars(r00ound))
+
+    r0und04 = deserialize_round(ser_round)
+
+    print(vars(r0und4))
+    print(vars(r0und04))
 
     """ Test Tournament """
     print("\n ### Test Tournament ### \n")
