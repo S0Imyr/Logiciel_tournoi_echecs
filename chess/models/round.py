@@ -41,7 +41,7 @@ class Round:
 
     def round_to_dict(self):
         """
-        convert a round into a dictionnary
+        Convert a round into a dictionnary
         :return:
         """
         string_attributes = ['round_nb',
@@ -63,9 +63,15 @@ class Round:
 
 
     def rank_players(self):
+        """
+        Rank players by points in the tournament (decreasingly)
+        and by rank
+        the method checks if the players have been ranked before
+        :return: None
+        """
         if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("rank"))
-            sorted_players = sorted(sorted_players, key=attrgetter("points"), reverse = True)
+            sorted_players = sorted(sorted_players, key=attrgetter("points"), reverse=True)
             for rank in range(NB_PLAYERS):
                 sorted_players[rank].place = rank + 1
             self.players_ranked = True
@@ -116,6 +122,25 @@ class Round:
         else:
             print("Attention, vous devez ranger les joueurs d'abord! \n")
 
+    def register_results(self, winners):
+        """
+        register the results of a round
+        :param winners: 0 for a tie, 1 when the first player quoted wins
+         and 2 when it's the second quoted.
+        :return: None
+        """
+        for num_match in range(NB_MATCH):
+            self.matchs[num_match].declare_result(winners[num_match])
+        self.finished = True
+
+    def assign_points(self):
+        """
+        Assign the points this round, for each matchs
+        :return: None
+        """
+        for num_match in range(NB_MATCH):
+            self.matchs[num_match].assign_points()
+
     def memorize_opponents(self):
         """
         For each player, memorize their previous
@@ -155,27 +180,14 @@ if __name__ == '__main__':
     """ Lancement partie : """
     tour1 = Round(1, "00000001", joueurs)
 
-    tour1.define_matchs()
-
-
-    tour1.rank_players()
-    tour1.define_matchs()
-
-
-    tour1.matchs[0].declare_result(1)
-    tour1.matchs[1].declare_result(2)
-    tour1.matchs[2].declare_result(0)
-    tour1.matchs[3].declare_result(1)
-
-
-    tour1.matchs[0].assign_points()
-    tour1.matchs[1].assign_points()
-    tour1.matchs[2].assign_points()
-    tour1.matchs[3].assign_points()
+    tour1.define_matchs()                           # Test rappel
+    tour1.rank_players()                            # Rangement des joueurs
+    tour1.define_matchs()                           # Désignation des matchs
+    tour1.register_results([0, 1, 2, 0])            # Rentrée des résultats
+    tour1.assign_points()                           # Assignation des résultats
     tour1.finished = True
+    tour1.memorize_opponents()                      # Mémorisation des adversaires
 
-    tour1.memorize_opponents()
+    print(tour1.matchs)
+    print(tour1.players)
 
-    print(vars(tour1))
-    print('serialized round')
-    print(tour1.round_to_dict())
