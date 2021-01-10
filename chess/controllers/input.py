@@ -157,6 +157,9 @@ def input_actor():
     acteur_arguments = [last_name, first_name, birthdate, gender, rank]
     return acteur_arguments
 
+def input_tournament_players(num_player, message):
+    actor_id = prompt_id_num(message)
+    return actor_id
 
 def tournament_inputs():
     """

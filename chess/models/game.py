@@ -31,6 +31,9 @@ class Tournament:
         self.list_of_players = []
         self.players_assigned = False
 
+    def define_players(self, players):
+        self.list_of_players = players
+
     def start_round(self, num_round):
         """
         Launch one round
@@ -71,7 +74,8 @@ class Tournament:
 
 
 if __name__ == "__main__":
-    #tournoi = Tournament(name=,location=,timer=,description=)
+    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer="Bz", description="Rien")
+
     # execute only if run as a script
 
     """Tests Player

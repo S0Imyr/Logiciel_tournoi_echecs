@@ -10,7 +10,7 @@ from chess.views.flow import view_validation_new_player, view_new_actor, \
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
-    prompt_id_num, input_match_results
+    input_match_results, input_tournament_players
 
 
 NB_PLAYERS = 8
@@ -137,10 +137,19 @@ class TournamentPlayers:
         self.tournament = tournament
 
     def __call__(self):
+        players = []
         while len(self.tournament.list_of_players) < NB_PLAYERS:
             num_player = len(self.tournament.list_of_players) + 1
             view_id_player(self.tournament, num_player)
-            define_tournament_player(self.tournament, num_player)
+            message = f"Veuillez indiquer "
+            f"l'identifiant du joueur {num_player}: "
+            actor_id = input_tournament_players(num_player, message)
+            while actor_id not in Actors():  ######
+                message += f"Identifiant inconnu."
+                actor_id = input_tournament_players(num_player, message)
+            players.append(actor_id)
+            # view pour valider les joueur mis
+        self.tournament.define_players(players)
         # Export
         return LaunchTournament(self.tournament)
 
@@ -204,20 +213,6 @@ class Ending:
 
     def __call__(self):
         print("Aurevoir")  # A modifier -> views
-
-
-def define_tournament_player(tournament, num_player):
-    """
-    Définit les joueurs d'un tournoi en demandant leur identifiant
-    :return: instance de l'acteur
-    """
-    actor_id = prompt_id_num(f"Veuillez indiquer "
-                             f"l'identifiant du joueur {num_player}: ")
-    while actor_id not in Actors():  ######
-        actor_id = prompt_id_num(f"Identifiant inconnu."
-                                 f" Veuillez réessayer "
-                                 f"l'identifiant du {num_player}: ")
-    tournament.list_of_players.append(Actors().actors[actor_id])
 
 
 if __name__ == "__main__":
