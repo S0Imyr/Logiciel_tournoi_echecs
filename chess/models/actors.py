@@ -1,6 +1,7 @@
 from chess.utils.conversion import list_to_str_space
 from chess.utils.utils import get_new_id
 
+
 ACTOR_ID_WIDTH = 8
 
 
@@ -11,7 +12,8 @@ class Actor:
     last_actor_id = "0" * ACTOR_ID_WIDTH
 
     def __init__(self, last_name, first_name, birthdate, gender, rank):
-        self.actor_id = get_new_id(Actor.last_actor_id, ACTOR_ID_WIDTH)
+        Actor.last_actor_id = get_new_id(Actor.last_actor_id, ACTOR_ID_WIDTH)
+        self.actor_id = Actor.last_actor_id
         self.last_name = last_name
         self.first_name = first_name
         self.birthdate = birthdate
@@ -89,6 +91,8 @@ if __name__ == "__main__":
     """ Données """
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
+    print(acteur1)
+    print(acteur2)
     acteur2.tournaments = ["00000025", "00000027"]
     acteur2.actor_id = '000123456'
 
