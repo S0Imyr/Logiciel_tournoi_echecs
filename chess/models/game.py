@@ -14,12 +14,13 @@ NB_MATCH = 4
 
 class Tournament:
     """
-    A Tournament
+    the class Tournament is the central piece of the models
     """
     last_tournament_id = "0" * TOURNAMENT_ID_WIDTH
 
     def __init__(self, name, location, timer, description):
-        self.tournament_id = get_new_id(Tournament.last_tournament_id, TOURNAMENT_ID_WIDTH)
+        Tournament.last_tournament_id = get_new_id(Tournament.last_tournament_id, TOURNAMENT_ID_WIDTH)
+        self.tournament_id = Tournament.last_tournament_id
         self.name = name
         self.location = location
         self.start_date = None
@@ -32,28 +33,42 @@ class Tournament:
         self.players_assigned = False
 
     def define_players(self, players):
+        """
+        define the list of id of the players
+        :param players:
+        :return: None
+        """
         self.list_of_players = players
 
-    def start_round(self, num_round):
+    def init_round(self, num_round):
         """
-        Launch one round
-        :return:
+        Launch the round number "num_round"
+        :param num_round: number of the round played
+        :return: None
         """
         tour = Round(num_round, self.tournament_id, self.list_of_players)
+        tour.rank_players()                     # Rangement des joueurs
+        tour.define_matchs()                    # Désignation des matchs
         self.rounds.append(tour)
-        tour.define_matchs()
 
-    def register_round_results(self, num_round, winners):
-        for num_match in range(NB_MATCH):
-            self.rounds[num_round].matchs[num_match].declare_result(winners[num_match])
+    def register_round_results(self, num_round, winner):
+        """
+        register the results
+        :param winner:
+        :param num_round:
+        :return:
+        """
+        self.rounds[num_round].register_results(winner)
+        self.rounds[num_round].assign_points()
         self.rounds[num_round].finished = True
+        self.rounds[num_round].memorize_opponents()
 
     def tournament_to_dict(self):
         """
-        convert a tournament into a dictionnary
-        :return:
+        convert the tournament into a dictionnary
+        :return: dictionnary of the class tournament
         """
-"""        string_attributes = ['',
+    """        string_attributes = ['',
                              '',
                              '',
                              '',
@@ -74,28 +89,9 @@ class Tournament:
 
 
 if __name__ == "__main__":
-    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer="Bz", description="Rien")
 
     # execute only if run as a script
 
-    """Tests Player
-    dark_vador = Actor("Skywalker", "Anakin", "16/03/1988", "M", 168)
-    print(dark_vador)
-    """
-
-    """Tests match
-    match1 = match("1", "1", "00000001", dark_vador.player_id, padawan.player_id)
-    print(match1.winner)
-    match1.declare_result(1)
-    print(match1.winner)
-    print(match1.players_points)
-    match1.assign_points()
-    print(match1.players_points)
-    match1.assign_points()
-    print(match1.players_points)
-    """
-
-    """Tests Round"""
     acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
     acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)         # 8
@@ -116,9 +112,48 @@ if __name__ == "__main__":
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
+    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer="Bz", description="Rien")
 
-    '''controllers.input.define_players'''
+    tournoi.define_players(joueurs)
+    print(tournoi.list_of_players)
+    """ Tour 1"""
+    tournoi.init_round(0)
+    print(tournoi.rounds)
 
+    gagnants1 = [0, 1, 2, 0]
+    tournoi.register_round_results(0, gagnants1)
+    print(tournoi.rounds[0])
+    print(tournoi.list_of_players)
+
+    """ Tour 2"""
+    tournoi.init_round(1)
+    print(tournoi.rounds)
+
+    gagnants2 = [1, 2, 2, 1]
+    tournoi.register_round_results(1, gagnants2)
+    print(tournoi.rounds[1])
+    print(tournoi.list_of_players)
+
+    """ Tour 3"""
+    tournoi.init_round(2)
+    print(tournoi.rounds)
+
+    gagnants3 = [1, 1, 0, 2]
+    tournoi.register_round_results(2, gagnants3)
+    print(tournoi.rounds[2])
+    print(tournoi.list_of_players)
+
+    """ Tour 4"""
+    tournoi.init_round(3)
+    print(tournoi.rounds)
+
+    gagnants4 = [2, 2, 1, 0]
+    tournoi.register_round_results(3, gagnants4)
+    print(tournoi.rounds[3])
+    print(tournoi.list_of_players)
+
+    # Dernier classement
+"""
     tour1 = Round(1, "00000001", joueurs)
     # self.rounds.append(tour1)
 
@@ -238,4 +273,4 @@ if __name__ == "__main__":
 
     for k in range(8):
         print(joueurs[k])
-    print(acteur1)
+    print(acteur1)"""
