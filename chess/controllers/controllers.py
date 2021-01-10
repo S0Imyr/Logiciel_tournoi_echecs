@@ -1,11 +1,12 @@
+import datetime
+
 from chess.models.game import Tournament
 from chess.models.actors import Actor
 
 from chess.views.menuview import MenuView
-from chess.views.flow import  view_validation_new_player, view_new_actor, \
+from chess.views.flow import view_validation_new_player, view_new_actor, \
     view_intro_home_menu, view_tournament_creation, view_tournament_players,\
     view_id_player, view_launch_tournament, view_round_matchs
-
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
@@ -101,8 +102,8 @@ class TournamentCreation:
         self.tournament = Tournament(tournament_arguments[0],
                                      tournament_arguments[1],
                                      tournament_arguments[2],
-                                     tournament_arguments[3],
-                                     tournament_arguments[4])
+                                     tournament_arguments[3])
+        self.tournament.start_date = datetime.date.today()
         # Export information ? step 0
         return TournamentPlayersMenu(self.tournament)
 
@@ -217,6 +218,7 @@ def define_tournament_player(tournament, num_player):
                                  f" Veuillez réessayer "
                                  f"l'identifiant du {num_player}: ")
     tournament.list_of_players.append(Actors().actors[actor_id])
+
 
 if __name__ == "__main__":
     app = BrowseControllers()

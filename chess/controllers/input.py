@@ -1,5 +1,3 @@
-import datetime
-from chess.models.actors import Actor
 from chess.utils.conversion import str_into_date
 
 
@@ -167,21 +165,20 @@ def tournament_inputs():
     """
     name = prompt_string("Nom du tournoi : ")
     location = prompt_string("Lieu du tournoi : ")
-    date = datetime.date.today()
     timer = prompt_propositions({"Bu": "Bullet",
                                  "Bz": "Blitz",
                                  "Cr": "Coup rapide"})
     description = prompt_string("description: ")
-    tournament_arguments = [name, location, date, timer, description]
+    tournament_arguments = [name, location, timer, description]
     return tournament_arguments
 
 
-def input_match_results(round):
+def input_match_results(r0und):
     """
     Demande à remplir les résultat d'un tour
     On commence par choisir un match en désignant son numéro
     puis on indique un vainqueur ou un match nul
-    :param round: le tour en question
+    :param r0und: le tour en question
     :return: la liste des résultats des 4 matchs
     Exemple {0,1,1,2}, match nul pour le premier match
     Le premier joueur désigné est vainqueur pour les matchs 2 et 3.
@@ -196,7 +193,7 @@ def input_match_results(round):
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
-        print(round.matchs[num_match])
+        print(r0und.matchs[num_match])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)

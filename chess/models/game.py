@@ -18,35 +18,32 @@ class Tournament:
     """
     last_tournament_id = "0" * TOURNAMENT_ID_WIDTH
 
-    def __init__(self, name, location, start_date, timer, description):
+    def __init__(self, name, location, timer, description):
         self.tournament_id = get_new_id(Tournament.last_tournament_id, TOURNAMENT_ID_WIDTH)
         self.name = name
         self.location = location
-        self.start_date = start_date
+        self.start_date = None
         self.end_date = None
         self.timer_type = timer
         self.description = description
         self.number_of_rounds = NB_ROUND
-        self.rounds = [] # La liste des instances de tours.
-        self.list_of_players = [] # Liste des indices correspondant aux instances du joueur stockées en mémoire)
+        self.rounds = []
+        self.list_of_players = []
         self.players_assigned = False
 
     def start_round(self, num_round):
         """
-        Launch the Tournament
+        Launch one round
         :return:
         """
         tour = Round(num_round, self.tournament_id, self.list_of_players)
         self.rounds.append(tour)
         tour.define_matchs()
 
-        '''Annonce des matchs'''
     def register_round_results(self, num_round, winners):
-        '''controllers et views : Entrées des résultats -> Choix du match -> Entrée 0(nul) ou le numéro du gagnant : 1 ou 2'''
         for num_match in range(NB_MATCH):
             self.rounds[num_round].matchs[num_match].declare_result(winners[num_match])
         self.rounds[num_round].finished = True
-
 
     def tournament_to_dict(self):
         """
@@ -74,7 +71,7 @@ class Tournament:
 
 
 if __name__ == "__main__":
-
+    #tournoi = Tournament(name=,location=,timer=,description=)
     # execute only if run as a script
 
     """Tests Player
