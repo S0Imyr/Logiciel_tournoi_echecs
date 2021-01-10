@@ -2,7 +2,7 @@ from chess.controllers.menus import Menu
 from chess.views.menuview import MenuView
 from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
 import chess.views.flow
-from chess.controllers.database import ExportActors, ExportTournament
+from chess.controllers.database import serialize_actors, import_actors
 
 
 NB_PLAYERS = 8
@@ -39,8 +39,7 @@ class Actors:
         actor = input_actor()
         self.actors[actor.actor_id] = actor
         chess.views.flow.view_validation_new_player(actor)
-        export = ExportActors(actor)
-        export.serialize_actors()                                                   #Enregistrer dans la DB
+        serialize_actors([actor])                                                   #Enregistrer dans la DB
         if tournament is not None and num_player is not None:
             print("arguments, réussi") ### Test
             tournament.list_of_players[num_player] = actor.actor_id
@@ -64,6 +63,7 @@ class Actors:
         return item in self.actors
 
 
+
 class HomeMenuController:
     """
     Controleur du menu principal
@@ -77,6 +77,7 @@ class HomeMenuController:
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
+        self.menu.add("auto", "Importer des joueurs", ImportActors())
         self.menu.add("auto", "Obtenir un rapport", RapportMenu())
         self.menu.add("q", "Quitter", Ending())
 
@@ -113,7 +114,6 @@ class TournamentPlayersMenu:
 
         self.menu.add("auto", "Ajouter les joueurs par id", TournamentPlayers(self.tournament))
         self.menu.add("auto", "Ajouter un nouveau joueur (sans id)", Actors())     # self.tournament, 1
-        self.menu.add("auto", "Importer des joueurs", ImportActors())
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
@@ -157,7 +157,14 @@ class ResumeTournament:
 
 
 class ImportActors:
-    pass
+    def __init__(self):
+        pass
+
+    def __call__(self):
+        serialized_actors = actors_table.all()
+        nb_actors = len(serialized_actors)
+        chess.views.flow.view_import_actors(nb_actors)
+        return HomeMenuController()
 
 
 class RapportMenu:
