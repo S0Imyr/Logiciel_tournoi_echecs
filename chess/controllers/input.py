@@ -1,6 +1,5 @@
 import datetime
 from chess.models.actors import Actor
-from chess.models.game import Tournament
 from chess.utils.conversion import str_into_date
 
 
@@ -149,7 +148,7 @@ def input_actor():
     """
     Demande les informations d'un joueur afin de
      les regrouper dans son instance acteur
-    :return: instance d'acteur
+    :return: acteur arguments
     """
     last_name = prompt_string("Votre nom de famille : ")
     first_name = prompt_string("Votre prénom : ")
@@ -157,14 +156,14 @@ def input_actor():
                             "en respectant le format: jj/mm/aaaa: ")
     gender = prompt_propositions({"F": "Féminin", "M": "Masculin"})
     rank = prompt_number("Votre classement HATP: ", mini=0)
-    acteur = Actor(last_name, first_name, birthdate, gender, rank)
-    return acteur
+    acteur_arguments = [last_name, first_name, birthdate, gender, rank]
+    return acteur_arguments
 
 
 def tournament_inputs():
     """
     Recueil les informations nécessaires à la création d'un tournoi
-    :return: instance de tournoi avec les informations
+    :return: the associated tournament arguments
     """
     name = prompt_string("Nom du tournoi : ")
     location = prompt_string("Lieu du tournoi : ")
@@ -173,8 +172,8 @@ def tournament_inputs():
                                  "Bz": "Blitz",
                                  "Cr": "Coup rapide"})
     description = prompt_string("description: ")
-    tournoi = Tournament(name, location, date, timer, description)
-    return tournoi
+    tournament_arguments = [name, location, date, timer, description]
+    return tournament_arguments
 
 
 def input_match_results(round):

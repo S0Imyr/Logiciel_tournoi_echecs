@@ -1,8 +1,11 @@
-from chess.controllers.menus import Menu
+from chess.models.game import Tournament
+from chess.models.actors import Actor
+
 from chess.views.menuview import MenuView
-from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
 import chess.views.flow
-from chess.controllers.database import serialize_actors, import_actors
+
+from chess.controllers.menus import Menu
+from chess.controllers.input import tournament_inputs, input_actor, prompt_id_num
 
 
 NB_PLAYERS = 8
@@ -36,10 +39,15 @@ class Actors:
 
     def __call__(self, tournament=None, num_player=None):
         chess.views.flow.view_new_player()
-        actor = input_actor()
+        actor_arguments = input_actor()
+        actor = Actor(actor_arguments[0],
+                      actor_arguments[1],
+                      actor_arguments[2],
+                      actor_arguments[3],
+                      actor_arguments[4])
         self.actors[actor.actor_id] = actor
         chess.views.flow.view_validation_new_player(actor)
-        serialize_actors([actor])                                                   #Enregistrer dans la DB
+                                                                #Enregistrer dans la DB
         if tournament is not None and num_player is not None:
             print("arguments, réussi") ### Test
             tournament.list_of_players[num_player] = actor.actor_id
@@ -95,7 +103,12 @@ class TournamentCreation:
 
     def __call__(self):
         chess.views.flow.view_tournament_creation()
-        self.tournament = tournament_inputs()
+        tournament_arguments = tournament_inputs()
+        self.tournament = Tournament(tournament_arguments[0],
+                                     tournament_arguments[1],
+                                     tournament_arguments[2],
+                                     tournament_arguments[3],
+                                     tournament_arguments[4])
         # Export information
         return TournamentPlayersMenu(self.tournament)
 
@@ -161,10 +174,11 @@ class ImportActors:
         pass
 
     def __call__(self):
-        serialized_actors = actors_table.all()
+        pass
+        """serialized_actors = actors_table.all()
         nb_actors = len(serialized_actors)
         chess.views.flow.view_import_actors(nb_actors)
-        return HomeMenuController()
+        return HomeMenuController()"""
 
 
 class RapportMenu:
