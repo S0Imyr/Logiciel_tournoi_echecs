@@ -136,10 +136,12 @@ class Round:
     def assign_points(self):
         """
         Assign the points this round, for each matchs
+        players_ranked is switched to False
         :return: None
         """
         for num_match in range(NB_MATCH):
             self.matchs[num_match].assign_points()
+        self.players_ranked = False
 
     def memorize_opponents(self):
         """
@@ -150,6 +152,7 @@ class Round:
         for match in range(NB_MATCH):
             self.matchs[match].player1.opponents.append(self.matchs[match].player2.player_id)
             self.matchs[match].player2.opponents.append(self.matchs[match].player1.player_id)
+
 
 if __name__ == '__main__':
     import datetime
@@ -178,7 +181,7 @@ if __name__ == '__main__':
 
 
     """ Lancement partie : """
-    tour1 = Round(1, "00000001", joueurs)
+    tour1 = Round(0, "00000001", joueurs)
 
     tour1.define_matchs()                           # Test rappel
     tour1.rank_players()                            # Rangement des joueurs
@@ -187,6 +190,7 @@ if __name__ == '__main__':
     tour1.assign_points()                           # Assignation des résultats
     tour1.finished = True
     tour1.memorize_opponents()                      # Mémorisation des adversaires
+    tour1.rank_players()                            # Rangement des joueurs
 
     print(tour1.matchs)
     print(tour1.players)
