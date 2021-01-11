@@ -49,7 +49,7 @@ def view_launch_tournament(tournament):
 
 
 def view_round_matchs(round):
-    display = f"\n ### Matchs du Tour {round.round_nb} " \
+    display = f"\n ### Matchs du Tour {round.round_nb + 1} " \
               f"du Tournoi {round.tournament_id} : ### \n"
     if round.matchs != {}:
         if round.finished:
