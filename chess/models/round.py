@@ -22,7 +22,7 @@ class Round:
         self.players_sorted = False
 
     def __repr__(self):
-        repr = f"Tour {self.round_nb} du tournoi {self.tournament_id} \n"
+        repr = f"Tour {self.round_nb + 1} du tournoi {self.tournament_id} \n"
         if self.matchs != {}:
             if self.finished:
                 repr += f"Les matchs ont vu s'affronter : \n"
