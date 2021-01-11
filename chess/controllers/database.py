@@ -42,9 +42,11 @@ def deserialize_round(serialized_round):
     for player in serialized_round['players']:
         deserialized_players.append(deserialize_player(player))
     r0und = Round(serialized_round['round_nb'], serialized_round['tournament_id'], deserialized_players)
+
     string_attribute = ['players_ranked', 'finished', 'players_sorted']
     for attribute in string_attribute:
         setattr(r0und, attribute, serialized_round[attribute])
+
     matchs = {}
     for match_nb, match in serialized_round['matchs'].items():
         matchs[match_nb] = deserialize_match(match)
@@ -52,8 +54,27 @@ def deserialize_round(serialized_round):
     return r0und
 
 
-def deserialize_tournament():
-    pass
+def deserialize_tournament(serialized_tournament):
+    tour = Tournament(serialized_tournament['name'],
+                      serialized_tournament['location'],
+                      serialized_tournament['timer_type'],
+                      serialized_tournament['description'])
+    string_attributes = ['tournament_id',
+                         'number_of_rounds',
+                         'players_assigned']
+    for attribute in string_attributes:
+        setattr(tour, attribute, serialized_tournament[attribute])
+    # no_string_attributes = ['start_date', 'end_date' (None / date), 'rounds', 'list_of_players' (list)]
+    tour.start_date = str_to_date(serialized_tournament['start_date'])
+    tour.end_date = str_to_date(serialized_tournament['end_date'])
+
+    tour.rounds = []
+    for r0und in serialized_tournament['rounds']:
+        tour.rounds.append(deserialize_round(r0und))
+    tour.list_of_players = []
+    for player in serialized_tournament['list_of_players']:
+        tour.list_of_players.append(deserialize_player(player))
+    return tour
 
 
 class DataBaseHandler:
@@ -66,7 +87,9 @@ class DataBaseHandler:
         actors_table.insert(dictio)
 
     def export_tournament(self, tournament, step):
-        pass
+        tournament_table = self.database.table('tournament')
+        # dictio = actor.actor_to_dict()
+        # actors_table.insert(dictio)
 
     def import_actors(self):
         actors_table = self.database.table('actors')
@@ -114,98 +137,69 @@ if __name__ == '__main__':
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
 
-    """ Lancement partie : """
-    tour1 = Round(1, "00000001", joueurs)
+    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer_type="Bz", description="Rien")
+    tournoi.start_date = datetime.date.today()
+    tournoi.define_players(joueurs)
+    print("\n Initialisation : Joueurs \n")
+    print(tournoi.list_of_players)
+    """ Tour 1"""
+    tournoi.init_round(0)
 
-    tour1.define_matchs()
+    gagnants1 = [0, 1, 2, 0]
+    tournoi.register_round_results(0, gagnants1)
+    print("\n Tour 1 \n")
+    print(tournoi.rounds[0])
+    print(tournoi.list_of_players)
 
-
-    tour1.rank_players()
-    tour1.define_matchs()
-
-
-    tour1.matchs[0].declare_result(1)
-    tour1.matchs[1].declare_result(2)
-    tour1.matchs[2].declare_result(0)
-    tour1.matchs[3].declare_result(1)
-
-
-    tour1.matchs[0].assign_points()
-    tour1.matchs[1].assign_points()
-    tour1.matchs[2].assign_points()
-    tour1.matchs[3].assign_points()
-    tour1.finished = True
-
-    tour1.memorize_opponents()
+    """ Tour 2"""
+    tournoi.init_round(1)
 
 
-    """Tour 2"""
+    gagnants2 = [1, 2, 2, 1]
+    tournoi.register_round_results(1, gagnants2)
+    print("\n Tour 2 \n")
+    print(tournoi.rounds[1])
+    print(tournoi.list_of_players)
 
-    tour2 = Round(2, "00000001", joueurs)
-
-    tour2.rank_players()
-    tour2.define_matchs()
-
-
-    tour2.matchs[0].declare_result(2)
-    tour2.matchs[1].declare_result(2)
-    tour2.matchs[2].declare_result(1)
-    tour2.matchs[3].declare_result(0)
-
-    tour2.matchs[0].assign_points()
-    tour2.matchs[1].assign_points()
-    tour2.matchs[2].assign_points()
-    tour2.matchs[3].assign_points()
-    tour2.finished = True
-
-    tour2.memorize_opponents()
-
-    """Tour 3"""
-
-    tour3 = Round(3, "00000001", joueurs)
-
-    tour3.rank_players()
-    tour3.define_matchs()
+    """ Tour 3"""
+    tournoi.init_round(2)
 
 
-    tour3.matchs[0].declare_result(0)
-    tour3.matchs[1].declare_result(2)
-    tour3.matchs[2].declare_result(2)
-    tour3.matchs[3].declare_result(1)
+    gagnants3 = [1, 1, 0, 2]
+    tournoi.register_round_results(2, gagnants3)
+    print("\n Tour 3 \n")
+    print(tournoi.rounds[2])
+    print(tournoi.list_of_players)
 
-    tour3.matchs[0].assign_points()
-    tour3.matchs[1].assign_points()
-    tour3.matchs[2].assign_points()
-    tour3.matchs[3].assign_points()
-    tour3.finished = True
-
-    tour3.memorize_opponents()
+    """ Tour 4"""
+    tournoi.init_round(3)
 
 
+    gagnants4 = [2, 2, 1, 0]
+    tournoi.register_round_results(3, gagnants4)
+    print("\n Tour 4 \n")
+    print(tournoi.rounds[3])
+    print(tournoi.list_of_players)
 
-    ''' Tour 4 '''
+    """ Test round
+    round = tournoi.rounds[0]
+    round_dico = round.round_to_dict()
+    r0und = deserialize_round(round_dico)
+     
+    print("\n ## Test round ## \n")
+    print(vars(round))
+    print(vars(r0und)) """
 
-    tour4 = Round(4, "00000001", joueurs)
+    """ Test tournoi """
+    tour_dico = tournoi.tournament_to_dict()
+    print(tour_dico)
+    print("\n ## Test tournoi ## \n")
+    t0urnoi = deserialize_tournament(tour_dico)
 
-    tour4.rank_players()
-    tour4.define_matchs()
-
-    tour4.matchs[0].declare_result(1)
-    tour4.matchs[1].declare_result(2)
-    tour4.matchs[2].declare_result(0)
-    tour4.matchs[3].declare_result(1)
-
-    tour4.matchs[0].assign_points()
-    tour4.matchs[1].assign_points()
-    tour4.matchs[2].assign_points()
-    tour4.matchs[3].assign_points()
-    tour4.finished = True
-
-
-    tour4.memorize_opponents()
+    print(vars(tournoi))
+    print(vars(t0urnoi))
 
     """ Fin partie """
-
 
     """ Test Acteur 
     print("\n ### Test acteur ### \n")
@@ -260,7 +254,7 @@ if __name__ == '__main__':
     print(vars(match))
     print(vars(match0))"""
 
-    """ Test Round """
+    """ Test Round 
     print("\n ### Test Round ### \n")
 
     r0und4 = tour4
@@ -271,7 +265,7 @@ if __name__ == '__main__':
     r0und04 = deserialize_round(ser_round)
 
     print(vars(r0und4))
-    print(vars(r0und04))
+    print(vars(r0und04))"""
 
-    """ Test Tournament """
-    print("\n ### Test Tournament ### \n")
+    """ Test Tournament 
+    print("\n ### Test Tournament ### \n")"""
