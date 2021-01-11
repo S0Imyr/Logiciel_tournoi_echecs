@@ -18,14 +18,14 @@ class Tournament:
     """
     last_tournament_id = "0" * TOURNAMENT_ID_WIDTH
 
-    def __init__(self, name, location, timer, description):
+    def __init__(self, name, location, timer_type, description):
         Tournament.last_tournament_id = get_new_id(Tournament.last_tournament_id, TOURNAMENT_ID_WIDTH)
         self.tournament_id = Tournament.last_tournament_id
         self.name = name
         self.location = location
         self.start_date = None
         self.end_date = None
-        self.timer_type = timer
+        self.timer_type = timer_type
         self.description = description
         self.number_of_rounds = NB_ROUND
         self.rounds = []
@@ -62,30 +62,33 @@ class Tournament:
         self.rounds[num_round].assign_points()
         self.rounds[num_round].finished = True
         self.rounds[num_round].memorize_opponents()
+        self.rounds[num_round].rank_players()
 
     def tournament_to_dict(self):
         """
         convert the tournament into a dictionnary
         :return: dictionnary of the class tournament
         """
-    """        string_attributes = ['',
-                             '',
-                             '',
-                             '',
-                             '']
+        string_attributes = ['tournament_id',
+                             'name',
+                             'location',
+                             'timer_type',
+                             'description',
+                             'number_of_rounds',
+                             'players_assigned']
         serialized_tournament = {}
         for attribute in string_attributes:
             serialized_tournament[attribute] = getattr(self, attribute)
-        # no_string_attributes = ['players' (list), 'matchs' (dict)]
-        serialized_tournament['players'] = []
-        for player in [1, 2]:
-            pass
-            #serialized_tournament['players']
-        serialized_tournament['matchs'] = {}
-        for key, value in {1:"un", 2: "deux"}:
-            # serialized_tournament['matchs'][key] = value.match_to_dict()
-            pass
-        return serialized_tournament"""
+        # no_string_attributes = ['start_date', 'end_date' (None / date), 'rounds', 'list_of_players' (list)]
+        serialized_tournament['rounds'] = []
+        for r0und in self.rounds:
+            serialized_tournament['rounds'].append(r0und.round_to_dict())
+        serialized_tournament['list_of_players'] = []
+        for player in self.list_of_players:
+            serialized_tournament['list_of_players'].append(player.player_to_dict())
+        serialized_tournament['start_date'] = str(self.start_date)
+        serialized_tournament['end_date'] = str(self.end_date)
+        return serialized_tournament
 
 
 if __name__ == "__main__":
@@ -112,8 +115,8 @@ if __name__ == "__main__":
     joueur8 = Player(acteur8, "00000001", 8)
     joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
 
-    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer="Bz", description="Rien")
-
+    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer_type="Bz", description="Rien")
+    tournoi.start_date = datetime.date.today()
     tournoi.define_players(joueurs)
     print(tournoi.list_of_players)
     """ Tour 1"""
@@ -152,7 +155,13 @@ if __name__ == "__main__":
     print(tournoi.rounds[3])
     print(tournoi.list_of_players)
 
-    # Dernier classement
+    print("\n ###  Vars Tournoi ### \n")
+    print(vars(tournoi))
+
+    print("\n ###  serialized Tournoi  ### \n")
+    dico = tournoi.tournament_to_dict()
+    print(dico)
+
 """
     tour1 = Round(1, "00000001", joueurs)
     # self.rounds.append(tour1)
