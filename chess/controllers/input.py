@@ -176,7 +176,7 @@ def tournament_inputs():
     return tournament_arguments
 
 
-def input_match_results(r0und):
+def input_match_results(r0und):  # Rajouter le joueur vs joueur
     """
     Demande à remplir les résultat d'un tour
     On commence par choisir un match en désignant son numéro
@@ -196,7 +196,7 @@ def input_match_results(r0und):
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
-        print(r0und.matchs[num_match+1])
+        print(r0und.matchs[num_match-1])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)
