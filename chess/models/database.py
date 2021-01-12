@@ -80,6 +80,7 @@ def deserialize_tournament(serialized_tournament):
 class DataBaseHandler:
     def __init__(self, database):
         self.database = database
+        self.tournament_step = None
 
     def export_actor(self, actor):
         actors_table = self.database.table('actors')
@@ -87,9 +88,10 @@ class DataBaseHandler:
         actors_table.insert(dictio)
 
     def export_tournament(self, tournament, step):
+        self.tournament_step = step
         tournament_table = self.database.table('tournament')
-        # dictio = actor.actor_to_dict()
-        # actors_table.insert(dictio)
+        dictio = tournament.tournament_to_dict()
+        tournament_table.insert(dictio)
 
     def import_actors(self):
         actors_table = self.database.table('actors')
@@ -101,8 +103,10 @@ class DataBaseHandler:
         return len(serialized_actors), actors
 
     def import_tournament(self):
-        pass
-
+        tournament_table = self.database.table('tournament')
+        serialized_tournament = tournament_table.all()
+        tournament = deserialize_tournament(serialized_tournament)
+        return self.tournament_step, tournament
 
 if __name__ == '__main__':
     import datetime
@@ -113,6 +117,7 @@ if __name__ == '__main__':
 
     handler = DataBaseHandler(TinyDB('db.json'))
     handler.database.table('actors').truncate()
+    handler.database.table('tournament').truncate()
 
     """ Données """
 
@@ -141,15 +146,15 @@ if __name__ == '__main__':
     tournoi.start_date = datetime.date.today()
     tournoi.define_players(joueurs)
     print("\n Initialisation : Joueurs \n")
-    print(tournoi.list_of_players)
+    #print(tournoi.list_of_players)
     """ Tour 1"""
     tournoi.init_round(0)
 
     gagnants1 = [0, 1, 2, 0]
     tournoi.register_round_results(0, gagnants1)
     print("\n Tour 1 \n")
-    print(tournoi.rounds[0])
-    print(tournoi.list_of_players)
+    #print(tournoi.rounds[0])
+    #print(tournoi.list_of_players)
 
     """ Tour 2"""
     tournoi.init_round(1)
@@ -158,8 +163,8 @@ if __name__ == '__main__':
     gagnants2 = [1, 2, 2, 1]
     tournoi.register_round_results(1, gagnants2)
     print("\n Tour 2 \n")
-    print(tournoi.rounds[1])
-    print(tournoi.list_of_players)
+    #print(tournoi.rounds[1])
+    #print(tournoi.list_of_players)
 
     """ Tour 3"""
     tournoi.init_round(2)
@@ -168,8 +173,8 @@ if __name__ == '__main__':
     gagnants3 = [1, 1, 0, 2]
     tournoi.register_round_results(2, gagnants3)
     print("\n Tour 3 \n")
-    print(tournoi.rounds[2])
-    print(tournoi.list_of_players)
+    #print(tournoi.rounds[2])
+    #print(tournoi.list_of_players)
 
     """ Tour 4"""
     tournoi.init_round(3)
@@ -178,27 +183,8 @@ if __name__ == '__main__':
     gagnants4 = [2, 2, 1, 0]
     tournoi.register_round_results(3, gagnants4)
     print("\n Tour 4 \n")
-    print(tournoi.rounds[3])
-    print(tournoi.list_of_players)
-
-    """ Test round
-    round = tournoi.rounds[0]
-    round_dico = round.round_to_dict()
-    r0und = deserialize_round(round_dico)
-     
-    print("\n ## Test round ## \n")
-    print(vars(round))
-    print(vars(r0und)) """
-
-    """ Test tournoi """
-    tour_dico = tournoi.tournament_to_dict()
-    print(tour_dico)
-    print("\n ## Test tournoi ## \n")
-    t0urnoi = deserialize_tournament(tour_dico)
-
-    print(vars(tournoi))
-    print(vars(t0urnoi))
-
+    #print(tournoi.rounds[3])
+    #print(tournoi.list_of_players)
     """ Fin partie """
 
     """ Test Acteur 
@@ -209,7 +195,6 @@ if __name__ == '__main__':
     # print(vars(acteur1))
     acters = handler.import_actors()
     print(acters)"""
-
 
     """Verification
     print(vars(acteur1))
@@ -257,15 +242,24 @@ if __name__ == '__main__':
     """ Test Round 
     print("\n ### Test Round ### \n")
 
-    r0und4 = tour4
-    ser_round = r0und4.round_to_dict()
-    print(ser_round)
+    round = tournoi.rounds[0]
+    round_dico = round.round_to_dict()
+    r0und = deserialize_round(round_dico)
+     
+    print("\n ## Test round ## \n")
+    print(vars(round))
+    print(vars(r0und)) """
 
-
-    r0und04 = deserialize_round(ser_round)
-
-    print(vars(r0und4))
-    print(vars(r0und04))"""
-
-    """ Test Tournament 
+    """ Test Tournament (serial, deserial)
     print("\n ### Test Tournament ### \n")"""
+    #tour_dico = tournoi.tournament_to_dict()
+    #print(tour_dico)
+    #print("\n ## Test tournoi ## \n")
+    #t0urnoi = deserialize_tournament(tour_dico)
+
+    #print(vars(tournoi))
+    #print(vars(t0urnoi))
+
+    """ Tests export, import """
+
+    handler.export_tournament(tournoi, 3)
