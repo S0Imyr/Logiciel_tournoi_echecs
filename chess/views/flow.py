@@ -21,7 +21,7 @@ def view_tournament_players(tournament):
           
           "pour ajouter des joueurs, "
           "vous devez les avoir enregistrer "
-          "depuis le menu principal \n"
+          "depuis le menu principal, \n"
           "puis donner l'identifiant au joueur"
           "pour qu'il le redonne au lancement du tournoi.\n")
 
@@ -89,8 +89,11 @@ def view_validation_actors_imported(actors):
         print(actor)
 
 
-def view_validation_export_actors(exportation):
-    pass
+def view_validation_actors_exported(exported_actors):
+    message = "Les personnes suivantes ont été exportés \n"
+    for actor in exported_actors:
+        message += "\n"+ actor
+    print(message)
 
 
 def view_tournament_final(tournament):
