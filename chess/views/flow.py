@@ -22,7 +22,7 @@ def view_tournament_players(tournament):
           "pour ajouter des joueurs, "
           "vous devez les avoir enregistrer "
           "depuis le menu principal, \n"
-          "puis donner l'identifiant au joueur"
+          "puis donner l'identifiant au joueur "
           "pour qu'il le redonne au lancement du tournoi.\n")
 
 
@@ -51,12 +51,12 @@ def view_validation_players(players):
 
 
 def view_launch_tournament(tournament):
-    print(f"\n ### Lancement du Tournoi {tournament.name}: ### \n")
+    print(f"\n ### Lancement du Tournoi {tournament.name}: ### ")
 
 
 def view_round_matchs(r0und):
     display = f"\n ### Matchs du Tour {r0und.round_nb + 1} " \
-              f"du Tournoi {r0und.tournament_id} : ### \n"
+              f"du Tournoi {r0und.tournament_id} : ### \n \n"
     if r0und.matchs != {}:
         if r0und.finished:
             display += f"Les matchs ont vu s'affronter : \n"
@@ -76,6 +76,14 @@ def view_round_matchs(r0und):
                     display += f"Victoire de " \
                                f"{r0und.matchs[num_match].player2.name}. \n"
     print(display)
+
+
+def input_match_results():
+    print("### En attente de résultats: ### \n"
+          "\n"
+          "Lorsqu'un match est terminé, "
+          "indiquez le numéro du match "
+          "pour entrez les résultats")
 
 
 def view_validation_actors_imported(actors):
