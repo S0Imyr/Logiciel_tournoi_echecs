@@ -71,9 +71,17 @@ def view_round_matchs(round):
                                f"{round.matchs[num_match].player2.name}. \n"
     print(display)
 
-def view_import_actors(nb_players):
+
+def view_validation_actors_imported(actors):
     print(f"\n ### Import de joueurs ### \n")
-    print(f"-- {nb_players} joueurs importés --")
+    if len(actors) == 0:
+        message = "Base de donnée vide, aucun import possible"
+    else:
+        message = f"-- {len(actors)} joueurs importés --"
+    print(message)
+    for actor in actors:
+        print(actor)
+
 
 def validation_export(exportation):
     pass
