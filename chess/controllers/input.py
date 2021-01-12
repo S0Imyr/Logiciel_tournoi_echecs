@@ -196,7 +196,7 @@ def input_match_results(r0und):
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
-        print(r0und.matchs[num_match])
+        print(r0und.matchs[num_match+1])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)
