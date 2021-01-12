@@ -21,19 +21,18 @@ def view_tournament_players(tournament):
           
           "pour ajouter des joueurs, "
           "vous devez les avoir enregistrer "
-          "depuis le menu principal"
+          "depuis le menu principal \n"
           "puis donner l'identifiant au joueur"
-          "pour qu'il le redonne au lancement du tournoi. ")
+          "pour qu'il le redonne au lancement du tournoi.\n")
 
 
-
-def view_new_actor():
+def view_input_new_actor():
     display = "\n ### Nouveau joueur ### \n"
     display += "\n -- Entrez les informations demandées: --\n"
     print(display)
 
 
-def view_validation_new_player(actor):
+def view_validation_new_actor(actor):
     print(f"\n ### Le joueur suivant a bien été enregistré ### \n")
     print(actor)
 
@@ -43,32 +42,40 @@ def view_id_player(tournament, num=1,):
     print(f"-- Joueur {num}--")
 
 
+def view_validation_players(players):
+    print(f"-- Les joueurs du tournoi sont : --")
+    message = ""
+    for player in players:
+        message += "\n" + str(player)
+    print(message)
+
+
 def view_launch_tournament(tournament):
     print(f"\n ### Lancement du Tournoi {tournament.name}: ### \n"
           "\n")
 
 
-def view_round_matchs(round):
-    display = f"\n ### Matchs du Tour {round.round_nb + 1} " \
-              f"du Tournoi {round.tournament_id} : ### \n"
-    if round.matchs != {}:
-        if round.finished:
+def view_round_matchs(r0und):
+    display = f"\n ### Matchs du Tour {r0und.round_nb + 1} " \
+              f"du Tournoi {r0und.tournament_id} : ### \n"
+    if r0und.matchs != {}:
+        if r0und.finished:
             display += f"Les matchs ont vu s'affronter : \n"
         else:
             display += f"Les matchs verront s'affronter : \n"
         for num_match in range(NB_MATCH):
             display += f"{num_match + 1}. " \
-                       f"{round.matchs[num_match].player1.name}" \
-                       f" et {round.matchs[num_match].player2.name} \n"
-            if round.finished:
-                if round.matchs[num_match].winner == 0:
+                       f"{r0und.matchs[num_match].player1.name}" \
+                       f" et {r0und.matchs[num_match].player2.name} \n"
+            if r0und.finished:
+                if r0und.matchs[num_match].winner == 0:
                     display += f"Match nul. \n"
-                if round.matchs[num_match].winner == 1:
+                if r0und.matchs[num_match].winner == 1:
                     display += f"Victoire de " \
-                               f"{round.matchs[num_match].player1.name}. \n"
-                if round.matchs[num_match].winner == 2:
+                               f"{r0und.matchs[num_match].player1.name}. \n"
+                if r0und.matchs[num_match].winner == 2:
                     display += f"Victoire de " \
-                               f"{round.matchs[num_match].player2.name}. \n"
+                               f"{r0und.matchs[num_match].player2.name}. \n"
     print(display)
 
 
@@ -83,5 +90,18 @@ def view_validation_actors_imported(actors):
         print(actor)
 
 
-def validation_export(exportation):
+def view_validation_export_actors(exportation):
     pass
+
+
+def view_tournament_final(tournament):
+    message = " ### Fin des matchs ### \n" \
+              "\n" \
+              "-- Classement final -- \n"
+    for player in tournament.list_of_players:
+        if player.place == 1:
+            message += f"1er: +{player}"
+        else:
+            for rank in range(2, len(tournament.list_of_players)):
+                message += f"{rank}eme: +{player}"
+    print(message)
