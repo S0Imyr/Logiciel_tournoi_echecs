@@ -22,22 +22,23 @@ class Round:
         self.players_sorted = False
 
     def __str__(self):
-        repr = f"Tour {self.round_nb + 1} du tournoi {self.tournament_id} \n"
+        message = f"Tour {self.round_nb + 1} du tournoi {self.tournament_id} \n"
         if self.matchs != {}:
             if self.finished:
-                repr += f"Les matchs ont vu s'affronter : \n"
+                message += f"Les matchs ont vu s'affronter : \n"
             else:
-                repr += f"Les matchs verront s'affronter : \n"
+                message += f"Les matchs verront s'affronter : \n"
             for num_match in range(NB_MATCH):
-                repr += f"{num_match+1}. {self.matchs[num_match].player1.name} et {self.matchs[num_match].player2.name} \n"
+                message += f"{num_match+1}. {self.matchs[num_match].player1.name} et {self.matchs[num_match].player2.name} \n"
                 if self.finished:
                     if self.matchs[num_match].winner == 0:
-                        repr += f"Match nul. \n"
+                        message += f"Match nul. \n"
                     if self.matchs[num_match].winner == 1:
-                        repr += f"Victoire de {self.matchs[num_match].player1.name}. \n"
+                        message += f"Victoire de {self.matchs[num_match].player1.name}. \n"
                     if self.matchs[num_match].winner == 2:
-                        repr += f"Victoire de {self.matchs[num_match].player2.name}. \n"
-        return repr
+                        message += f"Victoire de {self.matchs[num_match].player2.name}. \n"
+        return message
+
 
     def round_to_dict(self):
         """
@@ -75,8 +76,7 @@ class Round:
             for rank in range(NB_PLAYERS):
                 sorted_players[rank].place = rank + 1
             self.players_ranked = True
-        else:
-            print("Already ranked")
+
 
     def define_matchs(self):
         """
@@ -84,43 +84,39 @@ class Round:
          the rules of Swiss tournament
         :return:
         """
-        if self.players_ranked:
-            if self.round_nb == 0:
-                print("Lancement du round 1")
-                for match in range(NB_MATCH):
-                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
-                    for player in range(NB_PLAYERS):
-                        if self.players[player].place == MATCH_1ST_ROUND[match][0]:
-                            self.matchs[match].player1 = self.players[player]
-                        if self.players[player].place == MATCH_1ST_ROUND[match][1]:
-                            self.matchs[match].player2 = self.players[player]
-            else:
-                print(f"Lancement du round {self.round_nb}")
-                first_non_assigned = 0
-                sorted_players = sorted(self.players, key=attrgetter("place"))
-                player_assigned = []
-                for match in range(NB_MATCH):
-                    while sorted_players[first_non_assigned] in player_assigned:
-                        first_non_assigned += 1
-                    self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
-                    self.matchs[match].player1 = sorted_players[first_non_assigned]
-                    player_assigned.append(sorted_players[first_non_assigned])
-                    first_non_assigned += 1
-                    id_player = min(first_non_assigned, len(sorted_players)-1)
-                    while sorted_players[id_player].player_id\
-                            in self.matchs[match].player1.opponents\
-                            or sorted_players[id_player]\
-                            in player_assigned:
-                        id_player += 1
-                        if id_player >= len(sorted_players):
-                            break
-                    id_player = min(id_player, len(sorted_players)-1)
-                    self.matchs[match].player2 = sorted_players[id_player]
-                    player_assigned.append(sorted_players[id_player])
-                    if id_player == first_non_assigned:
-                        first_non_assigned += 1
+        if self.round_nb == 0:
+            for match in range(NB_MATCH):
+                self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                for player in range(NB_PLAYERS):
+                    if self.players[player].place == MATCH_1ST_ROUND[match][0]:
+                        self.matchs[match].player1 = self.players[player]
+                    if self.players[player].place == MATCH_1ST_ROUND[match][1]:
+                        self.matchs[match].player2 = self.players[player]
         else:
-            print("Attention, vous devez ranger les joueurs d'abord! \n")
+            first_non_assigned = 0
+            sorted_players = sorted(self.players, key=attrgetter("place"))
+            player_assigned = []
+            for match in range(NB_MATCH):
+                while sorted_players[first_non_assigned] in player_assigned:
+                    first_non_assigned += 1
+                self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                self.matchs[match].player1 = sorted_players[first_non_assigned]
+                player_assigned.append(sorted_players[first_non_assigned])
+                first_non_assigned += 1
+                id_player = min(first_non_assigned, len(sorted_players)-1)
+                while sorted_players[id_player].player_id\
+                        in self.matchs[match].player1.opponents\
+                        or sorted_players[id_player]\
+                        in player_assigned:
+                    id_player += 1
+                    if id_player >= len(sorted_players):
+                        break
+                id_player = min(id_player, len(sorted_players)-1)
+                self.matchs[match].player2 = sorted_players[id_player]
+                player_assigned.append(sorted_players[id_player])
+                if id_player == first_non_assigned:
+                    first_non_assigned += 1
+
 
     def register_results(self, winners):
         """
@@ -145,8 +141,8 @@ class Round:
 
     def memorize_opponents(self):
         """
-        For each player, memorize their previous
-        opponents during the previous rounds in a list
+        For each player, append the current opponent
+        in the list of previous opponent of the player.
         :return: None
         """
         for match in range(NB_MATCH):
