@@ -49,7 +49,7 @@ def deserialize_round(serialized_round):
 
     matchs = {}
     for match_nb, match in serialized_round['matchs'].items():
-        matchs[match_nb] = deserialize_match(match)
+        matchs[int(match_nb)] = deserialize_match(match)
     setattr(r0und, 'matchs', matchs)
     return r0und
 
@@ -104,7 +104,8 @@ class DataBaseHandler:
 
     def import_tournament(self):
         tournament_table = self.database.table('tournament')
-        serialized_tournament = tournament_table.all()
+        list_serialized_tournament = tournament_table.all()
+        serialized_tournament = list_serialized_tournament[0]
         tournament = deserialize_tournament(serialized_tournament)
         return self.tournament_step, tournament
 
@@ -223,23 +224,20 @@ if __name__ == '__main__':
 
     """ Test Match 
     print("\n ### Test Match ### \n")
+ 
+    match = tournoi.rounds[0].matchs[0] """
 
-    match = tour4.matchs[0]
-    match.player1 = joueur4
-    match.player2 = joueur5
-    match.declare_result(1)
-    match.assign_points()"""
 
     """ serialize 
     ser_match = match.match_to_dict()
-    print(ser_match) """
+    #print(ser_match) """
 
     """ deserialize 
     match0 = deserialize_match(ser_match)
     print(vars(match))
-    print(vars(match0))"""
+    print(vars(match0)) """
 
-    """ Test Round 
+    """ Test Round """
     print("\n ### Test Round ### \n")
 
     round = tournoi.rounds[0]
@@ -248,7 +246,7 @@ if __name__ == '__main__':
      
     print("\n ## Test round ## \n")
     print(vars(round))
-    print(vars(r0und)) """
+    print(vars(r0und))
 
     """ Test Tournament (serial, deserial)
     print("\n ### Test Tournament ### \n")"""
@@ -261,5 +259,10 @@ if __name__ == '__main__':
     #print(vars(t0urnoi))
 
     """ Tests export, import """
-
+    print("\n ### Tests export, import ### \n")
     handler.export_tournament(tournoi, 3)
+    tupl = handler.import_tournament()
+
+    print(vars(tournoi))
+    print(vars(tupl[1]))
+    # problème dans matchs : clé '0' au lieu de 0
