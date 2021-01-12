@@ -37,9 +37,9 @@ def view_validation_new_actor(actor):
     print(actor)
 
 
-def view_id_player(tournament, num=1,):
+def view_id_player(tournament, num=1):
     print(f"\n ### Tournoi {tournament.name}: Identification de joueur ### \n")
-    print(f"-- Joueur {num}--")
+    print(f"-- Joueur {num} --")
 
 
 def view_validation_players(players):
@@ -51,8 +51,7 @@ def view_validation_players(players):
 
 
 def view_launch_tournament(tournament):
-    print(f"\n ### Lancement du Tournoi {tournament.name}: ### \n"
-          "\n")
+    print(f"\n ### Lancement du Tournoi {tournament.name}: ### \n")
 
 
 def view_round_matchs(r0und):
