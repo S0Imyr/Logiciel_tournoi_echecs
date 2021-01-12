@@ -29,7 +29,9 @@ class Round:
             else:
                 message += f"Les matchs verront s'affronter : \n"
             for num_match in range(NB_MATCH):
-                message += f"{num_match+1}. {self.matchs[num_match].player1.name} et {self.matchs[num_match].player2.name} \n"
+                message += f"{num_match+1}. " \
+                           f"{self.matchs[num_match].player1.name}" \
+                           f" et {self.matchs[num_match].player2.name} \n"
                 if self.finished:
                     if self.matchs[num_match].winner == 0:
                         message += f"Match nul. \n"
@@ -38,7 +40,6 @@ class Round:
                     if self.matchs[num_match].winner == 2:
                         message += f"Victoire de {self.matchs[num_match].player2.name}. \n"
         return message
-
 
     def round_to_dict(self):
         """
@@ -62,7 +63,6 @@ class Round:
             serialized_round['matchs'][key] = value.match_to_dict()
         return serialized_round
 
-
     def rank_players(self):
         """
         Rank players by points in the tournament (decreasingly)
@@ -76,7 +76,6 @@ class Round:
             for rank in range(NB_PLAYERS):
                 sorted_players[rank].place = rank + 1
             self.players_ranked = True
-
 
     def define_matchs(self):
         """
@@ -116,7 +115,6 @@ class Round:
                 player_assigned.append(sorted_players[id_player])
                 if id_player == first_non_assigned:
                     first_non_assigned += 1
-
 
     def register_results(self, winners):
         """
