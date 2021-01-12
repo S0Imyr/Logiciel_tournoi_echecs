@@ -96,11 +96,9 @@ def prompt_propositions(propositions):
     error_message = "Votre réponse ne correspond pas. \n" \
                     "Veuillez indiquer : \n"
     error_message += proposal_message
-
     response = input(message)
-
     while response not in propositions:
-        input(error_message)
+        response = input(error_message)
     return response
 
 
@@ -208,7 +206,9 @@ def input_match_results(r0und):
 
 
 if __name__ == "__main__":
-    Me = input_actor()
+    """    Me = input_actor()
     print(Me)
     You = input_actor()
-    print(You)
+    print(You)"""
+
+    prompt_propositions({"U": "Unique", "D": "Débile", "T": "Terrible"})
