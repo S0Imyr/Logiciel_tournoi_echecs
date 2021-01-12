@@ -119,7 +119,6 @@ def deserialize_tournament(serialized_tournament):
 class DataBaseHandler:
     def __init__(self, database):
         self.database = database
-        self.tournament_step = None
 
     def export_actor(self, actor):
         """
@@ -132,16 +131,13 @@ class DataBaseHandler:
         dictio = actor.actor_to_dict()
         actors_table.insert(dictio)
 
-    def export_tournament(self, tournament, step):
+    def export_tournament(self, tournament):
         """
         transfers an instance of tournament in a table of the database,
         the instance of tournament is transformed in a dictionnary first.
-        The step is the progress in the tournament.
         :param tournament: instance of tournament
-        :param step: progress in the tournament.
         :return: None
         """
-        self.tournament_step = step
         tournament_table = self.database.table('tournament')
         dictio = tournament.tournament_to_dict()
         tournament_table.insert(dictio)
@@ -166,13 +162,13 @@ class DataBaseHandler:
         """
         import a list of one tournament transformed in a dictionary,
         it is converted in  the corresponding instance of tournament.
-        :return: the progress in tournament, and the instance of tournament.
+        :return: the instance of tournament.
         """
         tournament_table = self.database.table('tournament')
         list_serialized_tournament = tournament_table.all()
         serialized_tournament = list_serialized_tournament[0]
         tournament = deserialize_tournament(serialized_tournament)
-        return self.tournament_step, tournament
+        return tournament
 
 
 if __name__ == '__main__':
@@ -212,38 +208,42 @@ if __name__ == '__main__':
     print("\n Initialisation : Joueurs \n")
     # print(tournoi.list_of_players)
     """ Tour 1"""
+    print("\n Tour 1 \n")
     tournoi.init_round(0)
 
     gagnants1 = [0, 1, 2, 0]
     tournoi.register_round_results(0, gagnants1)
-    print("\n Tour 1 \n")
+
     # print(tournoi.rounds[0])
     # print(tournoi.list_of_players)
 
     """ Tour 2"""
+    print("\n Tour 2 \n")
     tournoi.init_round(1)
 
     gagnants2 = [1, 2, 2, 1]
     tournoi.register_round_results(1, gagnants2)
-    print("\n Tour 2 \n")
+
     # print(tournoi.rounds[1])
     # print(tournoi.list_of_players)
 
     """ Tour 3"""
+    print("\n Tour 3 \n")
     tournoi.init_round(2)
 
     gagnants3 = [1, 1, 0, 2]
     tournoi.register_round_results(2, gagnants3)
-    print("\n Tour 3 \n")
+
     # print(tournoi.rounds[2])
     # print(tournoi.list_of_players)
 
     """ Tour 4"""
+    print("\n Tour 4 \n")
     tournoi.init_round(3)
 
     gagnants4 = [2, 2, 1, 0]
     tournoi.register_round_results(3, gagnants4)
-    print("\n Tour 4 \n")
+
     # print(tournoi.rounds[3])
     # print(tournoi.list_of_players)
     """ Fin partie """
@@ -319,9 +319,18 @@ if __name__ == '__main__':
 
     """ Tests export, import """
     print("\n ### Tests export, import ### \n")
-    handler.export_tournament(tournoi, 3)
+    print(" -- Tournoi \n")
+    handler.export_tournament(tournoi)
     tupl = handler.import_tournament()
 
     print(vars(tournoi))
-    print(vars(tupl[1]))
+    print(vars(tupl))
+
+    print(" -- Acteurs \n")
+    for k in acteurs:
+        handler.export_actor(k)
+
+    acteurs0 = handler.import_actors()[1]
+    print(acteurs)
+    print(acteurs0)
     # problème dans matchs : clé '0' au lieu de 0
