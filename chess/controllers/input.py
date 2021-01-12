@@ -200,7 +200,7 @@ def input_match_results(r0und):  # Rajouter le joueur vs joueur
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul", 0, 2)
-        results[num_match] = result
+        results[num_match-1] = result
         del remaining_matchs[str(num_match)]
     return results
 
