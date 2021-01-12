@@ -21,7 +21,7 @@ class Actor:
         self.rank = rank
         self.tournaments = []
 
-    def __repr__(self):
+    def __str__(self):
         return f"Personne: Nom: {self.last_name}, Prénom: {self.first_name} \n" \
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
@@ -59,7 +59,7 @@ class Player:
         self.place = 0
         self.opponents = []
 
-    def __repr__(self):
+    def __str__(self):
         return f"Nom: {self.name} \n" \
                f"Identifiant: {self.actor.actor_id}\n" \
                f"Classement: {self.rank}\n" \
