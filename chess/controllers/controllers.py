@@ -9,7 +9,7 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_intro_home_menu, view_tournament_creation, view_tournament_players,\
     view_id_player, view_launch_tournament, view_round_matchs, \
     view_validation_actors_imported, view_tournament_final, \
-    view_validation_export_actors, view_validation_players
+    view_validation_actors_exported, view_validation_players
 
 
 from chess.controllers.menus import Menu
@@ -200,7 +200,7 @@ class LaunchTournament:
         if num_round == 0:
             view_launch_tournament(self.tournament)                               # Affichage lancement tournoi
         if num_round == 4:
-            view_tournament_final()
+            view_tournament_final(self.tournament.list_of_players)
         else:
             self.tournament.init_round(num_round)                                 # Instance de round et définition des matchs
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage des matchs
@@ -227,6 +227,8 @@ class ImportActors:
         view_validation_actors_imported(actors)
         for actor in actors:
             Actors.actors[actor.actor_id] = actor
+        #tournament_table = handler.database.table("tournament")
+        #tournament_table.truncate()
         return HomeMenuController()
 
 
@@ -238,7 +240,9 @@ class ExportActors:
         handler = DataBaseHandler(TinyDB('db.json'))
         for actor in self.actors:
             handler.export_actor(actor)
-        view_validation_export_actors(self.actors)
+        view_validation_actors_exported(self.actors)
+        #actors_table = handler.database.table("actors")
+        #actors_table.truncate()
 
 
 class RapportMenu:
