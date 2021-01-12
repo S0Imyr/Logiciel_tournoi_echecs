@@ -92,7 +92,7 @@ def view_validation_actors_imported(actors):
 def view_validation_actors_exported(exported_actors):
     message = "Les personnes suivantes ont été exportés \n"
     for actor in exported_actors:
-        message += "\n"+ actor
+        message += "\n" + actor
     print(message)
 
 
