@@ -32,13 +32,19 @@ class Tournament:
         self.list_of_players = []
         self.players_assigned = False
 
-    def define_players(self, players):
+    def define_players(self, actors):
         """
         define the list of id of the players
-        :param players:
+        :param actors:
         :return: None
         """
-        self.list_of_players = players
+        if len(actors) != NB_PLAYERS:
+            print("Il n'y a pas assez de joueurs")              ###
+        else:
+            for num_player in range(NB_PLAYERS):
+                self.list_of_players.append(Player(actors[num_player],
+                                                   self.tournament_id,
+                                                   num_player))
 
     def init_round(self, num_round):
         """
@@ -105,7 +111,7 @@ if __name__ == "__main__":
     acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)            # 6
     acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
 
-    joueur1 = Player(acteur1, "00000001", 1)
+    """joueur1 = Player(acteur1, "00000001", 1)
     joueur2 = Player(acteur2, "00000001", 2)
     joueur3 = Player(acteur3, "00000001", 3)
     joueur4 = Player(acteur4, "00000001", 4)
@@ -113,11 +119,11 @@ if __name__ == "__main__":
     joueur6 = Player(acteur6, "00000001", 6)
     joueur7 = Player(acteur7, "00000001", 7)
     joueur8 = Player(acteur8, "00000001", 8)
-    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
+    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]"""
 
     tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer_type="Bz", description="Rien")
     tournoi.start_date = datetime.date.today()
-    tournoi.define_players(joueurs)
+    tournoi.define_players(acteurs)
     print(tournoi.list_of_players)
     """ Tour 1"""
     tournoi.init_round(0)
