@@ -91,7 +91,7 @@ def prompt_propositions(propositions):
     """
     proposal_message = ""
     for cle, item in propositions.items():
-        proposal_message += f"soit :{cle} pour {item}.\n"
+        proposal_message += f"soit: {cle} pour {item}.\n"
     message = "Choisissez parmi: \n" + proposal_message
     error_message = "Votre réponse ne correspond pas. \n" \
                     "Veuillez indiquer : \n"
@@ -157,9 +157,11 @@ def input_actor():
     acteur_arguments = [last_name, first_name, birthdate, gender, rank]
     return acteur_arguments
 
-def input_tournament_players(num_player, message):
+
+def input_tournament_players(message):
     actor_id = prompt_id_num(message)
     return actor_id
+
 
 def tournament_inputs():
     """
