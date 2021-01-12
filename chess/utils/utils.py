@@ -4,7 +4,7 @@ def get_new_id(ide, width):
         ide = str(1)
     else:
         ide = str(int(ide.lstrip('0')) + 1)
-    ide = (width + 1 - len(ide.lstrip('0'))) * "0" + ide
+    ide = (width - len(ide.lstrip('0'))) * "0" + ide
     return ide
 
 if __name__ == '__main__':
