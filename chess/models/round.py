@@ -21,7 +21,7 @@ class Round:
         self.finished = False
         self.players_sorted = False
 
-    def __repr__(self):
+    def __str__(self):
         repr = f"Tour {self.round_nb + 1} du tournoi {self.tournament_id} \n"
         if self.matchs != {}:
             if self.finished:
