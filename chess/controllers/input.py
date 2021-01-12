@@ -187,19 +187,17 @@ def input_match_results(r0und):  # Rajouter le joueur vs joueur
     Le premier joueur désigné est vainqueur pour les matchs 2 et 3.
     Le second joueur désigné est vainqueur pour le match 4.
     """
-    print("En attente de résultats: \n"
-          "Lorsqu'un match est terminé, "
-          "indiquez le numéro du match "
-          "pour entrez les résultats")
-    remaining_matchs = {"1": "Match 1", "2":
-                        "Match 2", "3": "Match 3", "4": "Match 4"}
+    remaining_matchs = {}
+    num = 0
+    for num, match in r0und.matchs.items():
+        remaining_matchs[num+1] = f"Match {num+1}: {match.player1.name} vs {match.player2.name}"
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
         num_match = int(prompt_propositions(remaining_matchs))
         print(r0und.matchs[num_match-1])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
-                               " pour le match nul", 0, 2)
+                               " pour le match nul ", 0, 2)
         results[num_match-1] = result
         del remaining_matchs[str(num_match)]
     return results
