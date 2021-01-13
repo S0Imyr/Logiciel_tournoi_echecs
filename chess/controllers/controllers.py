@@ -13,6 +13,11 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_import_no_tournament
 
 
+from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
+    report_tournaments_list, report_tournament_players, \
+    report_tournament_matchs, report_tournament_rounds
+
+
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
     input_match_results, input_tournament_players
@@ -81,7 +86,7 @@ class HomeMenuController:
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
         self.menu.add("auto", "Importer des joueurs", ImportActors())
-        self.menu.add("auto", "Obtenir un rapport", RapportMenu())
+        self.menu.add("auto", "Obtenir un rapport", ReportMenu())
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
@@ -250,7 +255,7 @@ class ExportActors:
         #actors_table.truncate()
 
 
-class RapportMenu:
+class ReportMenu:
     """
     Menu des rapports
     """
@@ -277,7 +282,7 @@ class ActorsList:
     def __call__(self):
         self.menu.add("auto", "Trier par ordre alphabétique", ActorsListAlphabetical())
         self.menu.add("auto", "Trier selon leur classement", ActorsListRank())
-        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -286,11 +291,35 @@ class ActorsList:
 
 
 class ActorsListAlphabetical:
-    pass
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_actors_by_alpha()
+        self.menu.add("auto", "Retour au choix du tri", ActorsList())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
 
 class ActorsListRank:
-    pass
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_actors_by_rank()
+        self.menu.add("auto", "Retour au choix du tri", ActorsList())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
 
 class TournamentsList:
@@ -299,7 +328,8 @@ class TournamentsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        report_tournaments_list()
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -313,10 +343,10 @@ class TournamentRapportMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Liste des joueurs du tournoi", PlayersList())
-        self.menu.add("auto", "Liste des matchs du tournoi", MatchsList())
-        self.menu.add("auto", "Liste des matchs du tournoi", RoundsList())
-        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        self.menu.add("auto", "Liste des joueurs du tournoi", TournamentPlayersList())
+        self.menu.add("auto", "Liste des matchs du tournoi", TournamentMatchsList())
+        self.menu.add("auto", "Liste des matchs du tournoi", TournamentRoundsList())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -324,16 +354,52 @@ class TournamentRapportMenu:
         return user_choice.handler
 
 
-class PlayersList:
-    pass
+class TournamentPlayersList:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_tournament_players()
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
 
-class MatchsList:
-    pass
+class TournamentMatchsList:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_tournament_matchs()
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
 
-class RoundsList:
-    pass
+class TournamentRoundsList:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_tournament_rounds()
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
 
 
 class Ending:
