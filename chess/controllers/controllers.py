@@ -179,8 +179,11 @@ class TournamentPlayers:
             message = f"Veuillez indiquer " \
                       f"l'identifiant du joueur {num_player}: "
             actor_id = input_tournament_players(message)
+            num_bug = 0
             while actor_id not in Actors.actors:
-                message += f"Identifiant inconnu."
+                if num_bug == 0:
+                    message += f"Identifiant inconnu."
+                num_bug += 1
                 actor_id = input_tournament_players(message)
             actors_id.append(actor_id)
             actor = Actors.actors[actor_id]
