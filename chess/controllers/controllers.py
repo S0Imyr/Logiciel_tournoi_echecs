@@ -9,14 +9,13 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_intro_home_menu, view_tournament_creation, view_tournament_players,\
     view_id_player, view_launch_tournament, view_round_matchs, \
     view_validation_actors_imported, view_tournament_final, \
-    view_validation_actors_exported, view_validation_players
+    view_validation_actors_exported, view_validation_players, \
+    view_import_no_tournament
 
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
     input_match_results, input_tournament_players
-
-from tinydb import TinyDB
 
 
 NB_PLAYERS = 8
@@ -156,7 +155,7 @@ class TournamentPause:
 class TournamentInterruption:
     def __init__(self, tournament):
         self.tournament = tournament
-        handler = DataBaseHandler(TinyDB('db.json'))
+        handler = DataBaseHandler()
         handler.database.table('tournament').truncate()
         handler.export_tournament(self.tournament)
 
@@ -196,6 +195,9 @@ class LaunchTournament:
         self.tournament = tournament
 
     def __call__(self):
+        if self.tournament == []:
+            view_import_no_tournament()
+            return HomeMenuController()
         num_round = len(self.tournament.rounds)
         if num_round == 0:
             view_launch_tournament(self.tournament)                               # Affichage lancement tournoi
@@ -212,7 +214,7 @@ class LaunchTournament:
 
 class ResumeTournament:
     def __call__(self):
-        handler = DataBaseHandler(TinyDB('db.json'))
+        handler = DataBaseHandler()
         tournament = handler.import_tournament()
         return LaunchTournament(tournament)
 
@@ -222,7 +224,7 @@ class ImportActors:
         pass
 
     def __call__(self):
-        handler = DataBaseHandler(TinyDB('db.json'))
+        handler = DataBaseHandler()
         num_actors, actors = handler.import_actors()
         view_validation_actors_imported(actors)
         for actor in actors:
@@ -237,7 +239,7 @@ class ExportActors:
         self.actors = actors
 
     def __call__(self):
-        handler = DataBaseHandler(TinyDB('db.json'))
+        handler = DataBaseHandler()
         for actor in self.actors:
             handler.export_actor(actor)
         view_validation_actors_exported(self.actors)
@@ -254,15 +256,81 @@ class RapportMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Liste des acteurs", ())
-        self.menu.add("auto", "Liste des tournois", ())
-        self.menu.add("auto", "Détail d'un tournoi", ())
-        self.menu.add("auto", "Menu principal", HomeMenuController())
+        self.menu.add("auto", "Liste des acteurs", ActorsList())
+        self.menu.add("auto", "Liste des tournois", TournamentsList())
+        self.menu.add("auto", "Rapports pour un tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-
         return user_choice.handler
+
+
+class ActorsList:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        self.menu.add("auto", "Trier par ordre alphabétique", ActorsListAlphabetical())
+        self.menu.add("auto", "Trier selon leur classement", ActorsListRank())
+        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
+
+
+class ActorsListAlphabetical:
+    pass
+
+
+class ActorsListRank:
+    pass
+
+
+class TournamentsList:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
+
+
+class TournamentRapportMenu:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        self.menu.add("auto", "Liste des joueurs du tournoi", PlayersList())
+        self.menu.add("auto", "Liste des matchs du tournoi", MatchsList())
+        self.menu.add("auto", "Liste des matchs du tournoi", RoundsList())
+        self.menu.add("auto", "Obtenir un autre rapport", RapportMenu())
+        self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.handler
+
+
+class PlayersList:
+    pass
+
+
+class MatchsList:
+    pass
+
+
+class RoundsList:
+    pass
 
 
 class Ending:
