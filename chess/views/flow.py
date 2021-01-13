@@ -86,6 +86,19 @@ def input_match_results():
           "pour entrez les résultats")
 
 
+def view_tournament_final(tournament):
+    message = " ### Fin des matchs ### \n" \
+              "\n" \
+              "-- Classement final -- \n"
+    for player in tournament.list_of_players:
+        if player.place == 1:
+            message += f"1er: +{player}"
+        else:
+            for rank in range(2, len(tournament.list_of_players)):
+                message += f"{rank}eme: +{player}"
+    print(message)
+
+
 def view_validation_actors_imported(actors):
     print(f"\n ### Import de joueurs ### \n")
     if len(actors) == 0:
@@ -104,14 +117,7 @@ def view_validation_actors_exported(exported_actors):
     print(message)
 
 
-def view_tournament_final(tournament):
-    message = " ### Fin des matchs ### \n" \
-              "\n" \
-              "-- Classement final -- \n"
-    for player in tournament.list_of_players:
-        if player.place == 1:
-            message += f"1er: +{player}"
-        else:
-            for rank in range(2, len(tournament.list_of_players)):
-                message += f"{rank}eme: +{player}"
-    print(message)
+def view_import_no_tournament():
+    print(" ---------------------------------- "
+          "\n --- Aucun tournoi sauvegardé ! --- "
+          "\n ---------------------------------- ")
