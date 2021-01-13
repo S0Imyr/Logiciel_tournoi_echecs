@@ -81,12 +81,13 @@ def prompt_id_num(message, length=ID_WIDTH):
     return response
 
 
-def prompt_propositions(propositions):
+def prompt_propositions(propositions, integer=False):
     """
     Demande à l'utilisateur de spécifier un genre.
     Si la réponse n'est pas M ou F, la demande
     est refaite.
     :param propositions: dictionnaire des possibilités
+    :param integer: True if the input must be converted in integer
     :return: input
     """
     proposal_message = ""
@@ -97,8 +98,12 @@ def prompt_propositions(propositions):
                     "Veuillez indiquer : \n"
     error_message += proposal_message
     response = input(message)
+    if integer:
+        response = int(response)
     while response not in propositions:
         response = input(error_message)
+        if integer:
+            response = int(response)
     return response
 
 
