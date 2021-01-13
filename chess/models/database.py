@@ -1,3 +1,5 @@
+from tinydb import TinyDB
+
 from chess.models.actors import Actor, Player
 from chess.models.match import Match
 from chess.models.round import Round
@@ -117,8 +119,8 @@ def deserialize_tournament(serialized_tournament):
 
 
 class DataBaseHandler:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.database = TinyDB('db.json')
 
     def export_actor(self, actor):
         """
@@ -166,6 +168,8 @@ class DataBaseHandler:
         """
         tournament_table = self.database.table('tournament')
         list_serialized_tournament = tournament_table.all()
+        if list_serialized_tournament == []:
+            return []
         serialized_tournament = list_serialized_tournament[0]
         tournament = deserialize_tournament(serialized_tournament)
         return tournament
@@ -173,9 +177,9 @@ class DataBaseHandler:
 
 if __name__ == '__main__':
     import datetime
-    from tinydb import TinyDB
 
-    handler = DataBaseHandler(TinyDB('db.json'))
+
+    handler = DataBaseHandler()
     handler.database.table('actors').truncate()
     handler.database.table('tournament').truncate()
 
