@@ -4,7 +4,9 @@ NB_MATCH = 4
 def view_intro_home_menu():
     print("\n ### Menu Principal ### \n"
           "\n"
-          "-- Que souhaitez vous réaliser ? --\n")
+          "-- Que souhaitez vous réaliser ? --\n"
+          "\n"
+          "Si des joueurs doivent être importés, commencer par cela.")
 
 
 def view_tournament_creation():
