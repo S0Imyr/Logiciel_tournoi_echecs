@@ -125,7 +125,7 @@ class TournamentPlayersMenu:
         view_tournament_players(self.tournament)
 
         self.menu.add("auto",
-                      "Ajouter les joueurs par id",
+                      "Ajouter les joueurs par leur identifiant",
                       TournamentPlayers(self.tournament))
         self.menu.add("auto",
                       "Interrompre le tournoi",
