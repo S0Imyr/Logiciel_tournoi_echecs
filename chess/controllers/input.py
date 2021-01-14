@@ -91,10 +91,10 @@ def prompt_propositions(propositions, message_add="", integer=False):
     :param integer: True if the input must be converted in integer
     :return: input
     """
-    proposal_message = message_add
+    proposal_message = ""
     for cle, item in propositions.items():
         proposal_message += f"soit: {cle} pour {item}.\n"
-    message = "Choisissez parmi: \n" + proposal_message
+    message = message_add + "\n Choisissez parmi: \n" + proposal_message
     error_message = "Votre réponse ne correspond pas. \n" \
                     "Veuillez indiquer : \n"
     error_message += proposal_message
@@ -112,8 +112,7 @@ def prompt_date(message):
     """
     Demande à l'utilisateur à l'aide de
     message de saisir une date selon un format.
-    Si ce format n'est pas respecté, la demande
-    est refaite.
+    Si ce format n'est pas respecté, la demande est refaite.
     :param message:
     :return: input date
     """
@@ -178,7 +177,7 @@ def tournament_inputs():
                                  "Bz": "Blitz",
                                  "Cr": "Coup rapide"},
                                 message_add="Comment souhaitez vous"
-                                            " contrôler le temps")
+                                            " contrôler le temps ?")
     description = prompt_string("Description (facultatif): ")
     tournament_arguments = [name, location, timer, description]
     return tournament_arguments
