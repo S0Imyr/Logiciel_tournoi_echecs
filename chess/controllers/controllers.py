@@ -174,6 +174,8 @@ class TournamentPlayers:
     """
     def __init__(self, tournament):
         self.tournament = tournament
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
 
     def __call__(self):
         actors = []
@@ -181,20 +183,31 @@ class TournamentPlayers:
         while len(actors) < NB_PLAYERS:
             num_player = len(actors) + 1
             view_id_player(self.tournament, num_player)
-            message = f"Veuillez indiquer " \
+            message = "Vous pouvez revenir au menu principal en entrant 00000000. \nVeuillez indiquer " \
                       f"l'identifiant du joueur {num_player}: "
+            error_message = ""
             actor_id = input_tournament_players(message)
-            num_bug = 0
-            while actor_id not in Actors.actors:
-                if num_bug == 0:
-                    message += f"Identifiant inconnu."
-                num_bug += 1
-                actor_id = input_tournament_players(message)
+            bug_dont_exist = 0
+            bug_already_in = 0
+            while actor_id in actors_id or actor_id not in Actors.actors:
+                if actor_id == "00000000":
+                    handler = HomeMenuController()
+                    return handler()
+                if actor_id in actors_id:
+                    if bug_dont_exist == 0:
+                        error_message = "Erreur: ce joueur est déjà présent dans le tournoi. "
+                    bug_dont_exist += 1
+                if actor_id not in Actors.actors:
+                    if bug_already_in == 0:
+                        error_message = "Erreur: identifiant inconnu. "
+                    bug_already_in += 1
+                actor_id = input_tournament_players(error_message + message)
             actors_id.append(actor_id)
             actor = Actors.actors[actor_id]
             actors.append(actor)
         self.tournament.define_players(actors)
         view_validation_players(actors)
+
         return LaunchTournament(self.tournament)
 
 
@@ -203,7 +216,7 @@ class LaunchTournament:
         self.tournament = tournament
 
     def __call__(self):
-        if self.tournament == []:
+        if not self.tournament:
             view_import_no_tournament()
             return HomeMenuController()
         num_round = len(self.tournament.rounds)
