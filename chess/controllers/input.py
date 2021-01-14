@@ -81,16 +81,17 @@ def prompt_id_num(message, length=ID_WIDTH):
     return response
 
 
-def prompt_propositions(propositions, integer=False):
+def prompt_propositions(propositions, message_add="", integer=False):
     """
     Demande à l'utilisateur de spécifier un genre.
     Si la réponse n'est pas M ou F, la demande
     est refaite.
     :param propositions: dictionnaire des possibilités
+    :param message_add: message supplémentaire à afficher
     :param integer: True if the input must be converted in integer
     :return: input
     """
-    proposal_message = ""
+    proposal_message = message_add
     for cle, item in propositions.items():
         proposal_message += f"soit: {cle} pour {item}.\n"
     message = "Choisissez parmi: \n" + proposal_message
@@ -175,13 +176,15 @@ def tournament_inputs():
     location = prompt_string("Lieu du tournoi : ")
     timer = prompt_propositions({"Bu": "Bullet",
                                  "Bz": "Blitz",
-                                 "Cr": "Coup rapide"})
-    description = prompt_string("description: ")
+                                 "Cr": "Coup rapide"},
+                                message_add="Comment souhaitez vous"
+                                            " contrôler le temps")
+    description = prompt_string("Description (facultatif): ")
     tournament_arguments = [name, location, timer, description]
     return tournament_arguments
 
 
-def input_match_results(r0und):  # Rajouter le joueur vs joueur
+def input_match_results(r0und):
     """
     Demande à remplir les résultat d'un tour
     On commence par choisir un match en désignant son numéro
@@ -197,7 +200,7 @@ def input_match_results(r0und):  # Rajouter le joueur vs joueur
         remaining_matchs[num+1] = f"Match {num+1}: {match.player1.name} vs {match.player2.name}"
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
-        num_match = int(prompt_propositions(remaining_matchs, True))
+        num_match = int(prompt_propositions(remaining_matchs, integer=True))
         print(r0und.matchs[num_match-1])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
