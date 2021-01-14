@@ -199,13 +199,13 @@ def input_match_results(r0und):
         remaining_matchs[num+1] = f"Match {num+1}: {match.player1.name} vs {match.player2.name}"
     results = [0]*NB_MATCH
     while remaining_matchs != {}:
-        num_match = int(prompt_propositions(remaining_matchs, integer=True))
+        num_match = prompt_propositions(remaining_matchs, integer=True)
         print(r0und.matchs[num_match-1])
         result = prompt_number("Indiquer le vainqueur"
                                " par 1 ou 2, ou inscrivez 0"
                                " pour le match nul ", 0, 2)
         results[num_match-1] = result
-        del remaining_matchs[str(num_match)]
+        del remaining_matchs[num_match]
     return results
 
 
