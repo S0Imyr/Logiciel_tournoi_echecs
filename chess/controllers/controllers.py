@@ -82,10 +82,10 @@ class HomeMenuController:
 
     def __call__(self):
         view_intro_home_menu()
-        self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
-        self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
         self.menu.add("auto", "Importer des joueurs", ImportActors())
+        self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
+        self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Obtenir un rapport", ReportMenu())
         self.menu.add("q", "Quitter", Ending())
 
