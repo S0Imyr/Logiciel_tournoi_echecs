@@ -18,7 +18,7 @@ from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
-    input_match_results, input_tournament_players
+    input_match_results, input_tournament_players, input_tournament_id
 
 
 NB_PLAYERS = 8
@@ -233,9 +233,12 @@ class LaunchTournament:
             return HomeMenuController()
         num_round = len(self.tournament.rounds)
         if num_round == 0:
-            view_launch_tournament(self.tournament)                               # Affichage lancement tournoi
+            view_launch_tournament(self.tournament)
         if num_round == 4:
-            view_tournament_final(self.tournament.list_of_players)
+            view_tournament_final(self.tournament)
+            self.tournament.finished = True
+            database = DataBaseHandler()
+            database.export_tournament(self.tournament)
         else:
             self.tournament.init_round(num_round)                                 # Instance de round et définition des matchs
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage des matchs
@@ -300,7 +303,7 @@ class ReportMenu:
     def __call__(self):
         self.menu.add("auto", "Liste des acteurs", ActorsList())
         self.menu.add("auto", "Liste des tournois", TournamentsList())
-        self.menu.add("auto", "Rapports pour un tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Rapports pour un tournoi", TournamentRapportInput())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -331,8 +334,8 @@ class ActorsListAlphabetical:
 
     def __call__(self):
         handler = DataBaseHandler()
-        num_actors, actorslist = handler.import_actors()
-        report_actors_by_alpha(actorslist)
+        num_actors, actors_list = handler.import_actors()
+        report_actors_by_alpha(actors_list)
         self.menu.add("auto", "Retour au choix du tri", ActorsList())
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
@@ -348,7 +351,9 @@ class ActorsListRank:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_actors_by_rank()
+        handler = DataBaseHandler()
+        num_actors, actors_list = handler.import_actors()
+        report_actors_by_rank(actors_list)
         self.menu.add("auto", "Retour au choix du tri", ActorsList())
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
@@ -373,15 +378,25 @@ class TournamentsList:
         return user_choice.handler
 
 
+class TournamentRapportInput:
+    def __call__(self):
+        tournament_id = input_tournament_id()
+        pass
+        # chercher tournament_id dans les tournois
+        #handler = TournamentRapportMenu(tournament)
+        #return handler
+
+
 class TournamentRapportMenu:
-    def __init__(self):
+    def __init__(self, tournament):
+        self.tournament = tournament
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        self.menu.add("auto", "Liste des joueurs du tournoi", TournamentPlayersList())
-        self.menu.add("auto", "Liste des matchs du tournoi", TournamentMatchsList())
-        self.menu.add("auto", "Liste des matchs du tournoi", TournamentRoundsList())
+        self.menu.add("auto", "Liste des joueurs du tournoi", TournamentPlayersList(self.tournament))
+        self.menu.add("auto", "Liste des matchs du tournoi", TournamentMatchsList(self.tournament))
+        self.menu.add("auto", "Liste des matchs du tournoi", TournamentRoundsList(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -391,13 +406,14 @@ class TournamentRapportMenu:
 
 
 class TournamentPlayersList:
-    def __init__(self):
+    def __init__(self, tournament):
+        self.tournament = tournament
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
         report_tournament_players()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -407,13 +423,14 @@ class TournamentPlayersList:
 
 
 class TournamentMatchsList:
-    def __init__(self):
+    def __init__(self, tournament):
+        self.tournament = tournament
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
         report_tournament_matchs()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -423,13 +440,14 @@ class TournamentMatchsList:
 
 
 class TournamentRoundsList:
-    def __init__(self):
+    def __init__(self, tournament):
+        self.tournament = tournament
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
         report_tournament_rounds()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu())
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
