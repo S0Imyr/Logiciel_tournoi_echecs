@@ -54,11 +54,6 @@ class Actors:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        handler = DataBaseHandler()
-        num_actors, actors = handler.import_actors()
-        view_validation_actors_imported(actors)
-        for actor in actors:
-            Actors.actors[actor.actor_id] = actor
         view_input_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
@@ -69,7 +64,7 @@ class Actors:
         Actors.actors[actor.actor_id] = actor
         view_validation_new_actor(actor)
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
-        self.menu.add("auto", "Exporter les joueurs", ExportActors(Actors.actors))
+        self.menu.add("auto", "Exporter les joueurs", ExportActors(Actors.actors.values()))
         self.menu.add("auto", "Retour au menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -118,7 +113,7 @@ class TournamentCreation:
 
 class TournamentPlayersMenu:
     """
-    Menu du type d'introduction des joueurs du tournoi
+    Menu to input Players of the tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -144,6 +139,9 @@ class TournamentPlayersMenu:
 
 
 class TournamentPause:
+    """
+    A menu to give the alternative to interrupt or go on the tournament
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -162,11 +160,15 @@ class TournamentPause:
 
 
 class TournamentInterruption:
+    """
+    Interrupt the tournament and load the datas in the database
+    to be able to resume it.
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         handler = DataBaseHandler()
         handler.database.table('tournament').truncate()
-        handler.export_tournament(self.tournament)
+        handler.export_interrupted_tournament(self.tournament)
 
     def __call__(self):
         return Ending()
@@ -174,7 +176,7 @@ class TournamentInterruption:
 
 class TournamentPlayers:
     """
-    Gestion de l'entrée des joueurs
+    Handle the input of the players of the tournament.
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -187,7 +189,8 @@ class TournamentPlayers:
         while len(actors) < NB_PLAYERS:
             num_player = len(actors) + 1
             view_id_player(self.tournament, num_player)
-            message = "Vous pouvez revenir au menu principal en entrant 00000000. \nVeuillez indiquer " \
+            message = "Vous pouvez revenir au menu principal " \
+                      "en entrant 00000000. \nVeuillez indiquer " \
                       f"l'identifiant du joueur {num_player}: "
             error_message = ""
             actor_id = input_tournament_players(message)
@@ -216,6 +219,11 @@ class TournamentPlayers:
 
 
 class LaunchTournament:
+    """
+    Launch the tournament, there is a kind of a loop
+    between LaunchTournament and TournamentPause
+    for the 4 rounds.
+    """
     def __init__(self, tournament):
         self.tournament = tournament
 
@@ -234,17 +242,23 @@ class LaunchTournament:
             winners = input_match_results(self.tournament.rounds[num_round])      # Attente, entrée des gagnants
             self.tournament.register_round_results(num_round, winners)            # Entrées dans instance de round
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage résultats
-            return TournamentPause(self.tournament)                               # Export TDB ?
+            return TournamentPause(self.tournament)
 
 
 class ResumeTournament:
+    """
+    Resume a tournament.
+    It imports the datas and progress of
+    the last tournament interrupt.
+    """
     def __call__(self):
         handler = DataBaseHandler()
-        tournament = handler.import_tournament()
+        tournament = handler.import_interrupted_tournament()
         return LaunchTournament(tournament)
 
 
 class ImportActors:
+
     def __init__(self, new_player=False):
         self.new_player = new_player
         self.handler = HomeMenuController()
@@ -271,8 +285,8 @@ class ExportActors:
         for actor in self.actors:
             handler.export_actor(actor)
         view_validation_actors_exported(self.actors)
-        #actors_table = handler.database.table("actors")
-        #actors_table.truncate()
+        actors_table = handler.database.table("actors")
+        actors_table.truncate()
 
 
 class ReportMenu:

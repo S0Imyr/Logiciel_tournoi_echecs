@@ -130,19 +130,9 @@ class DataBaseHandler:
         :return: None
         """
         actors_table = self.database.table('actors')
+        actors_table.truncate()
         dictio = actor.actor_to_dict()
         actors_table.insert(dictio)
-
-    def export_tournament(self, tournament):
-        """
-        transfers an instance of tournament in a table of the database,
-        the instance of tournament is transformed in a dictionnary first.
-        :param tournament: instance of tournament
-        :return: None
-        """
-        tournament_table = self.database.table('tournament')
-        dictio = tournament.tournament_to_dict()
-        tournament_table.insert(dictio)
 
     def import_actors(self):
         """
@@ -160,19 +150,43 @@ class DataBaseHandler:
             actors.append(actor)
         return len(serialized_actors), actors
 
-    def import_tournament(self):
+    def export_interrupted_tournament(self, tournament):
+        """
+        transfers an instance of tournament in a table of the database,
+        the instance of tournament is transformed in a dictionnary first.
+        :param tournament: instance of tournament
+        :return: None
+        """
+        tournament_table = self.database.table('interrupted_tournament')
+        tournament_table.truncate()
+        dictio = tournament.tournament_to_dict()
+        tournament_table.insert(dictio)
+
+    def import_interrupted_tournament(self):
         """
         import a list of one tournament transformed in a dictionary,
         it is converted in  the corresponding instance of tournament.
         :return: the instance of tournament.
         """
-        tournament_table = self.database.table('tournament')
+        tournament_table = self.database.table('interrupted_tournament')
         list_serialized_tournament = tournament_table.all()
         if list_serialized_tournament == []:
             return []
         serialized_tournament = list_serialized_tournament[0]
         tournament = deserialize_tournament(serialized_tournament)
         return tournament
+
+    def export_tournament(self, tournament):
+        """
+        transfers an instance of tournament in a table of the database,
+        the instance of tournament is transformed in a dictionnary first.
+        :param tournament: instance of tournament
+        :return: None
+        """
+        tournament_table = self.database.table('tournaments')
+        tournament_table.truncate()
+        dictio = tournament.tournament_to_dict()
+        tournament_table.insert(dictio)
 
 
 if __name__ == '__main__':
@@ -324,8 +338,8 @@ if __name__ == '__main__':
     """ Tests export, import """
     print("\n ### Tests export, import ### \n")
     print(" -- Tournoi \n")
-    handler.export_tournament(tournoi)
-    tupl = handler.import_tournament()
+    handler.export_interrupted_tournament(tournoi)
+    tupl = handler.import_interrupted_tournament()
 
     print(vars(tournoi))
     print(vars(tupl))
