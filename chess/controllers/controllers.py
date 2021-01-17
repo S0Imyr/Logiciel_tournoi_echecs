@@ -330,7 +330,9 @@ class ActorsListAlphabetical:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_actors_by_alpha()
+        handler = DataBaseHandler()
+        num_actors, actorslist = handler.import_actors()
+        report_actors_by_alpha(actorslist)
         self.menu.add("auto", "Retour au choix du tri", ActorsList())
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
