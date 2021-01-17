@@ -209,6 +209,12 @@ def input_match_results(r0und):
     return results
 
 
+def input_tournament_id():
+    print("Si vous n'avez pas l'identifiant du tournoi, recherchez-le"
+          "dans la liste des tournois.")
+    prompt_id_num("Veuillez préciser l'identifiant du tournoi: ")
+
+
 if __name__ == "__main__":
     """    Me = input_actor()
     print(Me)
