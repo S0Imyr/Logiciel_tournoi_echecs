@@ -31,6 +31,7 @@ class Tournament:
         self.rounds = []
         self.list_of_players = []
         self.players_assigned = False
+        self.finished = False
 
     def define_players(self, actors):
         """
