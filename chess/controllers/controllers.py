@@ -12,11 +12,9 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_validation_actors_exported, view_validation_players, \
     view_import_no_tournament
 
-
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
     report_tournament_matchs, report_tournament_rounds
-
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
@@ -34,8 +32,8 @@ class BrowseControllers:
 
     def start(self):
         """
-        lance le menu d'accueil puis boucle pour naviguer
-        entre les différents controleurs
+        launch the home menu.
+        A loop while to browse between the controllers.
         :return: None
         """
         self.controller = HomeMenuController()
@@ -45,7 +43,9 @@ class BrowseControllers:
 
 class Actors:
     """
-    Gestion des acteurs
+    Store the actors in a class attribute,
+    the keys are the actors id and the values
+    are the instances of actors.
     """
     actors = {}
 
@@ -54,6 +54,11 @@ class Actors:
         self.view = MenuView(self.menu)
 
     def __call__(self):
+        handler = DataBaseHandler()
+        num_actors, actors = handler.import_actors()
+        view_validation_actors_imported(actors)
+        for actor in actors:
+            Actors.actors[actor.actor_id] = actor
         view_input_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
@@ -63,18 +68,18 @@ class Actors:
                       actor_arguments[4])
         Actors.actors[actor.actor_id] = actor
         view_validation_new_actor(actor)
-
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
         self.menu.add("auto", "Exporter les joueurs", ExportActors(Actors.actors))
         self.menu.add("auto", "Retour au menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
+
         user_choice = self.view.get_user_choice()
         return user_choice.handler
 
 
 class HomeMenuController:
     """
-    Controleur du menu principal
+    Handle the main menu
     """
     def __init__(self):
         self.menu = Menu()
@@ -82,21 +87,20 @@ class HomeMenuController:
 
     def __call__(self):
         view_intro_home_menu()
-        self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
         self.menu.add("auto", "Importer des joueurs", ImportActors())
+        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(new_player=True))
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Obtenir un rapport", ReportMenu())
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-
         return user_choice.handler
 
 
 class TournamentCreation:
     """
-    Gestionnaire création du tournoi
+    Handle the tournament creation
     """
     def __init__(self):
         self.tournament = None
@@ -241,8 +245,9 @@ class ResumeTournament:
 
 
 class ImportActors:
-    def __init__(self):
-        pass
+    def __init__(self, new_player=False):
+        self.new_player = new_player
+        self.handler = HomeMenuController()
 
     def __call__(self):
         handler = DataBaseHandler()
@@ -250,9 +255,11 @@ class ImportActors:
         view_validation_actors_imported(actors)
         for actor in actors:
             Actors.actors[actor.actor_id] = actor
-        #tournament_table = handler.database.table("tournament")
-        #tournament_table.truncate()
-        return HomeMenuController()
+        tournament_table = handler.database.table("tournament")
+        tournament_table.truncate()
+        if self.new_player:
+            self.handler = Actors()
+        return self.handler()
 
 
 class ExportActors:
