@@ -80,6 +80,10 @@ def view_round_matchs(r0und):
     print(display)
 
 
+def view_round_results(r0und):
+    pass
+
+
 def input_match_results():
     print("### En attente de résultats: ### \n"
           "\n"
@@ -97,10 +101,13 @@ def view_tournament_final(tournament):
         for player in tournament.list_of_players:
             if rank == 1:
                 if player.place == rank:
-                    message += f"1er : {player.name}"
+                    message += f"1er : {player.name}"\
+                               + " " * (20-len(player.name))\
+                               + "{player.points}"
             else:
                 if player.place == rank:
                     message += f"{rank}eme: {player.name}"
+                    message += " " * (20 - len(player.name))
         print(message)
 
 
@@ -118,7 +125,7 @@ def view_validation_actors_imported(actors):
 def view_validation_actors_exported(exported_actors):
     message = f"Les {len(exported_actors)} personnes ont été exportés \n"
     for actor in exported_actors:
-        message += "\n" + actor.actor_id + actor.first_name + " " + actor.last_name
+        message += "\n" + actor.actor_id + " " + actor.first_name + " " + actor.last_name
     print(message)
 
 
