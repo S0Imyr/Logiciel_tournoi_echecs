@@ -46,3 +46,8 @@ def report_tournament_matchs():
 
 def report_tournament_rounds():
     pass
+
+
+def report_no_tournament():
+    print("Il n'y a pas de tournoi avec cet identifiant"
+          " dans la base de données")
