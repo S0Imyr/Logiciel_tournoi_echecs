@@ -130,7 +130,6 @@ class DataBaseHandler:
         :return: None
         """
         actors_table = self.database.table('actors')
-        actors_table.truncate()
         dictio = actor.actor_to_dict()
         actors_table.insert(dictio)
 
@@ -183,10 +182,15 @@ class DataBaseHandler:
         :param tournament: instance of tournament
         :return: None
         """
-        tournament_table = self.database.table('tournaments')
-        tournament_table.truncate()
+        tournaments_table = self.database.table('tournament')
+        print(tournaments_table)
         dictio = tournament.tournament_to_dict()
-        tournament_table.insert(dictio)
+        tournaments_table.insert(dictio)
+
+    def find_tournament_by_id(self):
+        tournament_table = self.database.table('tournament')
+        for tournament in tournament_table:
+            print(tournament)
 
 
 if __name__ == '__main__':
