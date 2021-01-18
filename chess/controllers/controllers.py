@@ -25,6 +25,7 @@ from chess.controllers.input import tournament_inputs, input_actor, \
 NB_PLAYERS = 8
 NB_MATCH = 4
 NB_ROUND = 4
+ID_WIDTH = 8
 
 
 class BrowseControllers:
@@ -37,7 +38,7 @@ class BrowseControllers:
         A loop while to browse between the controllers.
         :return: None
         """
-        self.controller = HomeMenuController(True)
+        self.controller = HomeMenuController()
         while self.controller:
             self.controller = self.controller()
 
@@ -77,15 +78,14 @@ class HomeMenuController:
     """
     Handle the main menu
     """
-    def __init__(self, init_import=False):
+    def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
-        self.init_import = init_import
 
     def __call__(self):
         view_intro_home_menu()
         self.menu.add("auto", "Importer des joueurs", ImportActors())
-        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(self.init_import))
+        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(actors=True))
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Obtenir un rapport", ReportMenu())
@@ -241,6 +241,8 @@ class LaunchTournament:
             self.tournament.finished = True
             database = DataBaseHandler()
             database.export_tournament(self.tournament)
+            for player in self.tournament.list_of_players:
+                database.export_actor(player.actor)
         else:
             self.tournament.init_round(num_round)                                 # Instance de round et définition des matchs
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage des matchs
@@ -267,12 +269,12 @@ class ImportActors:
     Handle the actors imports.
     The database table is cleared after the import.
     """
-    def __init__(self, init=False):
+    def __init__(self, actors=False):
         self.handler = HomeMenuController()
-        self.init = init
+        self.actors = actors
 
     def __call__(self):
-        if self.init:
+        if self.actors:
             self.handler = Actors()
         handler = DataBaseHandler()
         num_actors, actors = handler.import_actors()
@@ -293,9 +295,9 @@ class ExportActors:
 
     def __call__(self):
         handler = DataBaseHandler()
-        print(vars(handler.database.table("actors")))
         for actor in self.actors:
             handler.export_actor(actor)
+        Actor.last_actor_id = "0" * ID_WIDTH
         view_validation_actors_exported(self.actors)
         return HomeMenuController()
 
