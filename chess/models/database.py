@@ -202,9 +202,13 @@ class DataBaseHandler:
         """
         tournaments = self.database.table('tournament')
         Tour = Query()
-        tournament_dict = tournaments.search(Tour.tournament_id == identifier)[0]
-        tournament = deserialize_tournament(tournament_dict)
+        if tournaments.search(Tour.tournament_id == identifier):
+            tournament_dict = tournaments.search(Tour.tournament_id == identifier)[0]
+            tournament = deserialize_tournament(tournament_dict)
+        else:
+            tournament = {}
         return tournament
+
 
 if __name__ == '__main__':
     import datetime
