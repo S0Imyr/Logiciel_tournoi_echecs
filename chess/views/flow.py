@@ -96,7 +96,7 @@ def view_tournament_final(tournament):
     print(" ### Fin des matchs ### \n"
               "\n"
               "-- Classement final -- \n")
-    for rank in range(1, len(tournament.list_of_players)):
+    for rank in range(1, len(tournament.list_of_players) + 1):
         message = ""
         for player in tournament.list_of_players:
             if rank == 1:
