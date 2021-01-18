@@ -36,7 +36,7 @@ class BrowseControllers:
         A loop while to browse between the controllers.
         :return: None
         """
-        self.controller = HomeMenuController()
+        self.controller = HomeMenuController(True)
         while self.controller:
             self.controller = self.controller()
 
@@ -76,14 +76,15 @@ class HomeMenuController:
     """
     Handle the main menu
     """
-    def __init__(self):
+    def __init__(self, init_import=False):
         self.menu = Menu()
         self.view = MenuView(self.menu)
+        self.init_import = init_import
 
     def __call__(self):
         view_intro_home_menu()
         self.menu.add("auto", "Importer des joueurs", ImportActors())
-        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(new_player=True))
+        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(self.init_import))
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Obtenir un rapport", ReportMenu())
@@ -261,40 +262,45 @@ class ResumeTournament:
 
 
 class ImportActors:
+    """
 
-    def __init__(self, new_player=False):
-        self.new_player = new_player
+    """
+    def __init__(self, init=False):
         self.handler = HomeMenuController()
+        self.init = init
 
     def __call__(self):
+        if self.init:
+            self.handler = Actors()
         handler = DataBaseHandler()
         num_actors, actors = handler.import_actors()
         view_validation_actors_imported(actors)
         for actor in actors:
             Actors.actors[actor.actor_id] = actor
-        tournament_table = handler.database.table("tournament")
-        tournament_table.truncate()
-        if self.new_player:
-            self.handler = Actors()
+        actors_table = handler.database.table("actors")
+        actors_table.truncate()
         return self.handler()
 
 
 class ExportActors:
+    """
+
+    """
     def __init__(self, actors):
         self.actors = actors
 
     def __call__(self):
         handler = DataBaseHandler()
+        print(vars(handler.database.table("actors")))
         for actor in self.actors:
             handler.export_actor(actor)
         view_validation_actors_exported(self.actors)
-        actors_table = handler.database.table("actors")
-        actors_table.truncate()
+        return HomeMenuController()
 
 
 class ReportMenu:
     """
-    Menu des rapports
+    Menu between the different reports
     """
     def __init__(self):
         self.menu = Menu()
@@ -303,7 +309,7 @@ class ReportMenu:
     def __call__(self):
         self.menu.add("auto", "Liste des acteurs", ActorsList())
         self.menu.add("auto", "Liste des tournois", TournamentsList())
-        self.menu.add("auto", "Rapports pour un tournoi", TournamentRapportInput())
+        self.menu.add("auto", "Rapports pour un tournoi", TournamentReportInput())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
 
@@ -312,6 +318,9 @@ class ReportMenu:
 
 
 class ActorsList:
+    """
+    Menu to obtain the actors lists
+    """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -328,6 +337,9 @@ class ActorsList:
 
 
 class ActorsListAlphabetical:
+    """
+    Handle the list of actors in alphabetical order
+    """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -346,6 +358,9 @@ class ActorsListAlphabetical:
 
 
 class ActorsListRank:
+    """
+    Handle the list of actors in rank order
+    """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -364,6 +379,9 @@ class ActorsListRank:
 
 
 class TournamentsList:
+    """
+    Handle the list of tournaments
+    """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -378,7 +396,10 @@ class TournamentsList:
         return user_choice.handler
 
 
-class TournamentRapportInput:
+class TournamentReportInput:
+    """
+    Ask for the tournament we want to get reports from
+    """
     def __call__(self):
         tournament_id = input_tournament_id()
         pass
@@ -387,13 +408,17 @@ class TournamentRapportInput:
         #return handler
 
 
-class TournamentRapportMenu:
+class TournamentReportMenu:
+    """
+    Handle the menu of reports of a tournament
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
+        #view_tournament_reports()
         self.menu.add("auto", "Liste des joueurs du tournoi", TournamentPlayersList(self.tournament))
         self.menu.add("auto", "Liste des matchs du tournoi", TournamentMatchsList(self.tournament))
         self.menu.add("auto", "Liste des matchs du tournoi", TournamentRoundsList(self.tournament))
@@ -406,6 +431,9 @@ class TournamentRapportMenu:
 
 
 class TournamentPlayersList:
+    """
+    Display the report of the players of a tournament
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -413,7 +441,7 @@ class TournamentPlayersList:
 
     def __call__(self):
         report_tournament_players()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentReportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -423,6 +451,9 @@ class TournamentPlayersList:
 
 
 class TournamentMatchsList:
+    """
+    Display the report of the matchs of a tournament
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -430,7 +461,7 @@ class TournamentMatchsList:
 
     def __call__(self):
         report_tournament_matchs()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentReportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -440,6 +471,9 @@ class TournamentMatchsList:
 
 
 class TournamentRoundsList:
+    """
+    Display the report of the rounds of a tournament
+    """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -447,7 +481,7 @@ class TournamentRoundsList:
 
     def __call__(self):
         report_tournament_rounds()
-        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentRapportMenu(self.tournament))
+        self.menu.add("auto", "Retour au menu rapport du tournoi", TournamentReportMenu(self.tournament))
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto", "Retour au Menu principal", HomeMenuController())
         self.menu.add("q", "Quitter", Ending())
@@ -457,6 +491,9 @@ class TournamentRoundsList:
 
 
 class Ending:
+    """
+    The exit screen
+    """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
