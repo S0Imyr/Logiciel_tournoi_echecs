@@ -14,7 +14,8 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
-    report_tournament_matchs, report_tournament_rounds
+    report_tournament_matchs, report_tournament_rounds, \
+    report_no_tournament
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
@@ -263,7 +264,8 @@ class ResumeTournament:
 
 class ImportActors:
     """
-
+    Handle the actors imports.
+    The database table is cleared after the import.
     """
     def __init__(self, init=False):
         self.handler = HomeMenuController()
@@ -284,7 +286,7 @@ class ImportActors:
 
 class ExportActors:
     """
-
+    Handle the actors exports.
     """
     def __init__(self, actors):
         self.actors = actors
@@ -402,10 +404,14 @@ class TournamentReportInput:
     """
     def __call__(self):
         tournament_id = input_tournament_id()
-        pass
-        # chercher tournament_id dans les tournois
-        #handler = TournamentRapportMenu(tournament)
-        #return handler
+        db = DataBaseHandler()
+        tournament = db.find_tournament_by_id(tournament_id)
+        if tournament:
+            handler = TournamentReportMenu(tournament)
+        else:
+            report_no_tournament()
+            handler = TournamentReportInput()
+        return handler
 
 
 class TournamentReportMenu:
