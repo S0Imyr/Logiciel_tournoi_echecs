@@ -1,4 +1,4 @@
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 
 from chess.models.actors import Actor, Player
 from chess.models.match import Match
@@ -130,8 +130,12 @@ class DataBaseHandler:
         :return: None
         """
         actors_table = self.database.table('actors')
+        query = Query()
         dictio = actor.actor_to_dict()
-        actors_table.insert(dictio)
+        if actors_table.search(query.actor_id == actor.actor_id):
+            actors_table.update(dictio, query.actor_id == actor.actor_id)
+        else:
+            actors_table.insert(dictio)
 
     def import_actors(self):
         """
@@ -183,23 +187,31 @@ class DataBaseHandler:
         :return: None
         """
         tournaments_table = self.database.table('tournament')
-        print(tournaments_table)
         dictio = tournament.tournament_to_dict()
-        tournaments_table.insert(dictio)
+        query = Query()
+        if tournaments_table.search(query.tournament_id == tournament.tournament_id):
+            tournaments_table.update(dictio, query.tournament_id == tournament.tournament_id)
+        else:
+            tournaments_table.insert(dictio)
 
-    def find_tournament_by_id(self):
-        tournament_table = self.database.table('tournament')
-        for tournament in tournament_table:
-            print(tournament)
-
+    def find_tournament_by_id(self, identifier):
+        """
+        Find the tournament in the database by entering its identifier
+        :param identifier: the identifier of the searched tournament
+        :return: instance of the tournament searched
+        """
+        tournaments = self.database.table('tournament')
+        Tour = Query()
+        tournament_dict = tournaments.search(Tour.tournament_id == identifier)[0]
+        tournament = deserialize_tournament(tournament_dict)
+        return tournament
 
 if __name__ == '__main__':
     import datetime
 
 
     handler = DataBaseHandler()
-    handler.database.table('actors').truncate()
-    handler.database.table('tournament').truncate()
+
 
     """ Données """
 
@@ -213,20 +225,10 @@ if __name__ == '__main__':
     acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)  # 6
     acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
 
-    joueur1 = Player(acteur1, "00000001", 1)
-    joueur2 = Player(acteur2, "00000001", 2)
-    joueur3 = Player(acteur3, "00000001", 3)
-    joueur4 = Player(acteur4, "00000001", 4)
-    joueur5 = Player(acteur5, "00000001", 5)
-    joueur6 = Player(acteur6, "00000001", 6)
-    joueur7 = Player(acteur7, "00000001", 7)
-    joueur8 = Player(acteur8, "00000001", 8)
-    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
-
-    tournoi = Tournament(name="Star Wars Chess", location="In a galaxy far far away", timer_type="Bz",
+    tournoi = Tournament(name="Star Wars Chess database.py", location="In a galaxy far far away", timer_type="Bz",
                          description="Rien")
     tournoi.start_date = datetime.date.today()
-    tournoi.define_players(joueurs)
+    tournoi.define_players(acteurs)
     print("\n Initialisation : Joueurs \n")
     # print(tournoi.list_of_players)
     """ Tour 1"""
@@ -270,14 +272,14 @@ if __name__ == '__main__':
     # print(tournoi.list_of_players)
     """ Fin partie """
 
-    """ Test Acteur 
+    """ Test Acteur """
     print("\n ### Test acteur ### \n")
-    acteur1.tournaments = ["00002200", "00002201"]
+    acteur1.tournaments = ["00002200", "00002201", "00002202"]
     for k in acteurs:
         handler.export_actor(k)
     # print(vars(acteur1))
     acters = handler.import_actors()
-    print(acters)"""
+    print(acters)
 
     """Verification
     print(vars(acteur1))
@@ -339,7 +341,7 @@ if __name__ == '__main__':
     # print(vars(tournoi))
     # print(vars(t0urnoi))
 
-    """ Tests export, import """
+    """ Tests export, import 
     print("\n ### Tests export, import ### \n")
     print(" -- Tournoi \n")
     handler.export_interrupted_tournament(tournoi)
@@ -354,5 +356,7 @@ if __name__ == '__main__':
 
     acteurs0 = handler.import_actors()[1]
     print(acteurs)
-    print(acteurs0)
-    # problème dans matchs : clé '0' au lieu de 0
+    print(acteurs0)"""
+
+    handler.export_tournament(tournoi)
+    print(handler.find_tournament_by_id("00000001").rounds)
