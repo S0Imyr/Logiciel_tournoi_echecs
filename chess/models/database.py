@@ -16,7 +16,7 @@ ID_WIDTH = 8
 
 def deserialize_actor(serialized_actor):
     """
-    transforms a dictionary containing the values of an actor instance
+    Transforms a dictionary containing the values of an actor instance
      into the corresponding actor instance.
     :param serialized_actor: structured dictionary.
     :return: instance of actor.
@@ -33,7 +33,7 @@ def deserialize_actor(serialized_actor):
 
 def deserialize_player(serialized_player):
     """
-    transforms a dictionary containing the values of a player instance
+    Transforms a dictionary containing the values of a player instance
      into the corresponding player instance.
     :param serialized_player: structured dictionary.
     :return: instance of player.
@@ -51,7 +51,7 @@ def deserialize_player(serialized_player):
 
 def deserialize_match(serialized_match):
     """
-    transforms a dictionary containing the values of a match instance
+    Transforms a dictionary containing the values of a match instance
      into the corresponding match instance.
     :param serialized_match: structured dictionary.
     :return: instance of match.
@@ -71,7 +71,7 @@ def deserialize_match(serialized_match):
 
 def deserialize_round(serialized_round):
     """
-    transforms a dictionary containing the values of a round instance
+    Transforms a dictionary containing the values of a round instance
      into the corresponding round instance.
     :param serialized_round: structured dictionary.
     :return: instance of round.
@@ -96,7 +96,7 @@ def deserialize_round(serialized_round):
 
 def deserialize_tournament(serialized_tournament):
     """
-    transforms a dictionary containing the values of a tournament instance
+    Transforms a dictionary containing the values of a tournament instance
      into the corresponding tournament instance.
     :param serialized_tournament: structured dictionary.
     :return: instance of tournament.
@@ -129,7 +129,7 @@ class DataBaseHandler:
 
     def export_actor(self, actor):
         """
-        transfers an instance of actor in a table of the database
+        Transfers an instance of actor in a table of the database
         the instance of actor is transformed in a dictionnary first.
         :param actor: instance of actor
         :return: None
@@ -144,7 +144,7 @@ class DataBaseHandler:
 
     def import_actors(self):
         """
-        import a list of actors instances transformed in a dictionnary,
+        Imports a list of actors instances transformed in a dictionnary,
         the dictionnary is converted in the list of the corresponding
         instances of actors.
         :return: the number of actors imported and
@@ -160,7 +160,7 @@ class DataBaseHandler:
 
     def export_interrupted_tournament(self, tournament):
         """
-        transfers an instance of tournament in a table of the database,
+        Transfers an instance of tournament in a table of the database,
         the instance of tournament is transformed in a dictionnary first.
         :param tournament: instance of tournament
         :return: None
@@ -172,7 +172,7 @@ class DataBaseHandler:
 
     def import_interrupted_tournament(self):
         """
-        import a list of one tournament transformed in a dictionary,
+        Imports a list of one tournament transformed in a dictionary,
         it is converted in  the corresponding instance of tournament.
         :return: the instance of tournament.
         """
@@ -186,7 +186,7 @@ class DataBaseHandler:
 
     def export_tournament(self, tournament):
         """
-        transfers an instance of tournament in a table of the database,
+        Transfers an instance of tournament in a table of the database,
         the instance of tournament is transformed in a dictionnary first.
         :param tournament: instance of tournament
         :return: None
@@ -201,7 +201,7 @@ class DataBaseHandler:
 
     def find_tournament_by_id(self, identifier):
         """
-        Find the tournament in the database by entering its identifier
+        Finds the tournament in the database by entering its identifier
         :param identifier: the identifier of the searched tournament
         :return: instance of the tournament searched
         """
@@ -216,7 +216,7 @@ class DataBaseHandler:
 
     def export_finished_tournament(self, tournament):
         """
-        Export actor instances of players and the tournament when finished
+        Exports actor instances of players and the tournament when finished
         :param tournament: the finihed tournament, ready to be exported
         :return: None
         """
@@ -229,6 +229,15 @@ class DataBaseHandler:
         for tournament in self.database.table('tournament').all():
             for key, value in tournament.items():
                 if key == "tournament_id":
+                    list_of_id.append(value)
+        last_id = get_last_id(list_of_id, ID_WIDTH)
+        return last_id
+
+    def export_last_actor_id(self):
+        list_of_id = []
+        for actor in self.database.table('actors').all():
+            for key, value in actor.items():
+                if key == "actor_id":
                     list_of_id.append(value)
         last_id = get_last_id(list_of_id, ID_WIDTH)
         return last_id
