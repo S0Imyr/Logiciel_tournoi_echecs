@@ -239,10 +239,9 @@ class LaunchTournament:
         if num_round == 4:
             view_tournament_final(self.tournament)
             self.tournament.finished = True
+            self.tournament.end_date = datetime.date.today()
             database = DataBaseHandler()
-            database.export_tournament(self.tournament)
-            for player in self.tournament.list_of_players:
-                database.export_actor(player.actor)
+            database.export_finished_tournament(self.tournament)
         else:
             self.tournament.init_round(num_round)                                 # Instance de round et définition des matchs
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage des matchs
