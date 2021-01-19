@@ -8,6 +8,11 @@ from chess.models.game import Tournament
 from chess.utils.conversion import str_to_date, \
     str_space_to_list, str_space_to_int_list
 
+from chess.utils.utils import get_last_id
+
+
+ID_WIDTH = 8
+
 
 def deserialize_actor(serialized_actor):
     """
@@ -219,12 +224,14 @@ class DataBaseHandler:
         for player in tournament.list_of_players:
             self.export_actor(player.actor)
 
-    def export_list_of_tournaments_id(self):
+    def export_last_tournament_id(self):
         list_of_id = []
         for tournament in self.database.table('tournament').all():
             for key, value in tournament.items():
                 if key == "tournament_id":
                     list_of_id.append(value)
+        last_id = get_last_id(list_of_id, ID_WIDTH)
+        return last_id
 
 
 if __name__ == '__main__':
