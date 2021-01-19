@@ -251,8 +251,7 @@ class LaunchTournament:
             view_launch_tournament(self.tournament)
         if num_round == 4:
             view_tournament_final(self.tournament)
-            self.tournament.finished = True
-            self.tournament.end_date = datetime.date.today()
+            self.tournament.end_tournament()
             database = DataBaseHandler()
             database.export_finished_tournament(self.tournament)
         else:

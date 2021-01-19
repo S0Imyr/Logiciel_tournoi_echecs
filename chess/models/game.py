@@ -97,6 +97,12 @@ class Tournament:
         serialized_tournament['end_date'] = str(self.end_date)
         return serialized_tournament
 
+    def end_tournament(self):
+        for player in self.list_of_players:
+            player.actor.tournaments.append(self.tournament_id)
+        self.finished = True
+        self.end_date = datetime.date.today()
+
 
 if __name__ == "__main__":
 
