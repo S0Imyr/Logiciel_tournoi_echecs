@@ -34,7 +34,7 @@ class BrowseControllers:
 
     def start(self):
         """
-        Launch the home menu.
+        Launches the home menu.
         A loop while to browse between the controllers.
         :return: None
         """
@@ -45,7 +45,7 @@ class BrowseControllers:
 
 class HomeMenuController:
     """
-    Handle the main menu
+    Handles the main menu
     """
     def __init__(self):
         self.menu = Menu()
@@ -85,7 +85,7 @@ class ActorsMenu:
 
 class Actors:
     """
-    Store the actors in a class attribute,
+    Stores the actors in a class attribute,
     the keys are the actors id and the values
     are the instances of actors.
     """
@@ -97,8 +97,6 @@ class Actors:
         self.next_menu = ActorsMenu()
 
     def __call__(self):
-        handler = DataBaseHandler()
-        Actor.last_actor_id = handler.export_last_actor_id()
         view_input_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
@@ -113,7 +111,7 @@ class Actors:
 
 class ImportActors:
     """
-    Handle the actors imports.
+    Handles the actors imports.
     The database table is cleared after the import.
     """
     def __init__(self):
@@ -132,7 +130,7 @@ class ImportActors:
 
 class ExportActors:
     """
-    Handle the actors exports.
+    Handles the actors exports.
     """
     def __init__(self, actors):
         self.actors = actors
@@ -148,7 +146,7 @@ class ExportActors:
 
 class TournamentCreation:
     """
-    Handle the tournament creation
+    Handles the tournament creation
     """
     def __init__(self):
         self.tournament = None
@@ -169,7 +167,7 @@ class TournamentCreation:
 
 class TournamentPlayersMenu:
     """
-    Menu to input Players of the tournament
+    Defines a menu to input the players of the tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -196,7 +194,7 @@ class TournamentPlayersMenu:
 
 class TournamentPlayers:
     """
-    Handle the input of the players of the tournament.
+    Handles the input of the players of the tournament.
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -240,7 +238,7 @@ class TournamentPlayers:
 
 class LaunchTournament:
     """
-    Launch the tournament, there is a kind of a loop
+    Launches the tournament, there is a kind of a loop
     between LaunchTournament and TournamentPause
     for the 4 rounds.
     """
@@ -271,7 +269,7 @@ class LaunchTournament:
 
 class TournamentPause:
     """
-    A menu to give the alternative to interrupt or go on the tournament
+    Defines a menu to give the alternative to interrupt or go on the tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -292,7 +290,7 @@ class TournamentPause:
 
 class TournamentInterruption:
     """
-    Interrupt the tournament and load the datas in the database
+    Interrupts the tournament and load the datas in the database
     to be able to resume it.
     """
     def __init__(self, tournament):
@@ -306,7 +304,7 @@ class TournamentInterruption:
 
 class ResumeTournament:
     """
-    Resume a tournament.
+    Resumes a tournament.
     It imports the datas and progress of
     the last tournament interrupt.
     """
@@ -318,7 +316,7 @@ class ResumeTournament:
 
 class ReportMenu:
     """
-    Menu between the different reports
+    Defines a menu between the different reports
     """
     def __init__(self):
         self.menu = Menu()
@@ -341,7 +339,7 @@ class ReportMenu:
 
 class ActorsList:
     """
-    Menu to obtain the actors lists
+    Defines a menu to obtain the actors lists
     """
     def __init__(self):
         self.menu = Menu()
@@ -368,7 +366,7 @@ class ActorsList:
 
 class ActorsListAlphabetical:
     """
-    Handle the list of actors in alphabetical order
+    Handles the list of actors in alphabetical order
     """
     def __init__(self):
         self.menu = Menu()
@@ -391,7 +389,7 @@ class ActorsListAlphabetical:
 
 class ActorsListRank:
     """
-    Handle the list of actors in rank order
+    Handles the list of actors in rank order
     """
     def __init__(self):
         self.menu = Menu()
@@ -414,7 +412,7 @@ class ActorsListRank:
 
 class TournamentsList:
     """
-    Handle the list of tournaments
+    Handles the list of tournaments
     """
     def __init__(self):
         self.menu = Menu()
@@ -434,7 +432,7 @@ class TournamentsList:
 
 class TournamentReportInput:
     """
-    Ask for the tournament we want to get reports from
+    Asks for the tournament we want to get reports from
     """
     def __call__(self):
         tournament_id = input_tournament_id()
@@ -450,7 +448,7 @@ class TournamentReportInput:
 
 class TournamentReportMenu:
     """
-    Handle the menu of reports of a tournament
+    Handles the menu of reports of a tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -482,7 +480,7 @@ class TournamentReportMenu:
 
 class TournamentPlayersList:
     """
-    Display the report of the players of a tournament
+    Displays the report of the players of a tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -508,7 +506,7 @@ class TournamentPlayersList:
 
 class TournamentMatchsList:
     """
-    Display the report of the matchs of a tournament
+    Displays the report of the matchs of a tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -534,7 +532,7 @@ class TournamentMatchsList:
 
 class TournamentRoundsList:
     """
-    Display the report of the rounds of a tournament
+    Displays the report of the rounds of a tournament
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -560,7 +558,7 @@ class TournamentRoundsList:
 
 class Ending:
     """
-    The exit screen
+    Displays the exit screen
     """
     def __init__(self):
         self.menu = Menu()

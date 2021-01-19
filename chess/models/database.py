@@ -233,15 +233,6 @@ class DataBaseHandler:
         last_id = get_last_id(list_of_id, ID_WIDTH)
         return last_id
 
-    def export_last_actor_id(self):
-        list_of_id = []
-        for actor in self.database.table('actors').all():
-            for key, value in actor.items():
-                if key == "actor_id":
-                    list_of_id.append(value)
-        last_id = get_last_id(list_of_id, ID_WIDTH)
-        return last_id
-
 
 if __name__ == '__main__':
     import datetime
