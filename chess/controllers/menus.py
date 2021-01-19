@@ -5,10 +5,10 @@ class MenuEntry:
     """
     def __init__(self, option, handler):
         self.option = option
-        self.handler = handler
+        self.next_menu = handler
 
     def __repr__(self):
-        return f"MenuEntry({self.option}, {self.handler})"
+        return f"MenuEntry({self.option}, {self.next_menu})"
 
     def __str__(self):
         return str(self.option)
