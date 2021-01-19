@@ -173,7 +173,7 @@ class DataBaseHandler:
         """
         tournament_table = self.database.table('interrupted_tournament')
         list_serialized_tournament = tournament_table.all()
-        if list_serialized_tournament == []:
+        if not list_serialized_tournament:
             return []
         serialized_tournament = list_serialized_tournament[0]
         tournament = deserialize_tournament(serialized_tournament)
@@ -215,9 +215,9 @@ class DataBaseHandler:
         :param tournament: the finihed tournament, ready to be exported
         :return: None
         """
-        self.database.export_tournament(tournament)
+        self.export_tournament(tournament)
         for player in tournament.list_of_players:
-            self.database.export_actor(player.actor)
+            self.export_actor(player.actor)
 
 
 if __name__ == '__main__':
