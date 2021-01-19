@@ -61,7 +61,7 @@ def view_launch_tournament(tournament):
 
 def view_round_matchs(r0und):
     view = f"\n ### Matchs du Tour {r0und.round_nb + 1} " \
-              f"du Tournoi {r0und.tournament_id} : ### \n \n"
+              f"du Tournoi {r0und.tournament_ID} : ### \n \n"
     if r0und.matchs != {}:
         if r0und.finished:
             view += f"Les matchs ont vu s'affronter : \n"
@@ -113,7 +113,6 @@ def view_tournament_final(tournament):
               "\n"
               "-- Classement final -- \n")
     view_players_rank(tournament.list_of_players)
-
 
 
 def view_validation_actors_imported(actors):
