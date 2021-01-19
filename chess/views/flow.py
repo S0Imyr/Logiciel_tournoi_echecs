@@ -4,8 +4,11 @@ NB_MATCH = 4
 def view_intro_home_menu():
     print("\n ### Menu Principal ### \n"
           "\n"
-          "-- Que souhaitez vous réaliser ? --\n"
-          "\n"
+          "-- Que souhaitez vous réaliser ? --\n")
+
+
+def view_actors_menu():
+    print("\n ### Attention ### \n"
           "Si des joueurs doivent être importés, commencer par cela.")
 
 
@@ -45,7 +48,7 @@ def view_id_player(tournament, num=1):
 
 
 def view_validation_players(players):
-    print(f"-- Les joueurs du tournoi sont : --")
+    print(f"\n -- Les joueurs du tournoi sont : --")
     view = ""
     for player in players:
         view += "\n" + str(player)
@@ -98,7 +101,7 @@ def view_players_rank(list_of_players):
 
 
 def view_wait_match_results():
-    print("### En attente de résultats: ### \n"
+    print("\n ### En attente de résultats: ### \n"
           "\n"
           "Lorsqu'un match est terminé, "
           "indiquez le numéro du match "
@@ -106,7 +109,7 @@ def view_wait_match_results():
 
 
 def view_tournament_final(tournament):
-    print(" ### Fin des matchs ### \n"
+    print("\n ### Fin des matchs ### \n"
               "\n"
               "-- Classement final -- \n")
     view_players_rank(tournament.list_of_players)
@@ -125,13 +128,13 @@ def view_validation_actors_imported(actors):
 
 
 def view_validation_actors_exported(exported_actors):
-    view = f"Les {len(exported_actors)} personnes ont été exportés \n"
+    view = f"\n Les {len(exported_actors)} personnes ont été exportés \n"
     for actor in exported_actors:
         view += "\n" + actor.actor_id + " " + actor.first_name + " " + actor.last_name
     print(view)
 
 
 def view_import_no_tournament():
-    print(" ---------------------------------- "
+    print("\n ---------------------------------- "
           "\n --- Aucun tournoi sauvegardé ! --- "
           "\n ---------------------------------- ")

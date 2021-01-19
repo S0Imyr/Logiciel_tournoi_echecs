@@ -10,7 +10,7 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_id_player, view_launch_tournament, view_round_matchs, \
     view_validation_actors_imported, view_tournament_final, \
     view_validation_actors_exported, view_validation_players, \
-    view_import_no_tournament, view_players_rank
+    view_import_no_tournament, view_players_rank, view_actors_menu
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
@@ -43,6 +43,46 @@ class BrowseControllers:
             self.controller = self.controller()
 
 
+class HomeMenuController:
+    """
+    Handle the main menu
+    """
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        view_intro_home_menu()
+        self.menu.add("auto", "Rentrer de nouveaux joueurs", ActorsMenu())
+        self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
+        self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
+        self.menu.add("auto", "Obtenir un rapport", ReportMenu())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.next_menu
+
+
+class ActorsMenu:
+    def __init__(self):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        view_actors_menu()
+        self.menu.add("auto", "Importer les joueurs", ImportActors())
+        self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
+        self.menu.add("auto",
+                      "Retour au menu principal et sauvegarder les joueurs",
+                      ExportActors(Actors.actors.values()))
+        self.menu.add("auto",
+                      "Retour au menu principal sans sauvegarder les joueurs",
+                      HomeMenuController())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.next_menu
+
+
 class Actors:
     """
     Store the actors in a class attribute,
@@ -54,6 +94,7 @@ class Actors:
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
+        self.next_menu = ActorsMenu()
 
     def __call__(self):
         view_input_new_actor()
@@ -65,34 +106,42 @@ class Actors:
                       actor_arguments[4])
         Actors.actors[actor.actor_id] = actor
         view_validation_new_actor(actor)
-        self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
-        self.menu.add("auto", "Exporter les joueurs", ExportActors(Actors.actors.values()))
-        self.menu.add("auto", "Retour au menu principal", HomeMenuController())
-        self.menu.add("q", "Quitter", Ending())
-
-        user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return self.next_menu
 
 
-class HomeMenuController:
+class ImportActors:
     """
-    Handle the main menu
+    Handle the actors imports.
+    The database table is cleared after the import.
     """
     def __init__(self):
-        self.menu = Menu()
-        self.view = MenuView(self.menu)
+        self.next_menu = ActorsMenu()
 
     def __call__(self):
-        view_intro_home_menu()
-        self.menu.add("auto", "Importer des joueurs", ImportActors())
-        self.menu.add("auto", "Ajouter un nouveau joueur", ImportActors(actors=True))
-        self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
-        self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
-        self.menu.add("auto", "Obtenir un rapport", ReportMenu())
-        self.menu.add("q", "Quitter", Ending())
+        handler = DataBaseHandler()
+        num_actors, actors = handler.import_actors()
+        view_validation_actors_imported(actors)
+        for actor in actors:
+            Actors.actors[actor.actor_id] = actor
+        actors_table = handler.database.table("actors")
+        actors_table.truncate()
+        return self.next_menu()
 
-        user_choice = self.view.get_user_choice()
-        return user_choice.handler
+
+class ExportActors:
+    """
+    Handle the actors exports.
+    """
+    def __init__(self, actors):
+        self.actors = actors
+
+    def __call__(self):
+        handler = DataBaseHandler()
+        for actor in self.actors:
+            handler.export_actor(actor)
+        Actor.last_actor_id = "0" * ID_WIDTH
+        view_validation_actors_exported(self.actors)
+        return HomeMenuController()
 
 
 class TournamentCreation:
@@ -137,42 +186,7 @@ class TournamentPlayersMenu:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
-
-
-class TournamentPause:
-    """
-    A menu to give the alternative to interrupt or go on the tournament
-    """
-    def __init__(self, tournament):
-        self.tournament = tournament
-        self.menu = Menu()
-        self.view = MenuView(self.menu)
-
-    def __call__(self):
-        self.menu.add("auto",
-                      "Continuer et passer au tour suivant",
-                      LaunchTournament(self.tournament))
-        self.menu.add("auto",
-                      "Interrompre le tournoi",
-                      TournamentInterruption(self.tournament))
-
-        user_choice = self.view.get_user_choice()
-        return user_choice.handler
-
-
-class TournamentInterruption:
-    """
-    Interrupt the tournament and load the datas in the database
-    to be able to resume it.
-    """
-    def __init__(self, tournament):
-        self.tournament = tournament
-        handler = DataBaseHandler()
-        handler.export_interrupted_tournament(self.tournament)
-
-    def __call__(self):
-        return Ending()
+        return user_choice.next_menu
 
 
 class TournamentPlayers:
@@ -199,8 +213,8 @@ class TournamentPlayers:
             bug_already_in = 0
             while actor_id in actors_id or actor_id not in Actors.actors:
                 if actor_id == "0"*ID_WIDTH:
-                    handler = HomeMenuController()
-                    return handler()
+                    next_menu = HomeMenuController()
+                    return next_menu()
                 if actor_id in actors_id:
                     if bug_dont_exist == 0:
                         error_message = "Erreur: ce joueur est déjà présent dans le tournoi. "
@@ -251,6 +265,41 @@ class LaunchTournament:
             return TournamentPause(self.tournament)
 
 
+class TournamentPause:
+    """
+    A menu to give the alternative to interrupt or go on the tournament
+    """
+    def __init__(self, tournament):
+        self.tournament = tournament
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        self.menu.add("auto",
+                      "Continuer et passer au tour suivant",
+                      LaunchTournament(self.tournament))
+        self.menu.add("auto",
+                      "Interrompre le tournoi",
+                      TournamentInterruption(self.tournament))
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.next_menu
+
+
+class TournamentInterruption:
+    """
+    Interrupt the tournament and load the datas in the database
+    to be able to resume it.
+    """
+    def __init__(self, tournament):
+        self.tournament = tournament
+        handler = DataBaseHandler()
+        handler.export_interrupted_tournament(self.tournament)
+
+    def __call__(self):
+        return Ending()
+
+
 class ResumeTournament:
     """
     Resume a tournament.
@@ -261,44 +310,6 @@ class ResumeTournament:
         handler = DataBaseHandler()
         tournament = handler.import_interrupted_tournament()
         return LaunchTournament(tournament)
-
-
-class ImportActors:
-    """
-    Handle the actors imports.
-    The database table is cleared after the import.
-    """
-    def __init__(self, actors=False):
-        self.handler = HomeMenuController()
-        self.actors = actors
-
-    def __call__(self):
-        if self.actors:
-            self.handler = Actors()
-        handler = DataBaseHandler()
-        num_actors, actors = handler.import_actors()
-        view_validation_actors_imported(actors)
-        for actor in actors:
-            Actors.actors[actor.actor_id] = actor
-        actors_table = handler.database.table("actors")
-        actors_table.truncate()
-        return self.handler()
-
-
-class ExportActors:
-    """
-    Handle the actors exports.
-    """
-    def __init__(self, actors):
-        self.actors = actors
-
-    def __call__(self):
-        handler = DataBaseHandler()
-        for actor in self.actors:
-            handler.export_actor(actor)
-        Actor.last_actor_id = "0" * ID_WIDTH
-        view_validation_actors_exported(self.actors)
-        return HomeMenuController()
 
 
 class ReportMenu:
@@ -317,7 +328,7 @@ class ReportMenu:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class ActorsList:
@@ -336,7 +347,7 @@ class ActorsList:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class ActorsListAlphabetical:
@@ -357,7 +368,7 @@ class ActorsListAlphabetical:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class ActorsListRank:
@@ -378,7 +389,7 @@ class ActorsListRank:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class TournamentsList:
@@ -396,7 +407,7 @@ class TournamentsList:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class TournamentReportInput:
@@ -434,7 +445,7 @@ class TournamentReportMenu:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class TournamentPlayersList:
@@ -454,7 +465,7 @@ class TournamentPlayersList:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class TournamentMatchsList:
@@ -474,7 +485,7 @@ class TournamentMatchsList:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class TournamentRoundsList:
@@ -494,7 +505,7 @@ class TournamentRoundsList:
         self.menu.add("q", "Quitter", Ending())
 
         user_choice = self.view.get_user_choice()
-        return user_choice.handler
+        return user_choice.next_menu
 
 
 class Ending:

@@ -13,8 +13,8 @@ class MenuView:
     def get_user_choice(self):
         while True:
             self._display_menu()
-            choice = input("Choissisez une option en inscrivant "
-                           "le nombre associé, ou q pour quitter")
+            choice = input("\nChoissisez une option en inscrivant "
+                           "le nombre associé, ou q pour quitter: ")
             if choice in self.menu:
                 return self.menu[choice]
 
