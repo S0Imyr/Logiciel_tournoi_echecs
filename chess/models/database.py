@@ -209,6 +209,16 @@ class DataBaseHandler:
             tournament = {}
         return tournament
 
+    def export_finished_tournament(self, tournament):
+        """
+        Export actor instances of players and the tournament when finished
+        :param tournament: the finihed tournament, ready to be exported
+        :return: None
+        """
+        self.database.export_tournament(tournament)
+        for player in tournament.list_of_players:
+            self.database.export_actor(player.actor)
+
 
 if __name__ == '__main__':
     import datetime
