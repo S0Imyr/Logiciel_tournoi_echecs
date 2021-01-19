@@ -47,7 +47,7 @@ class Round:
         :return:
         """
         string_attributes = ['round_nb',
-                             'tournament_id',
+                             'tournament_ID',
                              'players_ranked',
                              'finished',
                              'players_sorted']

@@ -73,7 +73,7 @@ class Player:
         convert an actor into a dictionnary
         :return: dictionnary of the player serialiazed
         """
-        string_attributes = ['name', 'tournament_id', 'player_id', 'rank', 'ranking', 'points', 'place']
+        string_attributes = ['name', 'tournament_ID', 'player_id', 'rank', 'ranking', 'points', 'place']
         serialized_player = {}
         for attribute in string_attributes:
             serialized_player[attribute] = getattr(self, attribute)

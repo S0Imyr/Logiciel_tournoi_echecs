@@ -71,7 +71,7 @@ class Match:
         """
         string_attributes = ['match_nb',
                              'round_nb',
-                             'tournament_id',
+                             'tournament_ID',
                              'winner',
                              'finished',
                              'points_assigned']
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     print("\n Début deserialize: \n")
     match = Match(serie['match_nb'],
                   serie['round_nb'],
-                  serie['tournament_id'])
+                  serie['tournament_ID'])
     print("Donnée Match: ", serie['match_nb'])
     print("Donnée Player 1: ", serie['player1'])
     print("Donnée Player 2: ", serie['player2'])
