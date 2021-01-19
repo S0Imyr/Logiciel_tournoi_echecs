@@ -97,6 +97,8 @@ class Actors:
         self.next_menu = ActorsMenu()
 
     def __call__(self):
+        handler = DataBaseHandler()
+        Actor.last_actor_id = handler.export_last_actor_id()
         view_input_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
