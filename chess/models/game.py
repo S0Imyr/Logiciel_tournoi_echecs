@@ -99,7 +99,7 @@ class Tournament:
 
     def end_tournament(self):
         for player in self.list_of_players:
-            player.actor.tournaments.append(self.tournament_id)
+            player.actor.list_of_tournaments_played.append(self.tournament_id)
         self.finished = True
         self.end_date = datetime.date.today()
 

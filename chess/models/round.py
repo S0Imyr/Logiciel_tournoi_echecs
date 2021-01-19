@@ -14,7 +14,7 @@ class Round:
     """
     def __init__(self, round_nb, tournament_id, players):
         self.round_nb = round_nb
-        self.tournament_id = tournament_id
+        self.tournament_ID = tournament_id
         self.players = players
         self.players_ranked = False
         self.matchs = {}
@@ -22,7 +22,7 @@ class Round:
         self.players_sorted = False
 
     def __str__(self):
-        message = f"Tour {self.round_nb + 1} du tournoi {self.tournament_id} \n"
+        message = f"Tour {self.round_nb + 1} du tournoi {self.tournament_ID} \n"
         if self.matchs != {}:
             if self.finished:
                 message += f"Les matchs ont vu s'affronter : \n"
@@ -85,7 +85,7 @@ class Round:
         """
         if self.round_nb == 0:
             for match in range(NB_MATCH):
-                self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                self.matchs[match] = Match(match, self.round_nb, self.tournament_ID)
                 for player in range(NB_PLAYERS):
                     if self.players[player].place == MATCH_1ST_ROUND[match][0]:
                         self.matchs[match].player1 = self.players[player]
@@ -98,7 +98,7 @@ class Round:
             for match in range(NB_MATCH):
                 while sorted_players[first_non_assigned] in player_assigned:
                     first_non_assigned += 1
-                self.matchs[match] = Match(match, self.round_nb, self.tournament_id)
+                self.matchs[match] = Match(match, self.round_nb, self.tournament_ID)
                 self.matchs[match].player1 = sorted_players[first_non_assigned]
                 player_assigned.append(sorted_players[first_non_assigned])
                 first_non_assigned += 1

@@ -19,7 +19,7 @@ class Actor:
         self.birthdate = birthdate
         self.gender = gender
         self.rank = rank
-        self.tournaments = []
+        self.list_of_tournaments_played = []
 
     def __str__(self):
         return f"Personne: Nom: {self.last_name}, Prénom: {self.first_name} \n" \
@@ -40,7 +40,7 @@ class Actor:
             serialized_actor[attribute] = getattr(self, attribute)
         # no_string_attributes = ['birthdate', 'tournaments']
         serialized_actor['birthdate'] = str(self.birthdate)
-        serialized_actor['tournaments'] = list_to_str_space(self.tournaments)
+        serialized_actor['tournaments'] = list_to_str_space(self.list_of_tournaments_played)
         return serialized_actor
 
 
@@ -51,7 +51,7 @@ class Player:
     def __init__(self, actor, tournament_id, player_id):
         self.actor = actor
         self.name = self.actor.first_name + " " + self.actor.last_name
-        self.tournament_id = tournament_id
+        self.tournament_ID = tournament_id
         self.player_id = player_id
         self.rank = actor.rank
         self.ranking = 0
@@ -63,7 +63,7 @@ class Player:
         return f"Nom: {self.name} \n" \
                f"Identifiant: {self.actor.actor_id}\n" \
                f"Classement: {self.rank}\n" \
-               f"Dans le tournoi {self.tournament_id}: \n" \
+               f"Dans le tournoi {self.tournament_ID}: \n" \
                f"Place: {self.place}\n" \
                f"Points: {self.points}\n" \
                f"A joué contre: {self.opponents} \n"
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
     print(acteur1)
     print(acteur2)
-    acteur2.tournaments = ["00000025", "00000027"]
+    acteur2.list_of_tournaments_played = ["00000025", "00000027"]
     acteur2.actor_id = '000123456'
 
     """ serialize """

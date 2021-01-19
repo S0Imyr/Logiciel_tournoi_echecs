@@ -11,7 +11,7 @@ class Match:
     def __init__(self, match_nb, round_nb, tournament_id):
         self.match_nb = match_nb
         self.round_nb = round_nb
-        self.tournament_id = tournament_id
+        self.tournament_ID = tournament_id
         self.player1 = None
         self.player2 = None
         self.winner = None
