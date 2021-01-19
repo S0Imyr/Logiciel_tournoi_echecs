@@ -22,7 +22,7 @@ def deserialize_actor(serialized_actor):
                   serialized_actor['gender'],
                   serialized_actor['rank'])
     actor.actor_id = serialized_actor['actor_id']
-    actor.tournaments = str_space_to_list(serialized_actor['tournaments'])
+    actor.list_of_tournaments_played = str_space_to_list(serialized_actor['tournaments'])
     return actor
 
 
@@ -35,7 +35,7 @@ def deserialize_player(serialized_player):
     """
     actor = deserialize_actor(serialized_player['actor'])
     player = Player(actor,
-                    serialized_player['tournament_id'],
+                    serialized_player['tournament_ID'],
                     serialized_player['player_id'])
     string_attribute = ['name', 'rank', 'ranking', 'points', 'place']
     for key in string_attribute:
@@ -53,7 +53,7 @@ def deserialize_match(serialized_match):
     """
     match = Match(serialized_match['match_nb'],
                   serialized_match['round_nb'],
-                  serialized_match['tournament_id'])
+                  serialized_match['tournament_ID'])
     player1 = deserialize_player(serialized_match['player1'])
     setattr(match, 'player1', player1)
     player2 = deserialize_player(serialized_match['player2'])
@@ -75,7 +75,7 @@ def deserialize_round(serialized_round):
     for player in serialized_round['players']:
         deserialized_players.append(deserialize_player(player))
     r0und = Round(serialized_round['round_nb'],
-                  serialized_round['tournament_id'],
+                  serialized_round['tournament_ID'],
                   deserialized_players)
 
     string_attribute = ['players_ranked', 'finished', 'players_sorted']
@@ -219,13 +219,18 @@ class DataBaseHandler:
         for player in tournament.list_of_players:
             self.export_actor(player.actor)
 
+    def export_list_of_tournaments_id(self):
+        list_of_id = []
+        for tournament in self.database.table('tournament').all():
+            for key, value in tournament.items():
+                if key == "tournament_id":
+                    list_of_id.append(value)
+
 
 if __name__ == '__main__':
     import datetime
 
-
     handler = DataBaseHandler()
-
 
     """ Données """
 
@@ -288,7 +293,7 @@ if __name__ == '__main__':
 
     """ Test Acteur """
     print("\n ### Test acteur ### \n")
-    acteur1.tournaments = ["00002200", "00002201", "00002202"]
+    acteur1.list_of_tournaments_played = ["00002200", "00002201", "00002202"]
     for k in acteurs:
         handler.export_actor(k)
     # print(vars(acteur1))
@@ -373,4 +378,4 @@ if __name__ == '__main__':
     print(acteurs0)"""
 
     handler.export_tournament(tournoi)
-    print(handler.find_tournament_by_id("00000001").rounds)
+
