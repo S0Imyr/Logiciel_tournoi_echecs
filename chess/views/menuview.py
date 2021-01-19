@@ -1,7 +1,7 @@
 
 class MenuView:
     """
-    Vue d'un menu, avec son affichage et la demande de la clé
+    Displays a given menu by asking to prompt the corresponding key
     """
     def __init__(self, menu):
         self.menu = menu
@@ -12,11 +12,9 @@ class MenuView:
 
     def get_user_choice(self):
         while True:
-            # Afficher le menu
             self._display_menu()
-            # demander le choix
-            choice = input("Choissisez une option en inscrivant le nombre associé, ou q pour quitter")
-            # Vérifier que le choix existe
+            choice = input("Choissisez une option en inscrivant "
+                           "le nombre associé, ou q pour quitter")
             if choice in self.menu:
                 return self.menu[choice]
 
