@@ -10,7 +10,7 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor, \
     view_id_player, view_launch_tournament, view_round_matchs, \
     view_validation_actors_imported, view_tournament_final, \
     view_validation_actors_exported, view_validation_players, \
-    view_import_no_tournament
+    view_import_no_tournament, view_players_rank
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
@@ -34,7 +34,7 @@ class BrowseControllers:
 
     def start(self):
         """
-        launch the home menu.
+        Launch the home menu.
         A loop while to browse between the controllers.
         :return: None
         """
@@ -169,7 +169,6 @@ class TournamentInterruption:
     def __init__(self, tournament):
         self.tournament = tournament
         handler = DataBaseHandler()
-        handler.database.table('tournament').truncate()
         handler.export_interrupted_tournament(self.tournament)
 
     def __call__(self):
@@ -199,7 +198,7 @@ class TournamentPlayers:
             bug_dont_exist = 0
             bug_already_in = 0
             while actor_id in actors_id or actor_id not in Actors.actors:
-                if actor_id == "00000000":
+                if actor_id == "0"*ID_WIDTH:
                     handler = HomeMenuController()
                     return handler()
                 if actor_id in actors_id:
@@ -248,6 +247,7 @@ class LaunchTournament:
             winners = input_match_results(self.tournament.rounds[num_round])      # Attente, entrée des gagnants
             self.tournament.register_round_results(num_round, winners)            # Entrées dans instance de round
             view_round_matchs(self.tournament.rounds[num_round])                  # Affichage résultats
+            view_players_rank(self.tournament.list_of_players)
             return TournamentPause(self.tournament)
 
 
