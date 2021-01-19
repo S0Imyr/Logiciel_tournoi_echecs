@@ -9,14 +9,14 @@ def players_table(actors_list):
               + " " * (30 - name_characters) +
               f"Classement : rank {actor.rank}"
               + " " * (10 - rank_characters) +
-              f"Tournoi joués : {len(actor.tournaments)}")
+              f"Tournoi joués : {len(actor.list_of_tournaments_played)}")
 
 
 def tournaments_table(tournaments_list):
     for tournament in tournaments_list:
-        id_characters = len(tournament.tournament_id)
+        id_characters = len(tournament.tournament_ID)
         #dates_characters = len(tournament.start_date)+len(tournament.end_date)
-        print(f"Tournoi: {tournament.tournament_id}"
+        print(f"Tournoi: {tournament.tournament_ID}"
               + " " * (10 - id_characters) +
               f"Du: {tournament.start_date} au: {tournament.end_date}")
 
