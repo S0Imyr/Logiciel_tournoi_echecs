@@ -80,8 +80,21 @@ def view_round_matchs(r0und):
     print(view)
 
 
-def view_round_results(r0und):
-    pass
+def view_players_rank(list_of_players):
+    for rank in range(1, len(list_of_players) + 1):
+        view = ""
+        for player in list_of_players:
+            if rank == 1:
+                if player.place == rank:
+                    view += f"1er : {player.name}" \
+                            + " " * (20 - len(player.name)) \
+                            + f"{player.points}"
+            else:
+                if player.place == rank:
+                    view += f"{rank}eme: {player.name}" \
+                            + " " * (20 - len(player.name)) \
+                            + f"{player.points}"
+        print(view)
 
 
 def view_wait_match_results():
@@ -96,19 +109,8 @@ def view_tournament_final(tournament):
     print(" ### Fin des matchs ### \n"
               "\n"
               "-- Classement final -- \n")
-    for rank in range(1, len(tournament.list_of_players) + 1):
-        view = ""
-        for player in tournament.list_of_players:
-            if rank == 1:
-                if player.place == rank:
-                    view += f"1er : {player.name}"\
-                               + " " * (20-len(player.name))\
-                               + "{player.points}"
-            else:
-                if player.place == rank:
-                    view += f"{rank}eme: {player.name}"
-                    view += " " * (20 - len(player.name))
-        print(view)
+    view_players_rank(tournament.list_of_players)
+
 
 
 def view_validation_actors_imported(actors):
