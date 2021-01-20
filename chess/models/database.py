@@ -199,6 +199,16 @@ class DataBaseHandler:
         else:
             tournaments_table.insert(dictio)
 
+    def export_finished_tournament(self, tournament):
+        """
+        Exports actor instances of players and the tournament when finished
+        :param tournament: the finihed tournament, ready to be exported
+        :return: None
+        """
+        self.export_tournament(tournament)
+        for player in tournament.list_of_players:
+            self.export_actor(player.actor)
+
     def find_tournament_by_id(self, identifier):
         """
         Finds the tournament in the database by entering its identifier
@@ -214,16 +224,6 @@ class DataBaseHandler:
             tournament = {}
         return tournament
 
-    def export_finished_tournament(self, tournament):
-        """
-        Exports actor instances of players and the tournament when finished
-        :param tournament: the finihed tournament, ready to be exported
-        :return: None
-        """
-        self.export_tournament(tournament)
-        for player in tournament.list_of_players:
-            self.export_actor(player.actor)
-
     def export_last_tournament_id(self):
         list_of_id = []
         for tournament in self.database.table('tournament').all():
@@ -232,6 +232,19 @@ class DataBaseHandler:
                     list_of_id.append(value)
         last_id = get_last_id(list_of_id, ID_WIDTH)
         return last_id
+
+    def import_tournaments(self):
+        """
+        Imports a list of tournaments instances from the database
+        :return: list of tournaments instances
+        """
+        tournaments_table = self.database.table('tournament')
+        serialized_tournaments = tournaments_table.all()
+        tournaments = []
+        for value in serialized_tournaments:
+            tournament = deserialize_tournament(value)
+            tournaments.append(tournament)
+        return tournaments
 
 
 if __name__ == '__main__':
