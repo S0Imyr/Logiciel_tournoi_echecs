@@ -137,3 +137,7 @@ def view_import_no_tournament():
     print("\n ---------------------------------- "
           "\n --- Aucun tournoi sauvegardé ! --- "
           "\n ---------------------------------- ")
+
+
+def view_tournament_reports():
+    pass
