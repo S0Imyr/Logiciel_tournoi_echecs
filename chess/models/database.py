@@ -145,7 +145,7 @@ class DataBaseHandler:
     def import_actors(self):
         """
         Imports a list of actors instances transformed in a dictionnary,
-        the dictionnary is converted in the list of the corresponding
+        the dictionary is converted in the list of the corresponding
         instances of actors.
         :return: the number of actors imported and
          the list of actors instances
@@ -161,7 +161,7 @@ class DataBaseHandler:
     def export_interrupted_tournament(self, tournament):
         """
         Transfers an instance of tournament in a table of the database,
-        the instance of tournament is transformed in a dictionnary first.
+        the instance of tournament is transformed in a dictionary first.
         :param tournament: instance of tournament
         :return: None
         """
@@ -399,3 +399,5 @@ if __name__ == '__main__':
 
     handler.export_tournament(tournoi)
 
+    tournament = handler.find_tournament_by_id("00000001")
+    print(tournament)
