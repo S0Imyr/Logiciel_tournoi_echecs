@@ -513,6 +513,11 @@ class TournamentPlayersList:
 
 
 class PlayersList:
+    """
+    Displays the list of the players of a tournament.
+    The argument sort is equal to "By rank" or "Alphabetical"
+     so, the players are ranked according to this.
+    """
     def __init__(self, tournament, sort):
         self.tournament = tournament
         self.sort = sort
