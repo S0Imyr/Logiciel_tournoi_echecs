@@ -459,7 +459,7 @@ class TournamentReportMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        view_tournament_reports()           #####################
+        view_tournament_reports(self.tournament)
         self.menu.add("auto",
                       "Liste des joueurs du tournoi",
                       TournamentPlayersList(self.tournament))

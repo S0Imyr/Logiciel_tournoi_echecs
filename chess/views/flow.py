@@ -139,5 +139,6 @@ def view_import_no_tournament():
           "\n ---------------------------------- ")
 
 
-def view_tournament_reports():
-    pass
+def view_tournament_reports(tournament):
+    print(f"\n Rapports du tournoi {tournament.name}."
+          f"\n Identifiant du tournoi: {tournament.tournament_id} \n")
