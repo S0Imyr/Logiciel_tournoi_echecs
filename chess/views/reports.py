@@ -30,11 +30,12 @@ def report_actors_by_rank(actors_list):
 def report_tournaments_list(tournaments_list):
     for tournament in tournaments_list:
         id_characters = len(tournament.tournament_id)
+        name_characters = len(tournament.name)
         # dates_characters = len(tournament.start_date)+len(tournament.end_date)
         print(f"{tournament.tournament_id}"
               + " " * (10 - id_characters) +
               f"Tournoi : {tournament.name}"
-              + " " * (20 - id_characters) +
+              + " " * (20 - name_characters) +
               f"Du: {tournament.start_date} au: {tournament.end_date}")
 
 
