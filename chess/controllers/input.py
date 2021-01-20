@@ -8,16 +8,15 @@ NB_MATCH = 4
 
 def prompt_number(message, mini=None, maxi=None):
     """
-    Demande à l'utilisateur à l'aide de
-    message de saisir un entier.
-
-    Si l'utilisateur fournit un objet qui n'est
-    pas un entier, ou un entier qui n'est pas
-    entre le min et le max (compris),
-    alors la question est reposée.
-    :param message:
-    :param mini:
-    :param maxi:
+    Asks the user to input a number.
+    If the user provides an object that is not
+    not an integer, or an integer that is not
+    between the mini and the maxi (included),
+    then the question is asked again, with the
+    appropriate error message.
+    :param message: message to ask the input
+    :param mini: if it is provided, the input must be higher
+    :param maxi: if it is provided, the input must be lower
     :return:
     """
     response = input(message)
@@ -27,7 +26,7 @@ def prompt_number(message, mini=None, maxi=None):
             response = int(response)
             response_is_not_number = False
         except ValueError:
-            response = input("Entrée incorrecte, veuillez entrer un nombre : ")
+            response = input("Entrée incorrecte, veuillez entrer un nombre: ")
     if mini is None and maxi is None:
         pass
     elif mini is None:
@@ -47,24 +46,22 @@ def prompt_number(message, mini=None, maxi=None):
 
 def prompt_string(message):
     """
-    Demande à l'utilisateur de saisir une chaine de caractère.
-    Renvoie la chaîne avec majuscule
-    :param message:
+    Asks the user to enter a character string.
+    :param message: message to ask the input
     :return: input
     """
     response = input(message)
-    response = response.capitalize()
     return response
 
 
 def prompt_id_num(message, length=ID_WIDTH):
     """
-    Demande à l'utilisateur de saisir un identifiant
-    qui est une chaîne de caractère numérique
-    de longueur length
-    :param message: message à montrer
-    :param length: la longueur de l'identifiant
-    :return:
+    Asks the user to enter a username
+    which is a numeric string.
+    The length is the length of the identifier asked.
+    :param message: message to ask the input
+    :param length: the length of the identifier
+    :return: input
     """
     response = input(message)
     while len(response) != length:
@@ -81,18 +78,21 @@ def prompt_id_num(message, length=ID_WIDTH):
     return response
 
 
-def prompt_propositions(propositions, message_add="", integer=False):
+def prompt_propositions(proposals, message_add="", integer=False):
     """
-    Demande à l'utilisateur de spécifier un genre.
-    Si la réponse n'est pas M ou F, la demande
-    est refaite.
-    :param propositions: dictionnaire des possibilités
-    :param message_add: message supplémentaire à afficher
+    Asks the user to choose from among the proposals.
+    The propositions must be in the form of a dictionary
+    keys, options.
+    The user is asked to enter the key of the desired proposal
+    If the answer is not in the dictionary keys
+    of proposals, the request is repeated.
+    :param proposals: proposals dictionary
+    :param message_add: additional message to display
     :param integer: True if the input must be converted in integer
     :return: input
     """
     proposal_message = ""
-    for cle, item in propositions.items():
+    for cle, item in proposals.items():
         proposal_message += f"soit: {cle} pour {item}.\n"
     message = message_add + "\n Choisissez parmi: \n" + proposal_message
     error_message = "Votre réponse ne correspond pas. \n" \
@@ -101,7 +101,7 @@ def prompt_propositions(propositions, message_add="", integer=False):
     response = input(message)
     if integer:
         response = int(response)
-    while response not in propositions:
+    while response not in proposals:
         response = input(error_message)
         if integer:
             response = int(response)
@@ -110,10 +110,9 @@ def prompt_propositions(propositions, message_add="", integer=False):
 
 def prompt_date(message):
     """
-    Demande à l'utilisateur à l'aide de
-    message de saisir une date selon un format.
-    Si ce format n'est pas respecté, la demande est refaite.
-    :param message:
+    Prompt the user to enter a date in a given format.
+    If this format is not respected, the request is repeated.
+    :param message: message to ask the input
     :return: input date
     """
     date = ""
@@ -147,9 +146,9 @@ def prompt_date(message):
 
 def input_actor():
     """
-    Demande les informations d'un joueur afin de
-     les regrouper dans son instance acteur
-    :return: acteur arguments
+    Asks player information in order to
+    group them into a list.
+    :return: actors arguments
     """
     last_name = prompt_string("Votre nom de famille : ")
     first_name = prompt_string("Votre prénom : ")
@@ -157,19 +156,24 @@ def input_actor():
                             "en respectant le format: jj/mm/aaaa: ")
     gender = prompt_propositions({"F": "Féminin", "M": "Masculin"})
     rank = prompt_number("Votre classement HATP: ", mini=0)
-    acteur_arguments = [last_name, first_name, birthdate, gender, rank]
-    return acteur_arguments
+    actor_arguments = [last_name, first_name, birthdate, gender, rank]
+    return actor_arguments
 
 
 def input_tournament_players(message):
+    """
+    Asks a player id
+    :param message: message to ask the input
+    :return: the input id
+    """
     actor_id = prompt_id_num(message)
     return actor_id
 
 
 def tournament_inputs():
     """
-    Recueil les informations nécessaires à la création d'un tournoi
-    :return: the associated tournament arguments
+    Gathers the information needed to create a instance of tournament
+    :return: the tournament arguments
     """
     name = prompt_string("Nom du tournoi : ")
     location = prompt_string("Lieu du tournoi : ")
@@ -185,14 +189,11 @@ def tournament_inputs():
 
 def input_match_results(r0und):
     """
-    Demande à remplir les résultat d'un tour
-    On commence par choisir un match en désignant son numéro
-    puis on indique un vainqueur ou un match nul
-    :param r0und: le tour en question
-    :return: la liste des résultats des 4 matchs
-    Exemple {0,1,1,2}, match nul pour le premier match
-    Le premier joueur désigné est vainqueur pour les matchs 2 et 3.
-    Le second joueur désigné est vainqueur pour le match 4.
+    Asks to fill in the results of a round
+    We start by choosing a match by designating its number
+    then we indicate a winner (1 or 2) or a draw by 0.
+    :param r0und: the round beeing played
+    :return: the list of the results
     """
     remaining_matchs = {}
     for num, match in r0und.matchs.items():
@@ -210,6 +211,10 @@ def input_match_results(r0und):
 
 
 def input_tournament_id():
+    """
+    Asks a tournament id
+    :return: the tournament id input
+    """
     print("Si vous n'avez pas l'identifiant du tournoi, recherchez-le"
           " dans la liste des tournois.")
     tournament_id = prompt_id_num("Veuillez préciser l'identifiant du tournoi: ")
@@ -221,5 +226,4 @@ if __name__ == "__main__":
     print(Me)
     You = input_actor()
     print(You)"""
-
     prompt_propositions({"U": "Unique", "D": "Débile", "T": "Terrible"})

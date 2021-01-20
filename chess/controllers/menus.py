@@ -30,12 +30,12 @@ class Menu:
 
     def add(self, key, option, next_menu):
         """
-        allows to add entries and their handler to the menu.
+        Allows to add entries and their handler to the menu
         :param key: if "auto", the key will take
-        the first integer value available from 1.
-        :param option: the displayed proposal.
-        :param next_menu: the next menu given if the key is chosen.
-        :return: None.
+        the first integer value available from 1
+        :param option: the displayed proposal
+        :param next_menu: the next menu given if the key is chosen
+        :return: None
         """
         if key == "auto":
             key = str(self._autokey)
@@ -45,7 +45,7 @@ class Menu:
 
     def items(self):
         """
-        allows to get the key without using _entries.
+        Allows access the key without using _entries.
         :return: the dictionary of keys and entries of the menu.
         """
         return self._entries.items()
