@@ -467,7 +467,7 @@ class TournamentReportMenu:
                       "Liste des matchs du tournoi",
                       TournamentMatchsList(self.tournament))
         self.menu.add("auto",
-                      "Liste des matchs du tournoi",
+                      "Liste des tours du tournoi",
                       TournamentRoundsList(self.tournament))
         self.menu.add("auto",
                       "Obtenir un autre rapport",
@@ -491,13 +491,38 @@ class TournamentPlayersList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_players()         #####################
+        self.menu.add("auto",
+                      "Trier par ordre alphabétique",
+                      PlayersList(self.tournament, "Alphabetical"))
+        self.menu.add("auto",
+                      "Trier selon leur classement",
+                      PlayersList(self.tournament, "By rank"))
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
         self.menu.add("auto",
                       "Obtenir un autre rapport",
                       ReportMenu())
+        self.menu.add("auto",
+                      "Retour au Menu principal",
+                      HomeMenuController())
+        self.menu.add("q", "Quitter", Ending())
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.next_menu
+
+
+class PlayersList:
+    def __init__(self, tournament, sort):
+        self.tournament = tournament
+        self.sort = sort
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+
+    def __call__(self):
+        report_tournament_players(self.tournament, self.sort)
+        self.menu.add("auto", "Retour au choix du tri", TournamentPlayersList(self.tournament))
+        self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto",
                       "Retour au Menu principal",
                       HomeMenuController())
@@ -517,7 +542,7 @@ class TournamentMatchsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_matchs()          #####################
+        report_tournament_matchs(self.tournament)
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
@@ -543,7 +568,7 @@ class TournamentRoundsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_rounds()          #####################
+        report_tournament_rounds(self.tournament)
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
