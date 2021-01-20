@@ -10,7 +10,8 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor,\
     view_id_player, view_launch_tournament, view_round_matchs, \
     view_validation_actors_imported, view_tournament_final, \
     view_validation_actors_exported, view_validation_players, \
-    view_import_no_tournament, view_players_rank, view_actors_menu
+    view_import_no_tournament, view_players_rank, view_actors_menu,\
+    view_tournament_reports
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
@@ -419,7 +420,9 @@ class TournamentsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournaments_list()
+        handler = DataBaseHandler()
+        tournaments = handler.import_tournaments()
+        report_tournaments_list(tournaments)
         self.menu.add("auto", "Obtenir un autre rapport", ReportMenu())
         self.menu.add("auto",
                       "Retour au Menu principal",
@@ -456,7 +459,7 @@ class TournamentReportMenu:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        #view_tournament_reports()
+        view_tournament_reports()           #####################
         self.menu.add("auto",
                       "Liste des joueurs du tournoi",
                       TournamentPlayersList(self.tournament))
@@ -488,7 +491,7 @@ class TournamentPlayersList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_players()
+        report_tournament_players()         #####################
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
@@ -514,7 +517,7 @@ class TournamentMatchsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_matchs()
+        report_tournament_matchs()          #####################
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
@@ -540,7 +543,7 @@ class TournamentRoundsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_rounds()
+        report_tournament_rounds()          #####################
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
