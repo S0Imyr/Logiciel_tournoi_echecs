@@ -110,8 +110,8 @@ def view_wait_match_results():
 
 def view_tournament_final(tournament):
     print("\n ### Fin des matchs ### \n"
-              "\n"
-              "-- Classement final -- \n")
+          "\n"
+          "-- Classement final -- \n")
     view_players_rank(tournament.list_of_players)
 
 
@@ -140,5 +140,5 @@ def view_import_no_tournament():
 
 
 def view_tournament_reports(tournament):
-    print(f"\n Rapports du tournoi {tournament.name}."
+    print(f"\n ### Rapports du tournoi {tournament.name}. ###"
           f"\n Identifiant du tournoi: {tournament.tournament_id} \n")

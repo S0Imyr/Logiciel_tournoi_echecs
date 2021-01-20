@@ -14,7 +14,7 @@ class MenuView:
         while True:
             self._display_menu()
             choice = input("\nChoissisez une option en inscrivant "
-                           "le nombre associé, ou q pour quitter: ")
+                           "le nombre associé, ou q pour quitter: \n")
             if choice in self.menu:
                 return self.menu[choice]
 
@@ -26,5 +26,4 @@ if __name__ == "__main__":
     menutest.add("auto", "Ajouter un nouveau joueur", lambda: None)
     menutest.add("q", "Quitter", lambda: None)
     test = MenuView(menutest)
-    test._display_menu()
     test.get_user_choice()
