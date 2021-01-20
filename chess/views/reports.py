@@ -13,12 +13,7 @@ def players_table(actors_list):
 
 
 def tournaments_table(tournaments_list):
-    for tournament in tournaments_list:
-        id_characters = len(tournament.tournament_ID)
-        #dates_characters = len(tournament.start_date)+len(tournament.end_date)
-        print(f"Tournoi: {tournament.tournament_ID}"
-              + " " * (10 - id_characters) +
-              f"Du: {tournament.start_date} au: {tournament.end_date}")
+    pass
 
 
 def report_actors_by_alpha(actors_list):
@@ -32,8 +27,15 @@ def report_actors_by_rank(actors_list):
     players_table(sorted_actors)
 
 
-def report_tournaments_list():
-    pass
+def report_tournaments_list(tournaments_list):
+    for tournament in tournaments_list:
+        id_characters = len(tournament.tournament_id)
+        # dates_characters = len(tournament.start_date)+len(tournament.end_date)
+        print(f"{tournament.tournament_id}"
+              + " " * (10 - id_characters) +
+              f"Tournoi : {tournament.name}"
+              + " " * (20 - id_characters) +
+              f"Du: {tournament.start_date} au: {tournament.end_date}")
 
 
 def report_tournament_players():
