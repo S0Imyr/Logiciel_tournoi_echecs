@@ -211,8 +211,9 @@ def input_match_results(r0und):
 
 def input_tournament_id():
     print("Si vous n'avez pas l'identifiant du tournoi, recherchez-le"
-          "dans la liste des tournois.")
-    prompt_id_num("Veuillez préciser l'identifiant du tournoi: ")
+          " dans la liste des tournois.")
+    tournament_id = prompt_id_num("Veuillez préciser l'identifiant du tournoi: ")
+    return tournament_id
 
 
 if __name__ == "__main__":
