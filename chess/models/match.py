@@ -1,4 +1,3 @@
-from chess.utils.conversion import list_to_str_space, str_to_date
 
 
 POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
@@ -18,8 +17,8 @@ class Match:
         self.finished = False
         self.points_assigned = False
 
-    def __repr__(self):
-        repr = f"Match {self.match_nb + 1}: \n" \
+    def __str__(self):
+        display = f"Match {self.match_nb + 1}: \n" \
               f"1: {self.player1.name} vs 2:{self.player2.name}\n"
         winner = "Aucun"
         if self.finished:
@@ -27,12 +26,12 @@ class Match:
                 winner = self.player1.name
             if self.winner == 2:
                 winner = self.player2.name
-            repr += f"Le match a été remporté par {winner} \n"
-        return repr
+            display += f"Le match a été remporté par {winner} \n"
+        return display
 
     def declare_result(self, num_player):
         """
-        Declare the winner by assigning the winner's number
+        Declares the winner by assigning the winner's number
          to the winner attribute
         :param num_player: 1 for the first quoted, 2 for the second.
          0 when it's a draw game
@@ -46,9 +45,9 @@ class Match:
 
     def assign_points(self):
         """
-        Assign points to the players
+        Assigns points to the players
         The function test if points are already assign, and then
-        assign the points
+        assigns the points
         :return:
         """
         if self.winner is None:
@@ -66,8 +65,8 @@ class Match:
 
     def match_to_dict(self):
         """
-        convert a match into a dictionnary
-        :return: a dictionnary
+        Converts a match into a dictionary
+        :return: a dictionary
         """
         string_attributes = ['match_nb',
                              'round_nb',
@@ -117,7 +116,6 @@ if __name__ == "__main__":
     print("\n Test série: \n")
     print(serie)
 
-
     print("\n Début deserialize: \n")
     match = Match(serie['match_nb'],
                   serie['round_nb'],
@@ -126,12 +124,10 @@ if __name__ == "__main__":
     print("Donnée Player 1: ", serie['player1'])
     print("Donnée Player 2: ", serie['player2'])
     print("fin de deserialize: \n")
-    match.dict_to_match(serie)
     print("Match: ", match.match_nb)
     print("Player 1", match.player1)
     print("Player 2:", match.player2)
     print("Joueur 1", match.player1.actor)
     print("Joueur 2:", match.player2.actor)
-
 
     print(match)
