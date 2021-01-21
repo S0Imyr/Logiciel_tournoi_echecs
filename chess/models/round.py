@@ -43,7 +43,7 @@ class Round:
 
     def round_to_dict(self):
         """
-        Convert a round into a dictionary
+        Converts a round into a dictionary
         :return:
         """
         string_attributes = ['round_nb',
@@ -65,7 +65,7 @@ class Round:
 
     def rank_players(self):
         """
-        Rank players by points in the tournament (decreasingly)
+        Ranks players by points in the tournament (decreasingly)
         and by rank
         the method checks if the players have been ranked before
         :return: None
@@ -79,9 +79,9 @@ class Round:
 
     def define_matchs(self):
         """
-        define the matchs of a round according to
+        Defines the matchs of a round according to
          the rules of Swiss tournament
-        :return:
+        :return: None
         """
         if self.round_nb == 0:
             for match in range(NB_MATCH):
@@ -118,7 +118,7 @@ class Round:
 
     def register_results(self, winners):
         """
-        register the results of a round
+        Registers the results of a round
         :param winners: 0 for a tie, 1 when the first player quoted wins
          and 2 when it's the second quoted.
         :return: None
@@ -129,7 +129,7 @@ class Round:
 
     def assign_points(self):
         """
-        Assign the points this round, for each matchs
+        Assigns the points this round, for each matchs
         players_ranked is switched to False
         :return: None
         """
@@ -139,7 +139,7 @@ class Round:
 
     def memorize_opponents(self):
         """
-        For each player, append the current opponent
+        For each player, appends the current opponent
         in the list of previous opponent of the player.
         :return: None
         """
