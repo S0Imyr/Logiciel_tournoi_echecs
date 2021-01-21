@@ -25,16 +25,16 @@ class Round:
         message = f"Tour {self.round_nb + 1} du tournoi {self.tournament_ID} \n"
         if self.matchs != {}:
             if self.finished:
-                message += f"Les matchs ont vu s'affronter : \n"
+                message += "Les matchs ont vu s'affronter : \n"
             else:
-                message += f"Les matchs verront s'affronter : \n"
+                message += "Les matchs verront s'affronter : \n"
             for num_match in range(NB_MATCH):
                 message += f"{num_match+1}. " \
                            f"{self.matchs[num_match].player1.name}" \
                            f" et {self.matchs[num_match].player2.name} \n"
                 if self.finished:
                     if self.matchs[num_match].winner == 0:
-                        message += f"Match nul. \n"
+                        message += "Match nul. \n"
                     if self.matchs[num_match].winner == 1:
                         message += f"Victoire de {self.matchs[num_match].player1.name}. \n"
                     if self.matchs[num_match].winner == 2:
