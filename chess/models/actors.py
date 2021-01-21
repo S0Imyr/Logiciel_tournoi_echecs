@@ -81,38 +81,3 @@ class Player:
         serialized_player['actor'] = self.actor.actor_to_dict()
         serialized_player['opponents'] = list_to_str_space(self.opponents)
         return serialized_player
-
-
-if __name__ == "__main__":
-    import datetime
-
-    """ Test Actor """
-    print("\n ### Tests Actor ### \n")
-    """ Données """
-    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)       # 2
-    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)       # 3
-    print(acteur1)
-    print(acteur2)
-    acteur2.list_of_tournaments_played = ["00000025", "00000027"]
-    acteur2.actor_id = '000123456'
-
-    """ serialize """
-    dictio = acteur2.actor_to_dict()
-
-    """ test """
-    print(dictio)
-
-    """ Test Player """
-    print("\n ### Tests Player ### \n")
-
-    """Données"""
-    joueur1 = Player(acteur1, "00000001", 1)
-    joueur2 = Player(acteur2, "00000001", 2)
-    joueur1.place = 1
-    joueur1.opponents = [1, 2, 3]
-
-    """ serialize """
-    dico2 = joueur1.player_to_dict()
-    print("\n dico2:", dico2)
-
-#### ne pas oublier last_id
