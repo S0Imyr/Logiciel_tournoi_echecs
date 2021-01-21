@@ -43,7 +43,7 @@ class Round:
 
     def round_to_dict(self):
         """
-        Convert a round into a dictionnary
+        Convert a round into a dictionary
         :return:
         """
         string_attributes = ['round_nb',
