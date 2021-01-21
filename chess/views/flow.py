@@ -20,8 +20,8 @@ def view_tournament_creation():
 
 def view_tournament_players(tournament):
     print(f"\n ### Tournoi {tournament.name}: Type d'entrée des joueurs ### \n"
-          "\n" 
-          "-- Attention --\n"  
+          "\n"
+          "-- Attention --\n" 
           "pour ajouter des joueurs, "
           "vous devez les avoir enregistrer "
           "depuis le menu principal, \n"
