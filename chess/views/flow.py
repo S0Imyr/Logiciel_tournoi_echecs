@@ -20,10 +20,8 @@ def view_tournament_creation():
 
 def view_tournament_players(tournament):
     print(f"\n ### Tournoi {tournament.name}: Type d'entrée des joueurs ### \n"
-          "\n"
-          
-          "-- Attention --\n"
-          
+          "\n" 
+          "-- Attention --\n"  
           "pour ajouter des joueurs, "
           "vous devez les avoir enregistrer "
           "depuis le menu principal, \n"
@@ -38,7 +36,7 @@ def view_input_new_actor():
 
 
 def view_validation_new_actor(actor):
-    print(f"\n ### Le joueur suivant a bien été enregistré ### \n")
+    print("\n ### Le joueur suivant a bien été enregistré ### \n")
     print(actor)
 
 
@@ -48,7 +46,7 @@ def view_id_player(tournament, num=1):
 
 
 def view_validation_players(players):
-    print(f"\n -- Les joueurs du tournoi sont : --")
+    print("\n -- Les joueurs du tournoi sont : --")
     view = ""
     for player in players:
         view += "\n" + str(player)
@@ -64,16 +62,16 @@ def view_round_matchs(r0und):
               f"du Tournoi {r0und.tournament_ID} : ### \n \n"
     if r0und.matchs != {}:
         if r0und.finished:
-            view += f"Les matchs ont vu s'affronter : \n"
+            view += "Les matchs ont vu s'affronter : \n"
         else:
-            view += f"Les matchs verront s'affronter : \n"
+            view += "Les matchs verront s'affronter : \n"
         for num_match in range(NB_MATCH):
             view += f"{num_match + 1}. " \
                        f"{r0und.matchs[num_match].player1.name}" \
                        f" et {r0und.matchs[num_match].player2.name} \n"
             if r0und.finished:
                 if r0und.matchs[num_match].winner == 0:
-                    view += f"Match nul. \n"
+                    view += "Match nul. \n"
                 if r0und.matchs[num_match].winner == 1:
                     view += f"Victoire de " \
                                f"{r0und.matchs[num_match].player1.name}. \n"
@@ -116,7 +114,7 @@ def view_tournament_final(tournament):
 
 
 def view_validation_actors_imported(actors):
-    print(f"\n ### Import de joueurs ### \n")
+    print("\n ### Import de joueurs ### \n")
     if len(actors) == 0:
         view = "Base de donnée vide, aucun import possible"
     else:
