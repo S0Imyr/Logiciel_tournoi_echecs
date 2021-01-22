@@ -37,3 +37,4 @@ Sur le terminal tapper : <br>
     <li>flake8 chess --format=html --htmldir=flake-report</li>
 </ul>
 Vous trouverez dans le dossier Projet4, un dossier flake-report avec les rapports de flake8.
+Cliquer sur index pour avoir la synthèse.
