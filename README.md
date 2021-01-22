@@ -27,7 +27,13 @@ Sur le terminal tapper : <br>
 <ul>
     <li>python main.py</li>
 </ul>
+Il s'agit ensuite de naviguer entre les menus en indiquant le nombre associé au menu ou à l'action que l'on souhaite réaliser.
 
 
-
-<h2> Flake 8 </h2>
+<h2> Valider le code avec flake8 </h2>
+Sur le terminal tapper : <br>
+<ul>
+    <li>pip install flake8-html</li>
+    <li>flake8 chess --format=html --htmldir=flake-report</li>
+</ul>
+Vous trouverez dans le dossier Projet4, un dossier flake-report avec les rapports de flake8.
