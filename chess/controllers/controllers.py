@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+This module handles the menu and the navigation between them.
+"""
+
+
 import datetime
 
 from chess.models.game import Tournament
@@ -31,7 +39,9 @@ ID_WIDTH = 8
 
 
 class BrowseControllers:
+    """ Handles the navigation between controllers. """
     def __init__(self):
+        """ The attribute controller stores the next controller."""
         self.controller = None
 
     def start(self):
@@ -46,16 +56,22 @@ class BrowseControllers:
 
 
 class HomeMenuController:
-    """
-    Handles the main menu
-    """
+    """ Handles the main menu. """
     def __init__(self):
+        """
+        The attribute menu is a instance of Menu, the option are added in __call__.
+        The attribute view handles the display of the menu.
+        """
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
+        """ Calls the display of the menu's introduction.
+        The menu is created and the get_user_choice method
+        asks for the user choice.
+        """
         view_intro_home_menu()
-        self.menu.add("auto", "Rentrer de nouveaux joueurs", ActorsMenu())
+        self.menu.add("auto", "Rentrer ou modifier des joueurs", ActorsMenu())
         self.menu.add("auto", "Lancer un tournoi", TournamentCreation())
         self.menu.add("auto", "Reprendre un tournoi", ResumeTournament())
         self.menu.add("auto", "Obtenir un rapport", ReportMenu())
@@ -66,11 +82,20 @@ class HomeMenuController:
 
 
 class ActorsMenu:
+    """ Handles the menu of players settings. """
     def __init__(self):
+        """
+        The attribute menu is a instance of Menu, the option are added in __call__.
+        The attribute view handles the display of the menu.
+        """
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
+        """ Calls the display of the menu's introduction.
+        The menu is created and the get_user_choice method
+        asks for the user choice.
+        """
         view_actors_menu()
         self.menu.add("auto", "Importer les joueurs", ImportActors())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
@@ -87,19 +112,27 @@ class ActorsMenu:
 
 
 class Actors:
-    """
+    """ Handles Actors creation.
+
     Stores the actors in a class attribute,
     the keys are the actors id and the values
     are the instances of actors.
+
     """
     actors = {}
 
     def __init__(self):
-        self.menu = Menu()
-        self.view = MenuView(self.menu)
+        """ Defines the next menu. """
         self.next_menu = ActorsMenu()
 
     def __call__(self):
+        """
+        Calls the display and the input of a new player.
+        Then the corresponding actor instance is created.
+        The instance is stored in the class attribute actors
+        in a dictionary and it calls the display of the
+        validation of the new player creation.
+        """
         view_input_new_actor()
         actor_arguments = input_actor()
         actor = Actor(actor_arguments[0],
@@ -113,14 +146,17 @@ class Actors:
 
 
 class ImportActors:
-    """
-    Handles the actors imports.
-    The database table is cleared after the import.
-    """
+    """ Handles the actors imports. """
     def __init__(self):
+        """ The next controller is already set at ActorsMenu. """
         self.next_menu = ActorsMenu()
 
     def __call__(self):
+        """
+        It calls the display of imports.
+        The imported players fulfill the class attribute Actors.actors.
+        The database table is cleared after the import.
+        """
         handler = DataBaseHandler()
         num_actors, actors = handler.import_actors()
         view_validation_actors_imported(actors)
@@ -132,13 +168,13 @@ class ImportActors:
 
 
 class ExportActors:
-    """
-    Handles the actors exports.
-    """
+    """ Handles the actors exports. """
     def __init__(self, actors):
+        """ Stores the actors to export in the attribute actors """
         self.actors = actors
 
     def __call__(self):
+        """ Exports actor on by one and updates the last id"""
         handler = DataBaseHandler()
         for actor in self.actors:
             handler.export_actor(actor)
@@ -148,7 +184,7 @@ class ExportActors:
 
 
 class ActorsRank:
-
+    """ Handles the modification of a player's ranking. """
     def __init__(self, next_menu=ActorsMenu()):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -158,7 +194,6 @@ class ActorsRank:
         actor_id = input_actor_id()
         database = DataBaseHandler()
         actor = {}
-        print(Actors.actors)
         if not database.import_actor(actor_id) and actor_id not in Actors.actors:
             view_no_actor_id()
         else:
@@ -180,9 +215,7 @@ class ActorsRank:
 
 
 class TournamentCreation:
-    """
-    Handles the tournament creation
-    """
+    """ Handles the tournament creation. """
     def __init__(self):
         self.tournament = None
         self.last_id = "0" * ID_WIDTH
@@ -201,9 +234,7 @@ class TournamentCreation:
 
 
 class TournamentPlayersMenu:
-    """
-    Defines a menu to input the players of the tournament
-    """
+    """ Defines a menu to input the players of the tournament. """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -228,9 +259,7 @@ class TournamentPlayersMenu:
 
 
 class TournamentPlayers:
-    """
-    Handles the input of the players of the tournament.
-    """
+    """ Handles the input of the players of the tournament. """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -272,10 +301,12 @@ class TournamentPlayers:
 
 
 class LaunchTournament:
-    """
+    """ Handles the course of a tournament.
+
     Launches the tournament, there is a kind of a loop
     between LaunchTournament and TournamentPause
     for the 4 rounds.
+
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -303,8 +334,11 @@ class LaunchTournament:
 
 
 class TournamentPause:
-    """
-    Defines a menu to give the alternative to interrupt or go on the tournament
+    """ Defines a Pause menu
+
+    Defines a menu to give the alternative of interrupting
+    or continuing the tournament
+
     """
     def __init__(self, tournament):
         self.tournament = tournament
@@ -341,10 +375,11 @@ class TournamentInterruption:
 
 
 class ResumeTournament:
-    """
-    Resumes a tournament.
+    """Resumes a tournament.
+
     It imports the datas and progress of
     the last tournament interrupt.
+
     """
     def __call__(self):
         handler = DataBaseHandler()
@@ -376,9 +411,7 @@ class ReportMenu:
 
 
 class ActorsList:
-    """
-    Defines a menu to obtain the actors lists
-    """
+    """ Defines a menu to obtain the actors lists """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -403,9 +436,7 @@ class ActorsList:
 
 
 class ActorsListAlphabetical:
-    """
-    Handles the list of actors in alphabetical order
-    """
+    """ Handles the list of actors in alphabetical order """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -426,9 +457,7 @@ class ActorsListAlphabetical:
 
 
 class ActorsListRank:
-    """
-    Handles the list of actors in rank order
-    """
+    """ Handles the list of actors in rank order """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -449,9 +478,7 @@ class ActorsListRank:
 
 
 class TournamentsList:
-    """
-    Handles the list of tournaments
-    """
+    """ Handles the list of tournaments """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
@@ -471,9 +498,7 @@ class TournamentsList:
 
 
 class TournamentReportInput:
-    """
-    Asks for the tournament we want to get reports from
-    """
+    """ Asks for the tournament we want to get reports from """
     def __call__(self):
         tournament_id = input_tournament_id()
         db = DataBaseHandler()
@@ -487,9 +512,7 @@ class TournamentReportInput:
 
 
 class TournamentReportMenu:
-    """
-    Handles the menu of reports of a tournament
-    """
+    """ Handles the menu of reports of a tournament"""
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -519,9 +542,7 @@ class TournamentReportMenu:
 
 
 class TournamentPlayersList:
-    """
-    Displays the report of the players of a tournament
-    """
+    """ Displays the report of the players of a tournament """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -550,10 +571,11 @@ class TournamentPlayersList:
 
 
 class PlayersList:
-    """
-    Displays the list of the players of a tournament.
+    """ Displays the list of the players of a tournament.
+
     The argument sort is equal to "By rank" or "Alphabetical"
      so, the players are ranked according to this.
+
     """
     def __init__(self, tournament, sort):
         self.tournament = tournament
@@ -575,9 +597,7 @@ class PlayersList:
 
 
 class TournamentMatchsList:
-    """
-    Displays the report of the matchs of a tournament
-    """
+    """ Displays the report of the matchs of a tournament """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -601,9 +621,7 @@ class TournamentMatchsList:
 
 
 class TournamentRoundsList:
-    """
-    Displays the report of the rounds of a tournament
-    """
+    """ Displays the report of the rounds of a tournament """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()
@@ -627,17 +645,10 @@ class TournamentRoundsList:
 
 
 class Ending:
-    """
-    Displays the exit screen
-    """
+    """ Displays the exit screen """
     def __init__(self):
         self.menu = Menu()
         self.view = MenuView(self.menu)
 
     def __call__(self):
         print("Aurevoir")  # A modifier -> views
-
-
-if __name__ == "__main__":
-    app = BrowseControllers()
-    app.start()
