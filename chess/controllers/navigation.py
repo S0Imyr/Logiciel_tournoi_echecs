@@ -222,7 +222,7 @@ class TournamentCreation:
 
     def __call__(self):
         handler = DataBaseHandler()
-        Tournament.last_tournament_id = handler.export_last_tournament_id()
+        Tournament.last_tournament_id = handler.import_last_tournament_id()
         view_tournament_creation()
         tournament_arguments = tournament_inputs()
         self.tournament = Tournament(tournament_arguments[0],
