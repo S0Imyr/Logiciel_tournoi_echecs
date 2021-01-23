@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+Handles the tournament logic
+"""
+
+
 import datetime
 
 from chess.utils.utils import get_new_id
@@ -13,9 +21,7 @@ NB_MATCH = 4
 
 
 class Tournament:
-    """
-    the class Tournament is the central piece of the models
-    """
+    """ The class Tournament is the central piece of the models. """
     last_tournament_id = "0" * TOURNAMENT_ID_WIDTH
 
     def __init__(self, name, location, timer_type, description):
@@ -34,8 +40,8 @@ class Tournament:
         self.finished = False
 
     def define_players(self, actors):
-        """
-        define the list of id of the players
+        """ Defines the list of identifier of the players who join the tournament.
+
         :param actors:
         :return: None
         """
@@ -45,8 +51,8 @@ class Tournament:
                                                num_player))
 
     def init_round(self, num_round):
-        """
-        Launch the round number "num_round"
+        """ Launches the round number "num_round".
+
         :param num_round: number of the round played
         :return: None
         """
@@ -56,11 +62,12 @@ class Tournament:
         self.rounds.append(tour)
 
     def register_round_results(self, num_round, winner):
-        """
-        register the results
-        :param winner:
-        :param num_round:
-        :return:
+        """ Registers the results of the round.
+
+        :param num_round: the round number.
+        :param winner: the list of the winners.
+        :return: None.
+
         """
         self.rounds[num_round].register_results(winner)
         self.rounds[num_round].assign_points()
@@ -69,9 +76,10 @@ class Tournament:
         self.rounds[num_round].rank_players()
 
     def tournament_to_dict(self):
-        """
-        convert the tournament into a dictionnary
-        :return: dictionnary of the class tournament
+        """ Converts the tournament into a dictionary
+
+        :return: dictionary of the tournament instance.
+
         """
         string_attributes = ['tournament_id',
                              'name',
@@ -94,6 +102,12 @@ class Tournament:
         return serialized_tournament
 
     def end_tournament(self):
+        """ Handles the end of the tournament.
+
+        Adds the tournament_id to the players list of tournaments.
+        Defines the attribute finished and the end date of the tournament.
+
+        """
         for player in self.list_of_players:
             player.actor.list_of_tournaments_played.append(self.tournament_id)
         self.finished = True
