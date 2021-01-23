@@ -8,7 +8,7 @@ This module handles the menu and the navigation between them.
 
 import datetime
 
-from chess.models.game import Tournament
+from chess.models.tournament import Tournament
 from chess.models.actors import Actor
 from chess.models.database import DataBaseHandler
 
