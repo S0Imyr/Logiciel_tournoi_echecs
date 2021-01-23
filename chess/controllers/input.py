@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+This module handles the different inputs
+"""
+
+
 from chess.utils.conversion import str_into_date
 
 
@@ -7,16 +15,15 @@ NB_MATCH = 4
 
 
 def prompt_number(message, mini=None, maxi=None):
-    """
-    Asks the user to input a number.
-    If the user provides an object that is not
-    not an integer, or an integer that is not
-    between the mini and the maxi (included),
-    then the question is asked again, with the
-    appropriate error message.
+    """ Asks the user to input a number.
+
+    If the user provides an object that is not an integer,
+     or an integer that is not between the mini and the maxi (included),
+    then the question is asked again, with the appropriate error message.
+
     :param message: message to ask the input
-    :param mini: if it is provided, the input must be higher
-    :param maxi: if it is provided, the input must be lower
+    :param mini: if it is provided, the input number must be higher
+    :param maxi: if it is provided, the input number must be lower
     :return:
     """
     response = input(message)
@@ -45,8 +52,8 @@ def prompt_number(message, mini=None, maxi=None):
 
 
 def prompt_string(message):
-    """
-    Asks the user to enter a character string.
+    """ Asks the user to enter a character string.
+
     :param message: message to ask the input
     :return: input
     """
@@ -55,10 +62,10 @@ def prompt_string(message):
 
 
 def prompt_id_num(message, length=ID_WIDTH):
-    """
-    Asks the user to enter a username
-    which is a numeric string.
+    """ Asks the user to enter a identifier which is a numeric string.
+
     The length is the length of the identifier asked.
+
     :param message: message to ask the input
     :param length: the length of the identifier
     :return: input
@@ -79,13 +86,12 @@ def prompt_id_num(message, length=ID_WIDTH):
 
 
 def prompt_propositions(proposals, message_add="", integer=False):
-    """
-    Asks the user to choose from among the proposals.
-    The propositions must be in the form of a dictionary
-    keys, options.
-    The user is asked to enter the key of the desired proposal
-    If the answer is not in the dictionary keys
-    of proposals, the request is repeated.
+    """ Asks the user to choose from among the proposals.
+
+    The propositions must be in the form of a dictionary keys, options.
+    The user is asked to enter the key of the desired proposal.
+    If the answer is not in the dictionary keys of proposals, the request is repeated.
+
     :param proposals: proposals dictionary
     :param message_add: additional message to display
     :param integer: True if the input must be converted in integer
@@ -109,9 +115,10 @@ def prompt_propositions(proposals, message_add="", integer=False):
 
 
 def prompt_date(message):
-    """
-    Prompt the user to enter a date in a given format.
+    """ Prompts the user to enter a date in a given format.
+
     If this format is not respected, the request is repeated.
+
     :param message: message to ask the input
     :return: input date
     """
@@ -145,9 +152,8 @@ def prompt_date(message):
 
 
 def input_actor():
-    """
-    Asks player information in order to
-    group them into a list.
+    """ Asks player information in order to group them into a list.
+
     :return: actors arguments
     """
     last_name = prompt_string("Votre nom de famille : ")
@@ -161,8 +167,7 @@ def input_actor():
 
 
 def input_actor_id():
-    """
-    Asks an actor id
+    """ Asks an actor id
     :return: the actor id input
     """
     print("Si vous n'avez pas l'identifiant du joueur, recherchez-le"
@@ -172,8 +177,8 @@ def input_actor_id():
 
 
 def input_actor_new_rank():
-    """
-    Asks
+    """ Asks a new rank for an actor.
+
     :return: actor rank
     """
     rank = prompt_number("Le nouveau classement HATP: ", mini=0)
@@ -181,8 +186,8 @@ def input_actor_new_rank():
 
 
 def input_tournament_players(message):
-    """
-    Asks a player id
+    """ Asks a player id
+
     :param message: message to ask the input
     :return: the input id
     """
@@ -191,8 +196,8 @@ def input_tournament_players(message):
 
 
 def tournament_inputs():
-    """
-    Gathers the information needed to create a instance of tournament
+    """ Gathers the information needed to create a instance of tournament.
+
     :return: the tournament arguments
     """
     name = prompt_string("Nom du tournoi : ")
@@ -208,11 +213,12 @@ def tournament_inputs():
 
 
 def input_match_results(r0und):
-    """
-    Asks to fill in the results of a round
+    """ Asks to fill in the results of a round
+
     We start by choosing a match by designating its number
     then we indicate a winner (1 or 2) or a draw by 0.
-    :param r0und: the round beeing played
+
+    :param r0und: the round being played
     :return: the list of the results
     """
     remaining_matchs = {}
@@ -231,19 +237,11 @@ def input_match_results(r0und):
 
 
 def input_tournament_id():
-    """
-    Asks a tournament id
+    """ Asks a tournament id
+
     :return: the tournament id input
     """
     print("Si vous n'avez pas l'identifiant du tournoi, recherchez-le"
           " dans la liste des tournois.")
     tournament_id = prompt_id_num("Veuillez préciser l'identifiant du tournoi: ")
     return tournament_id
-
-
-if __name__ == "__main__":
-    """    Me = input_actor()
-    print(Me)
-    You = input_actor()
-    print(You)"""
-    prompt_propositions({"U": "Unique", "D": "Débile", "T": "Terrible"})
