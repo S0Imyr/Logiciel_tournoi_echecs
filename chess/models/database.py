@@ -14,7 +14,7 @@ from tinydb import TinyDB, Query
 from chess.models.actors import Actor, Player
 from chess.models.match import Match
 from chess.models.round import Round
-from chess.models.game import Tournament
+from chess.models.tournament import Tournament
 
 from chess.utils.conversion import str_to_date, \
     str_space_to_list, str_space_to_int_list
