@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+This module handles the players and actors
+"""
+
+
 from chess.utils.conversion import list_to_str_space
 from chess.utils.utils import get_new_id
 
@@ -6,9 +14,7 @@ ACTOR_ID_WIDTH = 8
 
 
 class Actor:
-    """
-    An actor is the identity of player of the different tournaments
-    """
+    """ An actor is the identity of player of the different tournaments. """
     last_actor_id = "0" * ACTOR_ID_WIDTH
 
     def __init__(self, last_name, first_name, birthdate, gender, rank):
@@ -26,13 +32,11 @@ class Actor:
                f"Identifiant: {self.actor_id}\n" \
                f"Classement: {self.rank} \n"
 
-    def modify_rank(self, rank):
-        self.rank = rank
-
     def actor_to_dict(self):
-        """
-        convert the actor into a dictionnary
-        :return:
+        """ Converts the actor into a dictionary.
+
+        :return: the dictionary of the actor instance.
+
         """
         string_attributes = ['actor_id', 'last_name', 'first_name', 'gender', 'rank']
         serialized_actor = {}
@@ -45,9 +49,7 @@ class Actor:
 
 
 class Player:
-    """
-    A player mean a player in a specific tournament
-    """
+    """ Defines player in a specific tournament """
     def __init__(self, actor, tournament_id, player_id):
         self.actor = actor
         self.name = self.actor.first_name + " " + self.actor.last_name
@@ -69,9 +71,10 @@ class Player:
                f"A joué contre: {self.opponents} \n"
 
     def player_to_dict(self):
-        """
-        convert an actor into a dictionnary
-        :return: dictionnary of the player serialiazed
+        """ Converts an actor into a dictionary
+
+        :return: dictionary of the player serialiazed
+
         """
         string_attributes = ['name', 'tournament_ID', 'player_id', 'rank', 'ranking', 'points', 'place']
         serialized_player = {}
