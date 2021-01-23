@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+This module handle the round logic.
+"""
+
+
 from operator import attrgetter
 from chess.models.match import Match
 
@@ -9,9 +17,7 @@ MATCH_OTHER_ROUND = [[1, 2], [3, 4], [5, 6], [7, 8]]
 
 
 class Round:
-    """
-    A round is a set in a tournament
-    """
+    """ A round is a set in a tournament. """
     def __init__(self, round_nb, tournament_id, players):
         self.round_nb = round_nb
         self.tournament_ID = tournament_id
@@ -42,9 +48,10 @@ class Round:
         return message
 
     def round_to_dict(self):
-        """
-        Converts a round into a dictionary
-        :return:
+        """ Converts a round into a dictionary
+
+        :return: the round instance converted in a dictionary.
+
         """
         string_attributes = ['round_nb',
                              'tournament_ID',
@@ -64,11 +71,12 @@ class Round:
         return serialized_round
 
     def rank_players(self):
-        """
-        Ranks players by points in the tournament (decreasingly)
-        and by rank
-        the method checks if the players have been ranked before
+        """ Ranks players by points in the tournament (decreasingly) and then by rank.
+
+        The method checks if the players have been ranked before.
+
         :return: None
+
         """
         if not self.players_ranked:
             sorted_players = sorted(self.players, key=attrgetter("rank"))
@@ -78,9 +86,7 @@ class Round:
             self.players_ranked = True
 
     def define_matchs(self):
-        """
-        Defines the matchs of a round according to
-         the rules of Swiss tournament
+        """ Defines the matchs of a round according to the rules of Swiss tournament
         :return: None
         """
         if self.round_nb == 0:
@@ -117,73 +123,31 @@ class Round:
                     first_non_assigned += 1
 
     def register_results(self, winners):
-        """
-        Registers the results of a round
-        :param winners: 0 for a tie, 1 when the first player quoted wins
-         and 2 when it's the second quoted.
+        """ Registers the results of a round.
+
+        :param winners: 0 for a tie, 1 when the first player quoted wins and 2 when it's the second quoted.
         :return: None
+
         """
         for num_match in range(NB_MATCH):
             self.matchs[num_match].declare_result(winners[num_match])
         self.finished = True
 
     def assign_points(self):
-        """
-        Assigns the points this round, for each matchs
-        players_ranked is switched to False
+        """ Assigns the points this round, for each matchs
+
+        Players_ranked is switched to False
         :return: None
+
         """
         for num_match in range(NB_MATCH):
             self.matchs[num_match].assign_points()
         self.players_ranked = False
 
     def memorize_opponents(self):
-        """
-        For each player, appends the current opponent
-        in the list of previous opponent of the player.
+        """ For each player, appends the current opponent in the list of previous opponents.
         :return: None
         """
         for match in range(NB_MATCH):
             self.matchs[match].player1.opponents.append(self.matchs[match].player2.player_id)
             self.matchs[match].player2.opponents.append(self.matchs[match].player1.player_id)
-
-
-if __name__ == '__main__':
-    import datetime
-    from chess.models.actors import Actor, Player
-    """ Données """
-
-    acteur1 = Actor("Skywalker", "Anakin", datetime.date(41, 5, 6), "M", 8)
-    acteur2 = Actor("Skywalker", "Luke", datetime.date(19, 12, 7), "M", 21)
-    acteur3 = Actor("Organa", "Leia", datetime.date(19, 12, 7), "F", 143)
-    acteur4 = Actor("Tano", "Ahsoka", datetime.date(36, 11, 22), "F", 35)
-    acteur5 = Actor("Yoda", "Maître", datetime.date(896, 10, 15), "M", 3)
-    acteur6 = Actor("Palpatine", "Sheev", datetime.date(84, 2, 25), "M", 27)
-    acteur7 = Actor("Kashyyyk", "Chewbacca", datetime.date(200, 8, 31), "M", 112)
-    acteur8 = Actor("Solo", "Han", datetime.date(34, 7, 16), "M", 107)
-    acteurs = [acteur1, acteur2, acteur3, acteur4, acteur5, acteur6, acteur7, acteur8]
-
-    joueur1 = Player(acteur1, "00000001", 1)
-    joueur2 = Player(acteur2, "00000001", 2)
-    joueur3 = Player(acteur3, "00000001", 3)
-    joueur4 = Player(acteur4, "00000001", 4)
-    joueur5 = Player(acteur5, "00000001", 5)
-    joueur6 = Player(acteur6, "00000001", 6)
-    joueur7 = Player(acteur7, "00000001", 7)
-    joueur8 = Player(acteur8, "00000001", 8)
-    joueurs = [joueur1, joueur2, joueur3, joueur4, joueur5, joueur6, joueur7, joueur8]
-
-    """ Lancement partie : """
-    tour1 = Round(0, "00000001", joueurs)
-
-    tour1.define_matchs()
-    tour1.rank_players()
-    tour1.define_matchs()
-    tour1.register_results([0, 1, 2, 0])
-    tour1.assign_points()
-    tour1.finished = True
-    tour1.memorize_opponents()
-    tour1.rank_players()
-
-    print(tour1.matchs)
-    print(tour1.players)
