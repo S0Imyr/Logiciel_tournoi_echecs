@@ -203,7 +203,7 @@ class ActorsRank:
                 actor = database.import_actor(actor_id)
             view_validation_new_actor(actor)
             new_rank = input_actor_new_rank()
-            actor.modify_rank(new_rank)
+            actor.rank = new_rank
             Actors.actors[actor.actor_id] = actor
             view_validation_new_actor(actor)
 
