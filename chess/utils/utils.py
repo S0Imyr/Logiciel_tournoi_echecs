@@ -1,5 +1,16 @@
+"""
+This module provides two function to get id.
+"""
+
 
 def get_new_id(identifier, width):
+    """ Given an identifier, gets the next identifier.
+
+    :param identifier: the last identifier known.
+    :param width: the width of the identifier.
+    :return: the next identifier.
+
+    """
     if identifier.lstrip('0') == "":
         identifier = str(1)
     else:
@@ -9,6 +20,13 @@ def get_new_id(identifier, width):
 
 
 def get_last_id(list_of_id, width):
+    """ Gets the last identifier given a list of identifier.
+
+    :param list_of_id: list of identifier
+    :param width: the width of the identifier.
+    :return: the last identifier.
+
+    """
     last_number = 0
     for identifier in list_of_id:
         if identifier == "":
@@ -17,11 +35,3 @@ def get_last_id(list_of_id, width):
             last_number = max(last_number, int(identifier.lstrip('0')))
     last = (width - len(str(last_number))) * "0" + str(last_number)
     return last
-
-
-if __name__ == '__main__':
-    print(get_new_id("02321526", 8))
-    print(get_new_id("00000000", 8))
-
-    print(get_last_id(["000000001", "000000002", "000000003", "000000004", "000000006"], 8))
-    print(get_last_id([], 8))
