@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
+
+
+"""
+This module handle the match logic.
+"""
 
 
 POINTS = {"victory": 1, "draw": 0.5, "defeat": 0}
 
 
 class Match:
-    """
-    A Match is one of the 4 duel in a round
-    """
+    """ A Match is one of the 4 duel in a round. """
     def __init__(self, match_nb, round_nb, tournament_id):
         self.match_nb = match_nb
         self.round_nb = round_nb
@@ -30,12 +34,11 @@ class Match:
         return display
 
     def declare_result(self, num_player):
-        """
-        Declares the winner by assigning the winner's number
-         to the winner attribute
-        :param num_player: 1 for the first quoted, 2 for the second.
-         0 when it's a draw game
+        """ Declares the winner by assigning the winner's number to the winner attribute
+
+        :param num_player: 1 for the first quoted, 2 for the second, 0 when it's a tie game.
         :return: None
+
         """
         if self.finished:
             print("Already registered")
@@ -44,11 +47,11 @@ class Match:
             self.finished = True
 
     def assign_points(self):
-        """
-        Assigns points to the players
-        The function test if points are already assign, and then
-        assigns the points
-        :return:
+        """ Assigns points to the players.
+
+        The function test if points are already assign, and then assigns the points
+
+        :return: None
         """
         if self.winner is None:
             print("Attention, aucun joueur n'a été déclaré vainqueur")
@@ -64,9 +67,10 @@ class Match:
         self.points_assigned = True
 
     def match_to_dict(self):
-        """
-        Converts a match into a dictionary
-        :return: a dictionary
+        """ Converts a match into a dictionary.
+
+        :return: the dictionary of the match instance.
+
         """
         string_attributes = ['match_nb',
                              'round_nb',
@@ -81,53 +85,3 @@ class Match:
         serialized_match['player1'] = self.player1.player_to_dict()
         serialized_match['player2'] = self.player2.player_to_dict()
         return serialized_match
-
-
-if __name__ == "__main__":
-    from chess.models.actors import Actor, Player
-    import datetime
-    """ Données """
-    acteur1 = Actor("Skywalker",
-                    "Anakin",
-                    datetime.date(41, 5, 6),
-                    "M", 8)
-    acteur2 = Actor("Skywalker",
-                    "Luke",
-                    datetime.date(19, 12, 7),
-                    "M",
-                    21)
-
-    joueur1 = Player(acteur1, "00000001", 1)
-    joueur2 = Player(acteur2, "00000001", 2)
-
-    joueurs = [joueur1, joueur2]
-
-    match = Match(2, 3, "00000002")
-    match.player1 = joueur1
-    match.player2 = joueur2
-    match.declare_result(1)
-    match.assign_points()
-
-    print("\n Info match : \n")
-    print(match)
-
-    """ serialize """
-    serie = match.match_to_dict()
-    print("\n Test série: \n")
-    print(serie)
-
-    print("\n Début deserialize: \n")
-    match = Match(serie['match_nb'],
-                  serie['round_nb'],
-                  serie['tournament_ID'])
-    print("Donnée Match: ", serie['match_nb'])
-    print("Donnée Player 1: ", serie['player1'])
-    print("Donnée Player 2: ", serie['player2'])
-    print("fin de deserialize: \n")
-    print("Match: ", match.match_nb)
-    print("Player 1", match.player1)
-    print("Player 2:", match.player2)
-    print("Joueur 1", match.player1.actor)
-    print("Joueur 2:", match.player2.actor)
-
-    print(match)
