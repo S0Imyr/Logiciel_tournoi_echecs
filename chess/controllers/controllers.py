@@ -11,7 +11,7 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor,\
     view_validation_actors_imported, view_tournament_final, \
     view_validation_actors_exported, view_validation_players, \
     view_import_no_tournament, view_players_rank, view_actors_menu,\
-    view_tournament_reports
+    view_tournament_reports, view_no_actor_id
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
     report_tournaments_list, report_tournament_players, \
@@ -157,15 +157,23 @@ class ActorsRank:
     def __call__(self):
         actor_id = input_actor_id()
         database = DataBaseHandler()
-        actor = database.import_actor(actor_id)
-        view_validation_new_actor(actor)
-        new_rank = input_actor_new_rank()
-        actor.modify_rank(new_rank)
-        Actors.actors[actor.actor_id] = actor
-        view_validation_new_actor(actor)
+        actor = {}
+        print(Actors.actors)
+        if not database.import_actor(actor_id) and actor_id not in Actors.actors:
+            view_no_actor_id()
+        else:
+            if actor_id in Actors.actors:
+                actor = Actors.actors[actor_id]
+            elif database.import_actor(actor_id):
+                actor = database.import_actor(actor_id)
+            view_validation_new_actor(actor)
+            new_rank = input_actor_new_rank()
+            actor.modify_rank(new_rank)
+            Actors.actors[actor.actor_id] = actor
+            view_validation_new_actor(actor)
 
         self.menu.add("auto", "Modifier le classement d'un autre joueur", ActorsRank(self.next_menu))
-        self.menu.add("auto", "Retour au menu des joueurs", self.next_menu)
+        self.menu.add("auto", "Retour", self.next_menu)
 
         user_choice = self.view.get_user_choice()
         return user_choice.next_menu
@@ -307,6 +315,9 @@ class TournamentPause:
         self.menu.add("auto",
                       "Continuer et passer au tour suivant",
                       LaunchTournament(self.tournament))
+        self.menu.add("auto",
+                      "Changer le classement d'un joueur",
+                      ActorsRank(TournamentPause(self.tournament)))
         self.menu.add("auto",
                       "Interrompre le tournoi",
                       TournamentInterruption(self.tournament))

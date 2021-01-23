@@ -131,6 +131,10 @@ def view_validation_actors_exported(exported_actors):
     print(view)
 
 
+def view_no_actor_id():
+    print("Il n'y a pas de joueurs avec cet identitifant")
+
+
 def view_import_no_tournament():
     print("\n ---------------------------------- "
           "\n --- Aucun tournoi sauvegardé ! --- "
