@@ -160,6 +160,26 @@ def input_actor():
     return actor_arguments
 
 
+def input_actor_id():
+    """
+    Asks an actor id
+    :return: the actor id input
+    """
+    print("Si vous n'avez pas l'identifiant du joueur, recherchez-le"
+          " dans la liste des joueurs.")
+    actor_id = prompt_id_num("Veuillez préciser l'identifiant du joueur: ")
+    return actor_id
+
+
+def input_actor_new_rank():
+    """
+    Asks
+    :return: actor rank
+    """
+    rank = prompt_number("Le nouveau classement HATP: ", mini=0)
+    return rank
+
+
 def input_tournament_players(message):
     """
     Asks a player id

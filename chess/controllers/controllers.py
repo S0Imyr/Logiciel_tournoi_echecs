@@ -20,7 +20,8 @@ from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
-    input_match_results, input_tournament_players, input_tournament_id
+    input_match_results, input_tournament_players, input_tournament_id,\
+    input_actor_id, input_actor_new_rank
 
 
 NB_PLAYERS = 8
@@ -73,6 +74,7 @@ class ActorsMenu:
         view_actors_menu()
         self.menu.add("auto", "Importer les joueurs", ImportActors())
         self.menu.add("auto", "Ajouter un nouveau joueur", Actors())
+        self.menu.add("auto", "Modifier le classement d'un joueur", ActorsRank())
         self.menu.add("auto",
                       "Retour au menu principal et sauvegarder les joueurs",
                       ExportActors(Actors.actors.values()))
@@ -143,6 +145,30 @@ class ExportActors:
         Actor.last_actor_id = "0" * ID_WIDTH
         view_validation_actors_exported(self.actors)
         return HomeMenuController()
+
+
+class ActorsRank:
+
+    def __init__(self, next_menu=ActorsMenu()):
+        self.menu = Menu()
+        self.view = MenuView(self.menu)
+        self.next_menu = next_menu
+
+    def __call__(self):
+        actor_id = input_actor_id()
+        database = DataBaseHandler()
+        actor = database.import_actor(actor_id)
+        view_validation_new_actor(actor)
+        new_rank = input_actor_new_rank()
+        actor.modify_rank(new_rank)
+        Actors.actors[actor.actor_id] = actor
+        view_validation_new_actor(actor)
+
+        self.menu.add("auto", "Modifier le classement d'un autre joueur", ActorsRank(self.next_menu))
+        self.menu.add("auto", "Retour au menu des joueurs", self.next_menu)
+
+        user_choice = self.view.get_user_choice()
+        return user_choice.next_menu
 
 
 class TournamentCreation:

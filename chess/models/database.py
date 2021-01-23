@@ -130,7 +130,7 @@ class DataBaseHandler:
     def export_actor(self, actor):
         """
         Transfers an instance of actor in a table of the database
-        the instance of actor is transformed in a dictionnary first.
+        the instance of actor is transformed in a dictionary first.
         :param actor: instance of actor
         :return: None
         """
@@ -141,6 +141,16 @@ class DataBaseHandler:
             actors_table.update(dictio, query.actor_id == actor.actor_id)
         else:
             actors_table.insert(dictio)
+
+    def import_actor(self, identifier):
+        actors = self.database.table('actors')
+        query = Query()
+        if actors.search(query.actor_id == identifier):
+            actor_dict = actors.search(query.actor_id == identifier)[0]
+            actor = deserialize_actor(actor_dict)
+        else:
+            actor = {}
+        return actor
 
     def import_actors(self):
         """
@@ -216,9 +226,9 @@ class DataBaseHandler:
         :return: instance of the tournament searched
         """
         tournaments = self.database.table('tournament')
-        Tour = Query()
-        if tournaments.search(Tour.tournament_id == identifier):
-            tournament_dict = tournaments.search(Tour.tournament_id == identifier)[0]
+        query = Query()
+        if tournaments.search(query.tournament_id == identifier):
+            tournament_dict = tournaments.search(query.tournament_id == identifier)[0]
             tournament = deserialize_tournament(tournament_dict)
         else:
             tournament = {}
