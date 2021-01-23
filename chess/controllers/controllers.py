@@ -281,7 +281,7 @@ class LaunchTournament:
         self.tournament = tournament
 
     def __call__(self):
-        if not self.tournament:
+        if not self.tournament or self.tournament.finished:
             view_import_no_tournament()
             return HomeMenuController()
         num_round = len(self.tournament.rounds)
