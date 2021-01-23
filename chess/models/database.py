@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+
+
+""" This module handles the database.
+
+First there is some functions to transform dictionnary into instance of some class.
+Then it is a class to handle exports and imports between the database and the program.
+
+"""
+
+
 from tinydb import TinyDB, Query
 
 from chess.models.actors import Actor, Player
@@ -124,13 +135,15 @@ def deserialize_tournament(serialized_tournament):
 
 
 class DataBaseHandler:
+    """ Handles the exports and imports between the program and the database. """
     def __init__(self):
         self.database = TinyDB('db.json')
 
     def export_actor(self, actor):
-        """
-        Transfers an instance of actor in a table of the database
-        the instance of actor is transformed in a dictionary first.
+        """ Transfers an instance of actor in a table of the database
+
+        The instance of actor is transformed in a dictionary first.
+
         :param actor: instance of actor
         :return: None
         """
@@ -143,6 +156,11 @@ class DataBaseHandler:
             actors_table.insert(dictio)
 
     def import_actor(self, identifier):
+        """ Transfers the serialized actor with the given identifier from the database.
+
+        :param identifier: the identifier of the chosen actor.
+        :return: the instance of the corresponding actor.
+        """
         actors = self.database.table('actors')
         query = Query()
         if actors.search(query.actor_id == identifier):
@@ -153,12 +171,11 @@ class DataBaseHandler:
         return actor
 
     def import_actors(self):
-        """
-        Imports a list of actors instances transformed in a dictionnary,
-        the dictionary is converted in the list of the corresponding
-        instances of actors.
-        :return: the number of actors imported and
-         the list of actors instances
+        """ Imports a list of actors instances transformed in a dictionary.
+
+        The dictionary is converted in the list of the corresponding instances of actors.
+
+        :return: the number of actors imported and the list of actors instances.
         """
         actors_table = self.database.table('actors')
         serialized_actors = actors_table.all()
@@ -169,9 +186,11 @@ class DataBaseHandler:
         return len(serialized_actors), actors
 
     def export_interrupted_tournament(self, tournament):
-        """
-        Transfers an instance of tournament in a table of the database,
-        the instance of tournament is transformed in a dictionary first.
+        """ Transfers an instance of tournament in a table of the database.
+
+        The instance of tournament is transformed in a dictionary.
+        Then it is transferred to the database.
+
         :param tournament: instance of tournament
         :return: None
         """
@@ -181,9 +200,11 @@ class DataBaseHandler:
         tournament_table.insert(dictio)
 
     def import_interrupted_tournament(self):
-        """
-        Imports a list of one tournament transformed in a dictionary,
-        it is converted in  the corresponding instance of tournament.
+        """ Imports a list of one tournament transformed in a dictionary.
+
+        It is converted in  the corresponding instance of tournament.
+        Then it is transferred to the database.
+
         :return: the instance of tournament.
         """
         tournament_table = self.database.table('interrupted_tournament')
@@ -195,9 +216,11 @@ class DataBaseHandler:
         return tournament
 
     def export_tournament(self, tournament):
-        """
-        Transfers an instance of tournament in a table of the database,
-        the instance of tournament is transformed in a dictionnary first.
+        """ Transfers an instance of tournament in a table of the database.
+
+        The instance of tournament is transformed in a dictionary.
+        Then it is transferred to the database.
+
         :param tournament: instance of tournament
         :return: None
         """
@@ -210,9 +233,9 @@ class DataBaseHandler:
             tournaments_table.insert(dictio)
 
     def export_finished_tournament(self, tournament):
-        """
-        Exports actor instances of players and the tournament when finished
-        :param tournament: the finihed tournament, ready to be exported
+        """ Exports actor instances of players and the tournament when finished
+
+        :param tournament: the finished tournament, ready to be exported
         :return: None
         """
         self.export_tournament(tournament)
@@ -220,10 +243,10 @@ class DataBaseHandler:
             self.export_actor(player.actor)
 
     def find_tournament_by_id(self, identifier):
-        """
-        Finds the tournament in the database by entering its identifier
-        :param identifier: the identifier of the searched tournament
-        :return: instance of the tournament searched
+        """ Finds the tournament in the database by entering its identifier.
+
+        :param identifier: the identifier of the searched tournament.
+        :return: instance of the searched tournament.
         """
         tournaments = self.database.table('tournament')
         query = Query()
@@ -234,7 +257,14 @@ class DataBaseHandler:
             tournament = {}
         return tournament
 
-    def export_last_tournament_id(self):
+    def import_last_tournament_id(self):
+        """ Imports the last tournament identifier created
+
+        It imports the list of tournament identifier.
+        With the list, the last identifier is deduced.
+
+        :return: the last tournament identifier
+        """
         list_of_id = []
         for tournament in self.database.table('tournament').all():
             for key, value in tournament.items():
@@ -244,9 +274,9 @@ class DataBaseHandler:
         return last_id
 
     def import_tournaments(self):
-        """
-        Imports a list of tournaments instances from the database
-        :return: list of tournaments instances
+        """ Imports a list of tournaments instances from the database.
+
+        :return: list of tournaments instances.
         """
         tournaments_table = self.database.table('tournament')
         serialized_tournaments = tournaments_table.all()
