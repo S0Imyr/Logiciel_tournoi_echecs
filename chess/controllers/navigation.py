@@ -23,7 +23,7 @@ from chess.views.flow import view_validation_new_actor, view_input_new_actor,\
 
 from chess.views.reports import report_actors_by_alpha, report_actors_by_rank, \
     report_tournaments_list, report_tournament_players, \
-    report_tournament_matchs, report_tournament_rounds, \
+    report_tournament_matches, report_tournament_rounds, \
     report_no_tournament, view_tournament_reports
 
 from chess.controllers.menus import Menu
@@ -604,7 +604,7 @@ class TournamentMatchsList:
         self.view = MenuView(self.menu)
 
     def __call__(self):
-        report_tournament_matchs(self.tournament)
+        report_tournament_matches(self.tournament)
         self.menu.add("auto",
                       "Retour au menu rapport du tournoi",
                       TournamentReportMenu(self.tournament))
