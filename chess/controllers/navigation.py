@@ -15,16 +15,16 @@ from chess.models.database import DataBaseHandler
 from chess.views.menuview import MenuView
 from chess.views.flow import view_validation_new_actor, view_input_new_actor,\
     view_intro_home_menu, view_tournament_creation, view_tournament_players,\
-    view_id_player, view_launch_tournament, view_round_matchs, \
+    view_id_player, view_launch_tournament, view_round_matches, \
     view_validation_actors_imported, view_tournament_final, \
     view_validation_actors_exported, view_validation_players, \
-    view_import_no_tournament, view_players_rank, view_actors_menu,\
-    view_tournament_reports, view_no_actor_id
+    view_import_no_tournament, view_players_rank, view_actors_menu, \
+    view_no_actor_id
 
-from chess.views.reports import report_actors_by_alpha, report_actors_by_rank,\
+from chess.views.reports import report_actors_by_alpha, report_actors_by_rank, \
     report_tournaments_list, report_tournament_players, \
     report_tournament_matchs, report_tournament_rounds, \
-    report_no_tournament
+    report_no_tournament, view_tournament_reports
 
 from chess.controllers.menus import Menu
 from chess.controllers.input import tournament_inputs, input_actor, \
@@ -325,10 +325,10 @@ class LaunchTournament:
             database.export_finished_tournament(self.tournament)
         else:
             self.tournament.init_round(num_round)
-            view_round_matchs(self.tournament.rounds[num_round])
+            view_round_matches(self.tournament.rounds[num_round])
             winners = input_match_results(self.tournament.rounds[num_round])
             self.tournament.register_round_results(num_round, winners)
-            view_round_matchs(self.tournament.rounds[num_round])
+            view_round_matches(self.tournament.rounds[num_round])
             view_players_rank(self.tournament.list_of_players)
             return TournamentPause(self.tournament)
 
