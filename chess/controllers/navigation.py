@@ -323,6 +323,7 @@ class LaunchTournament:
             self.tournament.end_tournament()
             database = DataBaseHandler()
             database.export_finished_tournament(self.tournament)
+            return HomeMenuController()
         else:
             self.tournament.init_round(num_round)
             view_round_matches(self.tournament.rounds[num_round])
