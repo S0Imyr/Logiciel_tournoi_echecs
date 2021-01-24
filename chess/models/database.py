@@ -29,6 +29,7 @@ def deserialize_actor(serialized_actor):
     """
     Transforms a dictionary containing the values of an actor instance
      into the corresponding actor instance.
+
     :param serialized_actor: structured dictionary.
     :return: instance of actor.
     """
@@ -46,6 +47,7 @@ def deserialize_player(serialized_player):
     """
     Transforms a dictionary containing the values of a player instance
      into the corresponding player instance.
+
     :param serialized_player: structured dictionary.
     :return: instance of player.
     """
@@ -93,15 +95,15 @@ def deserialize_round(serialized_round):
     r0und = Round(serialized_round['round_nb'],
                   serialized_round['tournament_ID'],
                   deserialized_players)
-
     string_attribute = ['players_ranked', 'finished', 'players_sorted']
     for attribute in string_attribute:
         setattr(r0und, attribute, serialized_round[attribute])
-
-    matchs = {}
+    r0und.start_date = str_to_date(serialized_round['start_date'])
+    r0und.end_date = str_to_date(serialized_round['end_date'])
+    matches = {}
     for match_nb, match in serialized_round['matchs'].items():
-        matchs[int(match_nb)] = deserialize_match(match)
-    setattr(r0und, 'matchs', matchs)
+        matches[int(match_nb)] = deserialize_match(match)
+    setattr(r0und, 'matchs', matches)
     return r0und
 
 

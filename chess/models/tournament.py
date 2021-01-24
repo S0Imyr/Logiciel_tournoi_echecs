@@ -57,8 +57,9 @@ class Tournament:
         :return: None
         """
         tour = Round(num_round, self.tournament_id, self.list_of_players)
-        tour.rank_players()                     # Rangement des joueurs
-        tour.define_matchs()                    # Désignation des matchs
+        tour.start_date = datetime.date.today()
+        tour.rank_players()
+        tour.define_matchs()
         self.rounds.append(tour)
 
     def register_round_results(self, num_round, winner):
@@ -74,6 +75,7 @@ class Tournament:
         self.rounds[num_round].finished = True
         self.rounds[num_round].memorize_opponents()
         self.rounds[num_round].rank_players()
+        self.rounds[num_round].end_date = datetime.date.today()
 
     def tournament_to_dict(self):
         """ Converts the tournament into a dictionary

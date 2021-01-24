@@ -19,8 +19,8 @@ MATCH_OTHER_ROUND = [[1, 2], [3, 4], [5, 6], [7, 8]]
 class Round:
     """ A round is a set in a tournament. """
     def __init__(self, round_nb, tournament_id, players):
-        self.name = f"Round {round_nb}"
         self.round_nb = round_nb
+        self.name = f"Round {round_nb + 1}"
         self.tournament_ID = tournament_id
         self.players = players
         self.start_date = None
@@ -57,6 +57,7 @@ class Round:
 
         """
         string_attributes = ['round_nb',
+                             'name',
                              'tournament_ID',
                              'players_ranked',
                              'finished',
@@ -64,13 +65,14 @@ class Round:
         serialized_round = {}
         for attribute in string_attributes:
             serialized_round[attribute] = getattr(self, attribute)
-        # no_string_attributes = ['players' (list), 'matchs' (dict)]
         serialized_round['players'] = []
         for player in self.players:
             serialized_round['players'].append(player.player_to_dict())
         serialized_round['matchs'] = {}
         for key, value in self.matches.items():
             serialized_round['matchs'][key] = value.match_to_dict()
+        serialized_round['start_date'] = str(self.start_date)
+        serialized_round['end_date'] = str(self.end_date)
         return serialized_round
 
     def rank_players(self):
