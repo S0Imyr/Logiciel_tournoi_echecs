@@ -34,7 +34,7 @@ Il s'agit ensuite de naviguer entre les menus en indiquant le nombre associé au
 Sur le terminal tapper : <br>
 <ul>
     <li>pip install flake8-html</li>
-    <li>flake8 chess --format=html --htmldir=flake-report</li>
+    <li>flake8 chess --format=html --htmldir=flake_report</li>
 </ul>
-Vous trouverez dans le dossier Projet4, un dossier flake-report avec les rapports de flake8.
+Vous trouverez dans le dossier Projet4, un dossier flake_report avec les rapports de flake8.
 Cliquer sur index pour avoir la synthèse.
