@@ -95,7 +95,7 @@ def report_tournament_matches(tournament):
     print(f"### Tournoi: {tournament.name} ###")
     for r0und in tournament.rounds:
         print(f"Les matchs du tour {r0und.round_nb + 1}: \n")
-        for match in r0und.matchs.values():
+        for match in r0und.matches.values():
             print(str(match))
 
 

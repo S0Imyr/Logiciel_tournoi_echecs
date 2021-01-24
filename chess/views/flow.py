@@ -83,24 +83,24 @@ def view_round_matches(r0und):
     """
     view = f"\n ### Matchs du Tour {r0und.round_nb + 1} " \
            f"du Tournoi {r0und.tournament_ID} : ### \n \n"
-    if r0und.matchs != {}:
+    if r0und.matches != {}:
         if r0und.finished:
             view += "Les matchs ont vu s'affronter : \n"
         else:
             view += "Les matchs verront s'affronter : \n"
         for num_match in range(NB_MATCH):
             view += f"{num_match + 1}. " \
-                       f"{r0und.matchs[num_match].player1.name}" \
-                       f" et {r0und.matchs[num_match].player2.name} \n"
+                       f"{r0und.matches[num_match].player1.name}" \
+                       f" et {r0und.matches[num_match].player2.name} \n"
             if r0und.finished:
-                if r0und.matchs[num_match].winner == 0:
+                if r0und.matches[num_match].winner == 0:
                     view += "Match nul. \n"
-                if r0und.matchs[num_match].winner == 1:
+                if r0und.matches[num_match].winner == 1:
                     view += f"Victoire de " \
-                               f"{r0und.matchs[num_match].player1.name}. \n"
-                if r0und.matchs[num_match].winner == 2:
+                               f"{r0und.matches[num_match].player1.name}. \n"
+                if r0und.matches[num_match].winner == 2:
                     view += f"Victoire de " \
-                               f"{r0und.matchs[num_match].player2.name}. \n"
+                               f"{r0und.matches[num_match].player2.name}. \n"
     print(view)
 
 
