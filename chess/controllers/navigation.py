@@ -526,7 +526,7 @@ class TournamentReportMenu:
                       TournamentPlayersList(self.tournament))
         self.menu.add("auto",
                       "Liste des matchs du tournoi",
-                      TournamentMatchsList(self.tournament))
+                      TournamentMatchesList(self.tournament))
         self.menu.add("auto",
                       "Liste des tours du tournoi",
                       TournamentRoundsList(self.tournament))
@@ -597,8 +597,8 @@ class PlayersList:
         return user_choice.next_menu
 
 
-class TournamentMatchsList:
-    """ Displays the report of the matchs of a tournament """
+class TournamentMatchesList:
+    """ Displays the report of the matches of a tournament """
     def __init__(self, tournament):
         self.tournament = tournament
         self.menu = Menu()

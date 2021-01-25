@@ -59,7 +59,7 @@ class Tournament:
         tour = Round(num_round, self.tournament_id, self.list_of_players)
         tour.start_date = datetime.date.today()
         tour.rank_players()
-        tour.define_matchs()
+        tour.define_matches()
         self.rounds.append(tour)
 
     def register_round_results(self, num_round, winner):

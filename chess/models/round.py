@@ -68,9 +68,9 @@ class Round:
         serialized_round['players'] = []
         for player in self.players:
             serialized_round['players'].append(player.player_to_dict())
-        serialized_round['matchs'] = {}
+        serialized_round['matches'] = {}
         for key, value in self.matches.items():
-            serialized_round['matchs'][key] = value.match_to_dict()
+            serialized_round['matches'][key] = value.match_to_dict()
         serialized_round['start_date'] = str(self.start_date)
         serialized_round['end_date'] = str(self.end_date)
         return serialized_round
@@ -90,8 +90,8 @@ class Round:
                 sorted_players[rank].place = rank + 1
             self.players_ranked = True
 
-    def define_matchs(self):
-        """ Defines the matchs of a round according to the rules of Swiss tournament
+    def define_matches(self):
+        """ Defines the matches of a round according to the rules of Swiss tournament
         :return: None
         """
         if self.round_nb == 0:
@@ -139,7 +139,7 @@ class Round:
         self.finished = True
 
     def assign_points(self):
-        """ Assigns the points this round, for each matchs
+        """ Assigns the points this round, for each matches
 
         Players_ranked is switched to False
         :return: None

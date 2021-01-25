@@ -101,9 +101,9 @@ def deserialize_round(serialized_round):
     r0und.start_date = str_to_date(serialized_round['start_date'])
     r0und.end_date = str_to_date(serialized_round['end_date'])
     matches = {}
-    for match_nb, match in serialized_round['matchs'].items():
+    for match_nb, match in serialized_round['matches'].items():
         matches[int(match_nb)] = deserialize_match(match)
-    setattr(r0und, 'matchs', matches)
+    setattr(r0und, 'matches', matches)
     return r0und
 
 
