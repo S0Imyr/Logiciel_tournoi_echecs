@@ -385,7 +385,10 @@ class ResumeTournament:
     def __call__(self):
         handler = DataBaseHandler()
         tournament = handler.import_interrupted_tournament()
-        return LaunchTournament(tournament)
+        if tournament.list_of_players:
+            return LaunchTournament(tournament)
+        else:
+            return TournamentPlayersMenu(tournament)
 
 
 class ReportMenu:
