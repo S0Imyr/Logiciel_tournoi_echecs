@@ -1,0 +1,5 @@
+.idea/
+venv
+.flake8
+
+db.json
