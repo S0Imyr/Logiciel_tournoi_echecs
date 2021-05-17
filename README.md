@@ -2,7 +2,7 @@
 ## Installation
 Sur le terminal se placer sur un dossier cible.
 
-***Copier les fichiers :***
+**Copier les fichiers :**
 Sur le terminal tapper successivement :
  - git clone https://github.com/S0Imyr/Projet4.git
  - cd Projet4
@@ -10,13 +10,13 @@ Sur le terminal tapper successivement :
 ## Installer l'environnement virtuel :
 
 Sur le terminal tapper successivement : 
-- python -m venv env</li>
+- python -m venv env
 - source env/Scripts/activate (ou "source env/bin/activate" sur Linux et Mac).
 
 ## Installer les packages :
 Sur le terminal tapper :
 
-- pip install -r requirements.txt</li>
+- pip install -r requirements.txt
 
 
 ## Exécution
