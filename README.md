@@ -1,3 +1,4 @@
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)  
 [English](#english-readme) | [Français](#french-readme)
 # Chess Tournament Management Software
 <a name="english-readme"></a>
