@@ -1,7 +1,6 @@
 .idea/
-.flake8
 
 /env/
 
-db.json
-/PersoREADME.md
+src/db.json
+

@@ -4,9 +4,6 @@
 <a name="english-readme"></a>
 Chess Tournament Management Software is a Python application designed to help chess clubs manage their tournaments offline and generate reports.
 
-
-<a name="table-of-contents-english"></a>
-- [Table of Contents](#table-of-contents-english)  
 - [Installation](#installation-english)  
 - [Configuration](#configuration-english)  
 
@@ -16,8 +13,9 @@ Chess Tournament Management Software is a Python application designed to help ch
 Navigate to a target directory in your terminal.
 
 In the terminal, type the following commands one after the other :  
-`git clone https://github.com/S0Imyr/Chess_Tournament_Software.git`  
+`git clone https://github.com/rlossec/Chess_Tournament_Software.git`  
 `cd Chess_Tournament_Software`
+`cd src`
 
 In the terminal, type the following commands one after the other:  
 `python -m venv env`  
@@ -49,8 +47,6 @@ Le tournoi respecte le système de tournois "suisse".
 Le programme peut être interrompu en cours de compétition pour être repris par la suite.  
 La programmation suit le Design Pattern MVC Modèle Vue Contrôleur
 
-<a name="table-des-matières-français"></a>
-- [Table des matières](#table-des-matières-français)  
 - [Installation](#installation-français)  
 - [Configuration](#configuration-français)  
 
@@ -62,7 +58,7 @@ Sur le terminal se placer sur un dossier cible.
 
 **Copier les fichiers :**
 Sur le terminal tapper successivement :  
-`git clone https://github.com/S0Imyr/Logiciel_tournoi_echecs.git`  
+`git clone https://github.com/rlossec/Chess_tournament_managment.git`  
 `cd Logiciel_tournoi_echecs`  
 
 Sur le terminal tapper successivement :  
