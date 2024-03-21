@@ -13,8 +13,8 @@ Chess Tournament Management Software is a Python application designed to help ch
 Navigate to a target directory in your terminal.
 
 In the terminal, type the following commands one after the other :  
-`git clone https://github.com/rlossec/Chess_Tournament_Software.git`  
-`cd Chess_Tournament_Software`
+`git clone https://github.com/rlossec/Chess_tournament_managment.git`  
+`cd Chess_tournament_managment`  
 `cd src`
 
 In the terminal, type the following commands one after the other:  
