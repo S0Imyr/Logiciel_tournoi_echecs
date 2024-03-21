@@ -1,6 +1,7 @@
 .idea/
 
-/env/
+env/
 
 src/db.json
 
+*/__pycache__/*

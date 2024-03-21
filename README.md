@@ -36,7 +36,7 @@ In the terminal, type:
 `pip install flake8-html`  
 `flake8 chess --format=html --htmldir=flake_report`  
 
-You will find a folder named "flake_report" in the Logiciel_tournoi_echecs directory with the flake8 reports.  
+You will find a folder named `flake_report` in the `Chess_tournament_managment` directory with the flake8 reports.  
 Click on "index" to view the summary.
 
 # Logiciel de gestion de tournoi d'échecs
@@ -59,7 +59,7 @@ Sur le terminal se placer sur un dossier cible.
 **Copier les fichiers :**
 Sur le terminal tapper successivement :  
 `git clone https://github.com/rlossec/Chess_tournament_managment.git`  
-`cd Logiciel_tournoi_echecs`  
+`cd Chess_tournament_managment`  
 
 Sur le terminal tapper successivement :  
 `python -m venv env`  
@@ -84,5 +84,5 @@ Sur le terminal tapper :
 `pip install flake8-html`  
 `flake8 chess --format=html --htmldir=flake_report`  
 
-Vous trouverez dans le dossier Logiciel_tournoi_echecs, un dossier flake_report avec les rapports de flake8.
+Vous trouverez dans le dossier `Chess_tournament_managment`, un dossier `flake_report` avec les rapports de flake8.
 Cliquer sur index pour avoir la synthèse.
